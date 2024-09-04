@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <!-- Дополнительные стили и скрипты можно подключить здесь -->
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <!-- Ссылки для неавторизованных пользователей -->
+                {% if not user.is_authenticated %}
+                    <li><a href="{% url 'home' %}">Главная</a></li>
+                    <li><a href="{% url 'pricing' %}">Тарифы</a></li>
+                    <li><a href="{% url 'contact' %}">Связь</a></li>
+                    <li><a href="{% url 'about' %}">О нас</a></li>
+                    <li><a href="{% url 'login' %}">Войти</a></li>
+                    <li><a href="{% url 'register' %}">Регистрация</a></li>
+                <!-- Ссылки для авторизованных пользователей -->
+                {% else %}
+                    <li><a href="{% url 'home' %}">Главная</a></li>
+                    <li><a href="{% url 'pricing' %}">Тарифы</a></li>
+                    <li><a href="{% url 'profile' %}">Мой профиль</a></li>
+                    <li><a href="{% url 'books' %}">Книги</a></li>
+                    <li><a href="{% url 'search' %}">Поиск</a></li>
+                    <li><a href="{% url 'logout' %}">Выйти</a></li>
+                    <li><a href="{% url 'about' %}">О нас</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Основное содержимое страницы будет вставляться сюда -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My Website. All rights reserved.</p>
+    </footer>
+</body>
+</html>
