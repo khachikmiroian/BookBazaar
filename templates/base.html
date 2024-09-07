@@ -4,29 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Website{% endblock %}</title>
-    <!-- Дополнительные стили и скрипты можно подключить здесь -->
 </head>
 <body>
     <header>
         <nav>
             <ul>
-                <!-- Ссылки для неавторизованных пользователей -->
                 {% if not user.is_authenticated %}
-                    <li><a href="{% url 'home' %}">Главная</a></li>
-                    <li><a href="{% url 'pricing' %}">Тарифы</a></li>
+                    <li><a href="{% url 'books:home' %}">Главная</a></li>
+                    <li><a href="{% url 'subs:pricing' %}">Тарифы</a></li>
                     <li><a href="{% url 'contact' %}">Связь</a></li>
                     <li><a href="{% url 'about' %}">О нас</a></li>
-                    <li><a href="{% url 'login' %}">Войти</a></li>
-                    <li><a href="{% url 'register' %}">Регистрация</a></li>
+                    <li><a href="{% url 'account:login' %}">Войти</a></li>
+                    <li><a href="{% url 'account:register' %}">Регистрация</a></li>
                 <!-- Ссылки для авторизованных пользователей -->
                 {% else %}
-                    <li><a href="{% url 'home' %}">Главная</a></li>
+                    <li><a href="{% url 'books:home' %}">Главная</a></li>
                     <li><a href="{% url 'pricing' %}">Тарифы</a></li>
                     <li><a href="{% url 'profile' %}">Мой профиль</a></li>
                     <li><a href="{% url 'books' %}">Книги</a></li>
                     <li><a href="{% url 'search' %}">Поиск</a></li>
                     <li><a href="{% url 'logout' %}">Выйти</a></li>
                     <li><a href="{% url 'about' %}">О нас</a></li>
+
+                <form method="GET" action="{% url 'search' %}">
+                    <input type="text" name="query" placeholder="Search">
+                    <button type="submit">Go</button>
+                </form>
                 {% endif %}
             </ul>
         </nav>

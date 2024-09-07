@@ -14,9 +14,15 @@ class Books(models.Model):
     date = models.DateField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     tags = TaggableManager()
+    status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT)
+    pdf_file = models.FileField(upload_to='books/pdfs/', blank=True, null=True)
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('books:book_detail',
+                       args=[self.id])
 
 
 class Author(models.Model):
@@ -28,3 +34,6 @@ class Author(models.Model):
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
+    def get_absolute_url(self):
+        return reverse('books:actor_detail',
+                       args=[self.id])
