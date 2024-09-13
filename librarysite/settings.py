@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'accounts',
     'subscriptions',
     'django.contrib.postgres',
-    'taggit'
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -64,14 +64,20 @@ WSGI_APPLICATION = 'librarysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'library',
+#         'USER': 'librarier',
+#         'PASSWORD': '12345',
+#         'HOST': '192.168.10.88',
+#         'PORT': '5432',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'library',
-        'USER': 'librarier',
-        'PASSWORD': '12345',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -129,3 +135,7 @@ EMAIL_HOST_USER = 'khachikmiroyan@gmail.com'
 EMAIL_HOST_PASSWORD = 'whve dllx oaba kroc'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51PxUIbLACOE75Ln2QQnjSLp1D3ejQHuEVhzXMKVfsoRwerOzG0KLhnrNmiCOpOs5QiHIrScZy9gUSO8SIwf5KlZ500QS7GlqtL'
+STRIPE_SECRET_KEY = 'sk_test_51PxUIbLACOE75Ln2RXkN6P6zId7aAyWlDS3YXBJ766Hsbp0oqkPMY6lQGf8fbjineEJKlVAPRKSnm2VxZkliw06F003kUrX6bj'
+STRIPE_API_VERSION = '2024-06-20'

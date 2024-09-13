@@ -4,8 +4,7 @@ from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramSim
 from .forms import SearchForm
 from .models import Books, Author
 from django.views.generic import TemplateView, ListView, DetailView
-
-
+from django.contrib.auth.views import LoginView
 class HomeView(TemplateView):
     template_name = 'books/home.html'
 
@@ -66,3 +65,7 @@ class BookDetailView(DetailView):
 class AuthorDetailView(DetailView):
     model = Author
     template_name = 'books/author_detail.html'
+
+
+class Contact(TemplateView):
+    template_name = 'books/contact.html'

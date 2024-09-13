@@ -24,6 +24,10 @@ class Books(models.Model):
         return reverse('books:book_detail',
                        args=[self.id])
 
+    class Meta:
+        verbose_name = 'Book'
+        verbose_name_plural = 'Books'
+
 
 class Author(models.Model):
     first_name = models.CharField(max_length=15)
@@ -37,3 +41,7 @@ class Author(models.Model):
     def get_absolute_url(self):
         return reverse('books:actor_detail',
                        args=[self.id])
+
+    class Meta:
+        verbose_name = 'Author'
+        verbose_name_plural = 'Authors'
