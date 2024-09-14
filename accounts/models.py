@@ -6,7 +6,6 @@ from datetime import timedelta
 
 
 class Profile(models.Model):
-    username = models.CharField(max_length=30, unique=True)
     first_name = models.CharField(max_length=16)
     last_name = models.CharField(max_length=16)
     user = models.OneToOneField(settings.AUTH_USER_MODEL,

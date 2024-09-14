@@ -54,10 +54,22 @@ def register(request):
 
 
 
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
+from .models import Profile
+from .forms import UserEditForm, ProfileEditForm
+
 @login_required
 def edit(request, id):
     # Получаем объект профиля по ID
     profile = get_object_or_404(Profile, user_id=id)
+
+    # Проверяем, что текущий пользователь совпадает с профилем
+    if request.user.id != profile.user_id:
+        return redirect('profile')
 
     if request.method == 'POST':
         user_form = UserEditForm(instance=profile.user, data=request.POST)
@@ -81,3 +93,4 @@ def edit(request, id):
 
 class ProfileView(TemplateView):
     template_name = 'accounts/profile.html'
+
