@@ -3,10 +3,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from books.views import Contact, AboutUsView, HomeView
+from django.contrib.auth import views as auth_views
+
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('accounts/', include('accounts.urls')),
     path('books/', include('books.urls', namespace='books')),
     path('subscriptions/', include('subscriptions.urls', namespace='subscriptions')),
     path('contact/', Contact.as_view(), name='contact'),

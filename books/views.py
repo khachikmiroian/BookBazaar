@@ -5,6 +5,8 @@ from .forms import SearchForm
 from .models import Books, Author
 from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.views import LoginView
+
+
 class HomeView(TemplateView):
     template_name = 'books/home.html'
 
@@ -13,7 +15,6 @@ class AboutUsView(TemplateView):
     template_name = 'books/about_us.html'
 
 
-@login_required
 def post_search(request):
     form = SearchForm()
     query = None
@@ -31,7 +32,7 @@ def post_search(request):
             author_search_vector = SearchVector('name', weight='A')
             author_search_query = SearchQuery(query)
             author_results = Author.objects.annotate(
-                similarity=TrigramSimilarity('name', query),
+                similarity=TrigramSimilarity('first_name', query),
             ).filter(similarity__gt=0.1).order_by('-similarity')
 
             author_results = author_results.distinct()

@@ -8,6 +8,7 @@ class SubscriptionsList(ListView):
     template_name = 'subscription/subscription_list.html'
 
 
+
 class SubscriptionView(TemplateView):
     template_name = 'subscription/subscription_view.html'
 

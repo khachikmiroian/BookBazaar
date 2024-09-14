@@ -6,43 +6,58 @@
     <title>{% block title %}My Website{% endblock %}</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                {% if not user.is_authenticated %}
-                    <li><a href="{% url 'books:home' %}">Главная</a></li>
-                    <li><a href="{% url 'subs:subscriptions_list' %}">Тарифы</a></li>
-                    <li><a href="{% url 'contact' %}">Связь</a></li>
-                    <li><a href="{% url 'about' %}">О нас</a></li>
-                    <li><a href="{% url 'accounts:login' %}">Войти</a></li>
-                    <li><a href="{% url 'accounts:register' %}">Регистрация</a></li>
-                <!-- Ссылки для авторизованных пользователей -->
-                {% else %}
-                    <li><a href="{% url 'books:home' %}">Главная</a></li>
-                    <li><a href="{% url 'pricing' %}">Тарифы</a></li>
-                    <li><a href="{% url 'profile' %}">Мой профиль</a></li>
-                    <li><a href="{% url 'books' %}">Книги</a></li>
-                    <li><a href="{% url 'search' %}">Поиск</a></li>
-                    <li><a href="{% url 'logout' %}">Выйти</a></li>
-                    <li><a href="{% url 'about' %}">О нас</a></li>
+<header>
+    <nav>
+        <ul>
+            {% if not user.is_authenticated %}
+            <li><a href="{% url 'books:home' %}">Главная</a></li>
+            <li><a href="{% url 'subs:subscriptions_list' %}">Тарифы</a></li>
+            <li><a href="{% url 'contact' %}">Связь</a></li>
+            <li><a href="{% url 'about' %}">О нас</a></li>
+            <form id="login-form" method="POST" action="{% url 'login' %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit"
+                        style="background: none; border: none; color: blue; cursor: pointer; text-decoration: underline;">
+                    Login
+                </button>
+            </form>
+            <li><a href="{% url 'register' %}">Регистрация</a></li>
+            <form method="GET" action="{% url 'books:search' %}">
+                <input type="text" name="query" placeholder="Search">
+                <button type="submit">Go</button>
+            </form>
+            <!-- Ссылки для авторизованных пользователей -->
+            {% else %}
+            <li><a href="{% url 'books:home' %}">Главная</a></li>
 
-                <form method="GET" action="{% url 'search' %}">
-                    <input type="text" name="query" placeholder="Search">
-                    <button type="submit">Go</button>
+            <li><a href="{% url 'books:book_list' %}">Книги</a></li>
+            <li><a href="{% url 'books:search' %}">Поиск</a></li>
+            <li>
+                <form id="logout-form" method="POST" action="{% url 'logout' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit"
+                            style="background: none; border: none; color: blue; cursor: pointer; text-decoration: underline;">
+                        Выйти
+                    </button>
                 </form>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
+            </li>
+            <li><a href="{% url 'books:about_us' %}">О нас</a></li>
+            <li><a href="{% url 'edit' user.id %}">Edit Profile</a></li>
 
-    <main>
-        {% block content %}
-        <!-- Основное содержимое страницы будет вставляться сюда -->
-        {% endblock %}
-    </main>
 
-    <footer>
-        <p>&copy; 2024 My Website. All rights reserved.</p>
-    </footer>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+
+<main>
+    {% block content %}
+    <!-- Основное содержимое страницы будет вставляться сюда -->
+    {% endblock %}
+</main>
+
+<footer>
+    <p>&copy; {% now Y %} My Website. All rights reserved.</p>
+</footer>
 </body>
 </html>
