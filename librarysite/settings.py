@@ -1,8 +1,13 @@
 from pathlib import Path
+import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / 'templates'
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / ".env")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -11,7 +16,7 @@ TEMPLATES_DIR = BASE_DIR / 'templates'
 SECRET_KEY = 'django-insecure-+nlo%_^i4l@w3ox9$1v14tut+u92=5ko+b0!@5y$c5zf7gu(hz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG", cast=bool, default=False)
 
 ALLOWED_HOSTS = []
 
@@ -130,13 +135,13 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 PROFILE_UPDATE_URL = 'profile'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'khachikmiroyan@gmail.com'
-EMAIL_HOST_PASSWORD = 'whve dllx oaba kroc'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51PxUIbLACOE75Ln2QQnjSLp1D3ejQHuEVhzXMKVfsoRwerOzG0KLhnrNmiCOpOs5QiHIrScZy9gUSO8SIwf5KlZ500QS7GlqtL'
-STRIPE_SECRET_KEY = 'sk_test_51PxUIbLACOE75Ln2RXkN6P6zId7aAyWlDS3YXBJ766Hsbp0oqkPMY6lQGf8fbjineEJKlVAPRKSnm2VxZkliw06F003kUrX6bj'
+STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 STRIPE_API_VERSION = '2024-06-20'

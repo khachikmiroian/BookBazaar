@@ -1,66 +1,55 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.views.generic import TemplateView
-from django.shortcuts import get_object_or_404
-from django.shortcuts import get_object_or_404
-from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
 from django.contrib.auth.decorators import login_required
-from .models import Profile
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth import authenticate, login
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import TemplateView
+from django.views.generic.edit import FormView, UpdateView
 from django.contrib import messages
+from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
+from .models import Profile
 
 
-def user_login(request):
-    if request.method == 'POST':
+class UserLoginView(View):
+    def get(self, request):
+        form = LoginForm()
+        return render(request, 'accounts/login.html', {'form': form})
+
+    def post(self, request):
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(request,
-                                username=cd['username'],
-                                password=cd['password'])
+            user = authenticate(request, username=cd['username'], password=cd['password'])
             if user is not None:
                 if user.is_active:
                     login(request, user)
                     return HttpResponse('Authenticated successfully')
                 else:
-                    return HttpResponse('Disabled accounts')
+                    return HttpResponse('Disabled account')
             else:
                 return HttpResponse('Invalid login')
-    else:
-        form = LoginForm()
-    return render(request, 'accounts/login.html', {'form': form})
+        return render(request, 'accounts/login.html', {'form': form})
 
 
-def register(request):
-    if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST)
-        if user_form.is_valid():
-            new_user = user_form.save(commit=False)
+class UserRegistrationView(FormView):
+    template_name = 'accounts/register.html'
+    form_class = UserRegistrationForm
+    success_url = reverse_lazy('register_done')
 
-            new_user.set_password(
-                user_form.cleaned_data['password'])
-
-            new_user.save()
-
-            Profile.objects.create(user=new_user)
-            return render(request,
-                          'accounts/register_done.html',
-                          {'new_user': new_user})
-    else:
-        user_form = UserRegistrationForm()
-    return render(request,
-                  'accounts/register.html',
-                  {'user_form': user_form})
+    def form_valid(self, form):
+        new_user = form.save(commit=False)
+        new_user.set_password(form.cleaned_data['password'])
+        new_user.save()
+        Profile.objects.create(user=new_user)
+        return super().form_valid(form)
 
 
+class UserRegistrationDoneView(View):
+    def get(self, request):
+        return render(request, 'accounts/register_done.html', {'new_user': request.user})
 
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.shortcuts import get_object_or_404
-from .models import Profile
-from .forms import UserEditForm, ProfileEditForm
 
 @login_required
 def edit(request, id):
@@ -80,7 +69,7 @@ def edit(request, id):
             messages.success(request, 'Profile updated successfully')
         else:
             messages.error(request, 'Error updating your profile')
-        return redirect('home')
+        return redirect('profile')
     else:
         user_form = UserEditForm(instance=profile.user)
         profile_form = ProfileEditForm(instance=profile)
@@ -94,3 +83,7 @@ def edit(request, id):
 class ProfileView(TemplateView):
     template_name = 'accounts/profile.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile'] = get_object_or_404(Profile, user=self.request.user)
+        return context

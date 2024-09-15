@@ -1,34 +1,56 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
+<body>
+    <header>
+        <h1>Search</h1>
+    </header>
 
-{% block content %}
+    <main>
+        <form method="get" action="{% url 'books:search' %}">
+    <label for="query">Search:</label>
+    <input type="text" id="query" name="query" value="{{ query }}" placeholder="Search for books or authors">
+    <button type="submit">Search</button>
+</form>
 
 
-{% if query %}
-<h2>Search results for: "{{ query }}"</h2>
+        <section id="results">
+            {% if book_results %}
+                <h2>Books</h2>
+                <ul>
+                    {% for book in book_results %}
+                        <li>
+                            <strong>{{ book.title }}</strong>
+                            <p>{{ book.author }} - {{ book.publication_date }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No books found.</p>
+            {% endif %}
 
-{% if results %}
-<h3>Results</h3>
-<ul>
-    {% for result in results %}
-    {% if result.title %}
-    <!-- Display book results -->
-    <li>
-        <a href="{% url 'book_detail' result.id %}">{{ result.title }}</a>
-        (Book)
-    </li>
-    {% elif result.name %}
-    <!-- Display author results -->
-    <li>
-        <a href="{% url 'author_detail' result.id %}">{{ result.name }}</a>
-        (Author)
-    </li>
-    {% endif %}
-    {% empty %}
-    <li>No results found.</li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No results found.</p>
-{% endif %}
-{% endif %}
-{% endblock %}
+            {% if author_results %}
+                <h2>Authors</h2>
+                <ul>
+                    {% for author in author_results %}
+                        <li>
+                            <strong>{{ author.first_name }} {{ author.last_name }}</strong>
+                            <p>Books: {% for book in author.books.all %}{{ book.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No authors found.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your Library</p>
+    </footer>
+</body>
+</html>

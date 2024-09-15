@@ -1,42 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Редактирование профиля</title>
+{% extends "base.html" %}
 
-</head>
-<body>
-    <header>
-        <!-- Навигация может быть добавлена здесь -->
-    </header>
+{% block content %}
+  <h1>Редактирование профиля</h1>
 
-    <main>
-        <h1>Редактирование профиля</h1>
+  <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <h2>Редактирование пользователя</h2>
+      {{ user_form.as_p }}
 
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
+      <h2>Редактирование профиля</h2>
+      {{ profile_form.as_p }}
 
-            <h2>Редактирование пользователя</h2>
-            {{ user_form.as_p }}
+      <button type="submit">Сохранить изменения</button>
+  </form>
 
-            <h2>Редактирование профиля</h2>
-            {{ profile_form.as_p }}
-
-            <button type="submit">Сохранить изменения</button>
-        </form>
-
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li class="{{ message.tags }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </main>
-
-    <footer>
-        <!-- Подвал может быть добавлен здесь -->
-    </footer>
-</body>
-</html>
+  {% if messages %}
+    <div>
+      {% for message in messages %}
+        <div class="{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
