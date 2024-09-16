@@ -10,7 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('books/', include('books.urls', namespace='books')),
-    path('subscriptions/', include('subscriptions.urls', namespace='subscriptions')),
+    path('subscriptions/', include('subscriptions.urls', namespace='subs')),
     path('contact/', Contact.as_view(), name='contact'),
     path('about-us/', AboutUsView.as_view(), name='about'),
 ]
