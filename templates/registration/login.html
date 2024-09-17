@@ -1,29 +1,101 @@
-{% extends "base.html" %}
-{% block title %}Log-in{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
 {% block content %}
-<h1>Log-in</h1>
-{% if form.errors %}
-<p>
-    Your username and password didn't match.
-    Please try again.
-</p>
-{% else %}
-<p>Please, use the following form to log-in:
-    If you don't have an account
-    <a href="{% url 'register' %}">register here</a>.
-</p>
-{% endif %}
-<div class="login-form">
-    <form action="{% url 'login' %}" method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}"/>
-        <p><input type="submit" value="Log-in"></p>
-    </form>
-    <p>
-        <a href="{% url 'password_reset' %}">
-            Forgotten your password?
-        </a>
-    </p>
+<style>
+    /* Auth container styling */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background-color: #f5f5f5;
+}
+
+.auth-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+.auth-box h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+}
+
+.auth-box .form-group {
+    margin-bottom: 20px;
+}
+
+.auth-box .form-group label {
+    font-size: 1.1em;
+    color: #2c3e50;
+}
+
+.auth-box .form-control {
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #3498db;
+    border-radius: 4px;
+}
+
+.auth-box .btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1.2em;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.auth-box .btn:hover {
+    background-color: #2980b9;
+}
+
+.auth-box p {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #2c3e50;
+}
+
+.auth-box a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.auth-box a:hover {
+    text-decoration: underline;
+}
+
+</style>
+<div class="auth-container">
+    <div class="auth-box">
+        <h2>Login to Your Account</h2>
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form-control" id="username" placeholder="Enter Username"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Enter Password"
+                       required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        <p class="text-center">
+            <a href="{% url 'password_reset' %}">Forgot Password?</a>
+        </p>
+        <p class="text-center">Don't have an account? <a href="{% url 'register' %}">Sign up here</a></p>
+    </div>
 </div>
 {% endblock %}

@@ -1,11 +1,24 @@
-{% extends "base.html" %}
-{% block title %}Log-in{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
 {% block content %}
-<h1>Log-in</h1>
-<p>Please, use the following form to log-in:</p>
-<form method="post">
-    {{ form.as_p }}
-    {% csrf_token %}
-    <p><input type="submit" value="Log in"></p>
-</form>
+<div class="auth-container">
+    <div class="auth-box">
+        <h2>Login to Your Account</h2>
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form-control" id="username" placeholder="Enter Username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Enter Password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        <p class="text-center">Don't have an account? <a href="{% url 'register' %}">Sign up here</a></p>
+    </div>
+</div>
 {% endblock %}

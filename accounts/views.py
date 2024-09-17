@@ -1,15 +1,15 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login
-from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView
-from django.views.generic.edit import FormView, UpdateView
+from django.views.generic.edit import FormView
 from django.contrib import messages
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import Profile
+from django.contrib.auth.views import LogoutView
+from django.urls import reverse_lazy
 
 
 class UserLoginView(View):
@@ -87,3 +87,9 @@ class ProfileView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['profile'] = get_object_or_404(Profile, user=self.request.user)
         return context
+
+
+# Это использует стандартный LogoutView, но вы можете указать свой шаблон для страницы выхода
+class UserLogoutView(LogoutView):
+    template_name = 'logged_out.html'
+    next_page = reverse_lazy('books:home')  # Куда перенаправлять после выхода

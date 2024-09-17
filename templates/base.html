@@ -139,35 +139,62 @@
         footer .contact-info a:hover {
             text-decoration: underline;
         }
+
+        /* Styling for the logout button to match the navbar links */
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #ecf0f1;
+            font-size: 1.2em;
+            padding: 14px 20px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover,
+        .logout-btn:focus {
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+        }
+
     </style>
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="{% url 'books:home' %}">Online Book Store</a>
-                </div>
-                <ul class="nav navbar-nav">
-                    <li><a href="{% url 'books:home' %}">Home</a></li>
-                    <li><a href="#">Categories</a></li>
-                    <li><a href="#">Best Sellers</a></li>
-                    <li><a href="#">New Releases</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    {% if user.is_authenticated %}
-                    <li><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
-                    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
-                    {% else %}
-                    <li><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                    <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                    {% endif %}
-                </ul>
+<header>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'books:home' %}">Online Book Store</a>
             </div>
-        </nav>
-    </header>
-    {% block content %}{% endblock %}
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'books:home' %}">Home</a></li>
+                <li><a href="#">Categories</a></li>
+                <li><a href="#">Best Sellers</a></li>
+                <li><a href="#">New Releases</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a>
+                </li>
+                <li>
+                    <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn">
+                            <span class="glyphicon glyphicon-log-out"></span> Log Out
+                        </button>
+                    </form>
+                </li>
+                {% else %}
+                <li><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </nav>
+</header>
+{% block content %}{% endblock %}
 <footer>
     <p>&copy; 2024 Online Book Store. All rights reserved.</p>
     <div class="contact-info">
