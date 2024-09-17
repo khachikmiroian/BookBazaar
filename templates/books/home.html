@@ -1,8 +1,26 @@
-{% extends "base.html" %}
-
-{% block title %}Home{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Home Page{% endblock %}
 
 {% block content %}
-    <h1>Welcome to My Website</h1>
-    <p>This is the home page content.</p>
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>Welcome to Our Online Book Store</h1>
+        <p>Find your next favorite book today!</p>
+
+        <!-- Search Section -->
+        <div class="search-container">
+            <form action="/search" method="GET">
+                <input type="text" name="query" placeholder="Search for books..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <!-- Button for Books Page -->
+        <div class="books-button">
+            <a href="/books">Browse All Books</a>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

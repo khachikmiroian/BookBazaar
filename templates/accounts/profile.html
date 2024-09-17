@@ -1,1 +1,63 @@
-<p>my profile</p>
+{% extends 'base.html' %}
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>Welcome, {{ user.username }}</h1>
+        <p>Manage your account and view your details here.</p>
+    </div>
+</section>
+
+<!-- Profile Section -->
+<section class="profile-section">
+    <div class="container">
+        <div class="row">
+            <!-- Profile Info -->
+            <div class="col-md-6">
+                <div class="profile-info">
+                    <h2>Profile Information</h2>
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                </div>
+            </div>
+
+            <!-- Purchased Books -->
+            <div class="col-md-6">
+                <div class="purchased-books">
+                    <h2>Purchased Books</h2>
+                    {% if purchased_books %}
+                        <ul>
+                            {% for book in purchased_books %}
+                                <li>{{ book.title }} by {{ book.author }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No purchased books.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Subscription Plans -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="subscription-plans">
+                    <h2>Active Subscription Plans</h2>
+                    {% if subscription_plans %}
+                        <ul>
+                            {% for plan in subscription_plans %}
+                                <li>{{ plan.name }} - {{ plan.details }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No active subscription plans.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,8 +1,29 @@
-{% extends "base.html" %}
-
-{% block title %}About us{% endblock %}
-
+{% extends 'base.html' %}
+{% block title %}About Us{% endblock %}
 {% block content %}
-    <h1>About us</h1>
-    <p>About us</p>
+<!-- About Us Section -->
+<section class="about-us">
+    <div class="container">
+        <h1>About Us</h1>
+        <p>Welcome to Online Book Store! We are passionate about books and dedicated to providing you with the best reading experience. Our goal is to offer a wide selection of books that cater to all tastes and interests. Whether you're looking for bestsellers, new releases, or classic literature, you'll find it here.</p>
+
+        <h2>Contact Us</h2>
+        <p>If you have any questions or need assistance, please feel free to reach out to us. We're here to help!</p>
+
+        <div class="contact-info">
+            <h3>Contact Information</h3>
+            <p>Email: <a href="mailto:info@onlinebookstore.com">info@onlinebookstore.com</a></p>
+            <p>Phone: <a href="tel:+1234567890">+123 456 7890</a></p>
+            <p>Address: 123 Book Street, Readington, RB 45678</p>
+        </div>
+
+        <h2>Our Team</h2>
+        <p>Meet the people behind Online Book Store:</p>
+        <ul>
+            <li><strong>Jane Doe</strong> - Founder & CEO</li>
+            <li><strong>John Smith</strong> - Chief Technology Officer</li>
+            <li><strong>Emily Johnson</strong> - Head of Customer Service</li>
+        </ul>
+    </div>
+</section>
 {% endblock %}

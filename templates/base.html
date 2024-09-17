@@ -3,61 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Website{% endblock %}</title>
+    <title>Online Book Store</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        /* Body Styling */
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .navbar .navbar-brand {
+            color: #ecf0f1;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .navbar .nav > li > a {
+            color: #ecf0f1;
+            font-size: 1.2em;
+        }
+
+        .navbar .nav > li.active > a,
+        .navbar .nav > li > a:focus,
+        .navbar .nav > li > a:hover {
+            background-color: #3498db;
+            color: white !important;
+        }
+
+        /* Page header */
+        .page-header {
+            background-color: #3498db;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+        }
+
+        /* Search Section */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .search-container input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            font-size: 1.2em;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            color: #000; /* Цвет текста в поле поиска */
+            background-color: #fff; /* Цвет фона поля поиска */
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-container button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Button for Books Page */
+        .books-button {
+            margin-top: 20px;
+            display: block;
+            text-align: center;
+        }
+
+        .books-button a {
+            font-size: 1.5em;
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .books-button a:hover {
+            background-color: #34495e;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+
+        footer .contact-info {
+            margin-top: 10px;
+            font-size: 0.8em;
+        }
+
+        footer .contact-info a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        footer .contact-info a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-<header>
-    <nav>
-        <ul>
-            {% if not user.is_authenticated %}
-            <li><a href="{% url 'books:home' %}">Главная</a></li>
-            <li><a href="{% url 'subs:subscriptions_list' %}">Тарифы</a></li>
-            <li><a href="{% url 'contact' %}">Связь</a></li>
-            <li><a href="{% url 'about' %}">О нас</a></li>
-            <form id="login-form" method="POST" action="{% url 'login' %}" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit"
-                        style="background: none; border: none; color: blue; cursor: pointer; text-decoration: underline;">
-                    Login
-                </button>
-            </form>
-            <li><a href="{% url 'register' %}">Регистрация</a></li>
-            <form method="GET" action="{% url 'books:search' %}">
-                <input type="text" name="query" placeholder="Search">
-                <button type="submit">Go</button>
-            </form>
-            <!-- Ссылки для авторизованных пользователей -->
-            {% else %}
-            <li><a href="{% url 'books:home' %}">Главная</a></li>
-
-            <li><a href="{% url 'books:book_list' %}">Книги</a></li>
-            <li><a href="{% url 'books:search' %}">Поиск</a></li>
-            <li>
-                <form id="logout-form" method="POST" action="{% url 'logout' %}" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit"
-                            style="background: none; border: none; color: blue; cursor: pointer; text-decoration: underline;">
-                        Выйти
-                    </button>
-                </form>
-            </li>
-            <li><a href="{% url 'books:about_us' %}">О нас</a></li>
-            <li><a href="{% url 'edit' user.id %}">Edit Profile</a></li>
-
-
-            {% endif %}
-        </ul>
-    </nav>
-</header>
-
-<main>
-    {% block content %}
-    <!-- Основное содержимое страницы будет вставляться сюда -->
-    {% endblock %}
-</main>
-
+    <header>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{% url 'books:home' %}">Online Book Store</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="{% url 'books:home' %}">Home</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Best Sellers</a></li>
+                    <li><a href="#">New Releases</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
+                    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+                    {% else %}
+                    <li><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+    {% block content %}{% endblock %}
 <footer>
-    <p>&copy; {% now Y %} My Website. All rights reserved.</p>
+    <p>&copy; 2024 Online Book Store. All rights reserved.</p>
+    <div class="contact-info">
+        <p>Contact us at: info@onlinebookstore.com | <a href="{% url 'books:about_us' %}">About Us</a></p>
+    </div>
 </footer>
 </body>
 </html>
