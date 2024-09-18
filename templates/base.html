@@ -178,9 +178,9 @@
                 <li><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a>
                 </li>
                 <li>
-                    <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                    <form method="POST" action="{% url 'logout' %}" style="display:inline;" id="logoutForm">
                         {% csrf_token %}
-                        <button type="submit" class="logout-btn">
+                        <button type="button" class="logout-btn" id="logoutButton">
                             <span class="glyphicon glyphicon-log-out"></span> Log Out
                         </button>
                     </form>
@@ -189,6 +189,23 @@
                 <li><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                 <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 {% endif %}
+
+                <script>
+                    // Найдем кнопку Log Out
+                    document.getElementById('logoutButton').addEventListener('click', function(event) {
+                        // Отображаем окно подтверждения
+                        var confirmation = confirm("Are you sure you want to log out?");
+
+                        if (confirmation) {
+                            // Если пользователь подтвердил, отправляем форму выхода
+                            document.getElementById('logoutForm').submit();
+                        } else {
+                            // Если пользователь отменил, ничего не делаем (можно перенаправить или просто оставить)
+                            event.preventDefault(); // предотвращаем действие кнопки по умолчанию
+                        }
+                    });
+                </script>
+
 
             </ul>
         </div>
@@ -201,5 +218,7 @@
         <p>Contact us at: info@onlinebookstore.com | <a href="{% url 'books:about_us' %}">About Us</a></p>
     </div>
 </footer>
+
+
 </body>
 </html>
