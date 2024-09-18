@@ -23,9 +23,6 @@ class SubscriptionView(TemplateView):
     template_name = 'subscription/subscription_view.html'
 
 
-class BookPurchase(TemplateView):
-    template_name = 'subscription/bookpurchase.html'
-
 
 @login_required
 def create_subscription_session(request, plan_id):
