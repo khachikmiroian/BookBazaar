@@ -1,1 +1,24 @@
-<p>afasdfsad</p>
+<!-- subscription/subscription_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Plans</title>
+</head>
+<body>
+    <h1>Subscription Plans</h1>
+    <ul>
+        {% for subscription in subs %}
+            <li>
+                <h2>{{ subscription.get_name_display }}</h2>
+                <p>Price: ${{ subscription.price }}</p>
+                <form action="{% url 'subs:create_subscription_session' subscription.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Subscribe</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

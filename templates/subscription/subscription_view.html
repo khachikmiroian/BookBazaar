@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<form id="subscription-form" method="POST">
+    {% csrf_token %}
+    <input type="hidden" id="plan-id" value="{{ plan.id }}">
+    <button type="submit">Subscribe</button>
+</form>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");
 
-</body>
-</html>
+    document.getElementById('subscription-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const planId = document.getElementById('plan-id').value;
+
+        fetch("{% url 'subs:create_subscription_session' plan_id=0 %}".replace('0', planId), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.id) {
+                stripe.redirectToCheckout({ sessionId: data.id })
+                .then(function (result) {
+                    if (result.error) {
+                        console.error(result.error.message);
+                    }
+                });
+            } else {
+                console.error("Session creation failed:", data);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+</script>

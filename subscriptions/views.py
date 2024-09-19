@@ -1,14 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views.generic import TemplateView, ListView, DetailView
 import stripe
 from django.conf import settings
 from .models import SubscriptionPlan
 from books.models import Books
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
+stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_version = settings.STRIPE_API_VERSION
 
 class SubscriptionsList(ListView):
     model = SubscriptionPlan
@@ -22,16 +23,26 @@ class SubscriptionsList(ListView):
 class SubscriptionView(TemplateView):
     template_name = 'subscription/subscription_view.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['STRIPE_PUBLIC_KEY'] = settings.STRIPE_PUBLISHABLE_KEY
+
+        return context
 
 
 @login_required
 def create_subscription_session(request, plan_id):
     plan = get_object_or_404(SubscriptionPlan, id=plan_id)
+
     if request.method == 'POST':
-        session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            customer_email=request.user.email,
-            line_items=[{
+        success_url = request.build_absolute_uri(reverse('subs:completed'))
+        cancel_url = request.build_absolute_uri(reverse('subs:canceled'))
+
+        # Данные сеанса оформления платежа Stripe
+        session_data = {
+            'payment_method_types': ['card'],
+            'customer_email': request.user.email,
+            'line_items': [{
                 'price_data': {
                     'currency': 'usd',
                     'product_data': {
@@ -41,19 +52,18 @@ def create_subscription_session(request, plan_id):
                 },
                 'quantity': 1,
             }],
-            metadata={
-                'purchase_type': 'subscription',
-                'item_id': plan_id,
-            },
-            mode='payment',
-            success_url=request.build_absolute_uri(reverse('subs:completed')) + '?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url=request.build_absolute_uri(reverse('subs:canceled'))
-        )
+            'mode': 'payment',
+            'success_url': success_url + '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url': cancel_url,
+        }
 
-        return JsonResponse({'id': session.id})
+        # Создать сеанс оформления платежа Stripe
+        session = stripe.checkout.Session.create(**session_data)
+
+        # Перенаправить к платежной форме Stripe
+        return redirect(session.url, code=303)
     else:
-        return JsonResponse({'error': 'Invalid request method'}, status=405)
-
+        return render(request, 'subscription/subscribe.html', {'plan': plan})
 
 @login_required
 def create_book_purchase_session(request, book_id):
@@ -87,8 +97,8 @@ def create_book_purchase_session(request, book_id):
 
 
 def payment_completed(request):
-    return render(request, 'payment/completed.html')
+    return render(request, 'subscription/completed.html')
 
 
 def payment_canceled(request):
-    return render(request, 'payment/canceled.html')
+    return render(request, 'subscription/canceled.html')
