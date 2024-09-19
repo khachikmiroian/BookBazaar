@@ -157,6 +157,15 @@
             text-decoration: none;
         }
 
+        /* Profile photo styling */
+        .profile-photo {
+            width: 30px;  /* Размер фотографии */
+            height: 30px; /* Размер фотографии */
+            border-radius: 50%;  /* Скругляем края до круга */
+            object-fit: cover;  /* Центрируем изображение в круге */
+            margin-right: 8px;  /* Отступ справа от имени */
+        }
+
     </style>
     <title>{% block title %}{% endblock %}</title>
 </head>
@@ -175,7 +184,15 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a>
+                <li>
+                    <a href="{% url 'profile' %}">
+                        {% if user.profile.photo %}
+                        <img src="{{ user.profile.photo.url }}" alt="Profile Photo" class="profile-photo img-circle">
+                        {{ user.username }}
+                        {% else %}
+                        <span class="glyphicon glyphicon-user"></span> {{ user.username }}
+                        {% endif %}
+                    </a>
                 </li>
                 <li>
                     <form method="POST" action="{% url 'logout' %}" style="display:inline;" id="logoutForm">
@@ -189,24 +206,6 @@
                 <li><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                 <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 {% endif %}
-
-                <script>
-                    // Найдем кнопку Log Out
-                    document.getElementById('logoutButton').addEventListener('click', function(event) {
-                        // Отображаем окно подтверждения
-                        var confirmation = confirm("Are you sure you want to log out?");
-
-                        if (confirmation) {
-                            // Если пользователь подтвердил, отправляем форму выхода
-                            document.getElementById('logoutForm').submit();
-                        } else {
-                            // Если пользователь отменил, ничего не делаем (можно перенаправить или просто оставить)
-                            event.preventDefault(); // предотвращаем действие кнопки по умолчанию
-                        }
-                    });
-                </script>
-
-
             </ul>
         </div>
     </nav>
@@ -219,6 +218,21 @@
     </div>
 </footer>
 
+<script>
+    // Найдем кнопку Log Out
+    document.getElementById('logoutButton').addEventListener('click', function(event) {
+        // Отображаем окно подтверждения
+        var confirmation = confirm("Are you sure you want to log out?");
+
+        if (confirmation) {
+            // Если пользователь подтвердил, отправляем форму выхода
+            document.getElementById('logoutForm').submit();
+        } else {
+            // Если пользователь отменил, ничего не делаем
+            event.preventDefault();
+        }
+    });
+</script>
 
 </body>
 </html>

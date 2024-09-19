@@ -1,11 +1,21 @@
 {% extends "base.html" %}
 
-{% block title %}Welcome{% endblock %}
+{% block title %}Welcome to Our Site!{% endblock %}
 
 {% block content %}
-  <h1>Welcome {{ new_user.first_name }}!</h1>
-  <p>
-    Your account has been successfully created.
-    Now you can <a href="{% url 'login' %}">log in</a>.
-  </p>
+<section class="welcome-section" style="min-height: 80vh; display: center; justify-content: center; align-items: center; margin-left: 300px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <div class="welcome-message card shadow-lg p-4">
+                    <h1 class="display-4">Welcome, {{ new_user.username }}!</h1>
+                    <p class="lead">Your account has been successfully created. We're thrilled to have you!</p>
+                    <hr class="my-4">
+                    <p>You can now log in and explore everything we have to offer.</p>
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg mt-3">Log In</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

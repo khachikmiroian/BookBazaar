@@ -51,12 +51,12 @@ class UserRegistrationDoneView(View):
         return render(request, 'accounts/register_done.html', {'new_user': request.user})
 
 
+
+
 @login_required
 def edit(request, id):
-    # Получаем объект профиля по ID
     profile = get_object_or_404(Profile, user_id=id)
 
-    # Проверяем, что текущий пользователь совпадает с профилем
     if request.user.id != profile.user_id:
         return redirect('profile')
 
@@ -67,17 +67,21 @@ def edit(request, id):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Profile updated successfully')
+            return redirect('profile')
         else:
             messages.error(request, 'Error updating your profile')
-        return redirect('profile')
     else:
         user_form = UserEditForm(instance=profile.user)
         profile_form = ProfileEditForm(instance=profile)
 
     return render(request, 'accounts/edit.html', {
         'user_form': user_form,
-        'profile_form': profile_form
+        'profile_form': profile_form,
+        'profile': profile
     })
+
+
+
 
 
 class ProfileView(TemplateView):

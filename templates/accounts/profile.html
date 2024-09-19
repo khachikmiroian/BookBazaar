@@ -23,7 +23,7 @@
                     <p><strong>First Name:</strong> {{ user.first_name }}</p>
                     <p><strong>Last Name:</strong> {{ user.last_name }}</p>
                     <!-- Edit Profile Button -->
-                    <a href="{% url 'edit' user.pk %}" class="btn btn-primary">Edit Profile</a>
+                    <a href="{% url 'edit' id=request.user.id %}" class="btn btn-primary">Edit Profile</a>
                 </div>
             </div>
 
