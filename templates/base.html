@@ -178,9 +178,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="{% url 'books:home' %}">Home</a></li>
-                <li><a href="#">Categories</a></li>
-                <li><a href="#">Best Sellers</a></li>
-                <li><a href="#">New Releases</a></li>
+                <li><a href="{% url 'subs:subscriptions_list' %}">Pricing</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}

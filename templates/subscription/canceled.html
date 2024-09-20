@@ -1,6 +1,56 @@
-{% extends "shop/base.html" %}
-{% block title %}Payment canceled{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Payment Canceled{% endblock %}
+
 {% block content %}
-<h1>Your payment has not been processed</h1>
-<p>There was a problem processing your payment.</p>
+<section class="payment-section">
+    <div class="container text-center" style="margin-top: 50px;">
+        <h1 style="color: #e74c3c; font-size: 2.5rem;">Oops! Payment Failed</h1>
+        <p style="color: #555; font-size: 1.2rem; margin-bottom: 30px;">
+            Unfortunately, there was an issue processing your payment. Please check your payment details or try again later.
+        </p>
+        <p style="color: #777;">
+            If the problem persists, feel free to contact our
+            <a href="{% url 'books:about_us' %}" style="color: #3498db; text-decoration: underline;">support team</a>
+            for assistance.
+        </p>
+
+        <!-- Кнопки возврата -->
+        <div class="btn-group" role="group" aria-label="Navigation Buttons">
+            <a href="{% url 'home' %}" class="btn btn-outline-primary" style="padding: 15px 30px; font-size: 1.2rem;">Return to Home Page</a>
+            <a href="{% url 'subs:subscriptions_list' %}" class="btn btn-primary" style="padding: 15px 30px; font-size: 1.2rem; margin-left: 15px;">Choose a New Subscription</a>
+        </div>
+
+        <!-- Дополнительный текст -->
+        <div style="margin-top: 30px;">
+            <p style="color: #888; font-size: 1rem;">
+                Didn't mean to cancel? You can always explore our other plans or go back to the home page for more options.
+            </p>
+        </div>
+    </div>
+</section>
+
+<style>
+    .payment-section {
+        background-color: #f9f9f9;
+        padding: 60px 0;
+    }
+    .btn-outline-primary {
+        border-color: #3498db;
+        color: #3498db;
+        font-size: 1.2rem;
+    }
+    .btn-outline-primary:hover {
+        background-color: #3498db;
+        color: #fff;
+    }
+    .btn-primary {
+        background-color: #3498db;
+        border-color: #3498db;
+        font-size: 1.2rem;
+    }
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+</style>
 {% endblock %}

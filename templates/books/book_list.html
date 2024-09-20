@@ -1,1 +1,106 @@
-<p>nooks</p>
+{% extends "base.html" %}
+
+{% block title %}Book List{% endblock %}
+
+{% block content %}
+<section class="book-list-section">
+    <div class="container">
+        <h1 class="text-center mb-5">Available Books</h1>
+        
+        <div class="row">
+            {% for book in books %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">by {{ book.author }}</h6>
+                            <p class="card-text">{{ book.description|truncatewords:20 }}</p>
+                            <p><strong>Price:</strong> ${{ book.price }}</p>
+                            <p><strong>Date:</strong> {{ book.date }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ book.get_absolute_url }}" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No books are available at the moment.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Пагинация -->
+        <div class="pagination justify-content-center">
+            {% if is_paginated %}
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">{{ page_obj.number }}</a>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'home' %}" class="btn btn-secondary">Return to Home</a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .book-list-section {
+        padding: 50px 0;
+        background-color: #f9f9f9;
+    }
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card h5 {
+        font-size: 1.5rem;
+        color: #2c3e50;
+    }
+    .card-subtitle {
+        font-size: 1.1rem;
+        color: #7f8c8d;
+    }
+    .card-footer {
+        background-color: #fff;
+    }
+    .btn-primary {
+        background-color: #3498db;
+        border-color: #3498db;
+    }
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+    .btn-secondary {
+        font-size: 1.2rem;
+    }
+    .pagination {
+        margin-top: 20px;
+    }
+    .pagination .page-item .page-link {
+        color: #3498db;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #3498db;
+        border-color: #3498db;
+    }
+</style>
+{% endblock %}

@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}
+    {{ book.title }} - Book Details
+{% endblock %}
+
+{% block content %}
+    <section class="book-detail">
+        <div class="container">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h2 class="card-title">{{ book.title }}</h2>
+                    <h4>By {{ book.author }}</h4>
+                    <p><strong>Published on:</strong> {{ book.date }}</p>
+                    <p><strong>Description:</strong> {{ book.description }}</p>
+                    <p><strong>Price:</strong> ${{ book.price }}</p>
+
+                    <form action="{% url 'subs:create_subscription_session' book.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary btn-lg">Buy Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
