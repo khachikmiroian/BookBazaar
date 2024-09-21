@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Profile
 from django.forms.widgets import DateInput
+import re
+
 
 class LoginForm(forms.Form):
     username = forms.CharField()
@@ -18,11 +20,28 @@ class UserRegistrationForm(forms.ModelForm):
         model = User
         fields = ['username', 'first_name', 'email']
 
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Passwords don\'t match.')
-        return cd['password2']
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if not self.is_strong_password(password):
+            raise forms.ValidationError(
+                'Password must be at least 8 characters long and contain letters, numbers and special characters.')
+        return password
+
+    def is_strong_password(self, password):
+        return (len(password) >= 8 and
+                re.search(r'\d', password) and
+                re.search(r'[A-Za-z]', password) and
+                re.search(r'[!@#$_%^&*(),.?":{}|<>]', password))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+
+        if password and password2 and password != password2:
+            raise forms.ValidationError("Пароли не совпадают.")
+
+        return cleaned_data
 
     def clean_email(self):
         data = self.cleaned_data['email']
