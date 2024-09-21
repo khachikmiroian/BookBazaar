@@ -10,6 +10,7 @@ from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditFor
 from .models import Profile
 from django.contrib.auth.views import LogoutView
 from django.urls import reverse_lazy
+from subscriptions.models import BookPurchase
 
 
 class UserLoginView(View):
@@ -51,8 +52,6 @@ class UserRegistrationDoneView(View):
         return render(request, 'accounts/register_done.html', {'new_user': request.user})
 
 
-
-
 @login_required
 def edit(request, id):
     profile = get_object_or_404(Profile, user_id=id)
@@ -81,15 +80,17 @@ def edit(request, id):
     })
 
 
-
-
-
 class ProfileView(TemplateView):
     template_name = 'accounts/profile.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['profile'] = get_object_or_404(Profile, user=self.request.user)
+        profile = get_object_or_404(Profile, user=self.request.user)
+        context['profile'] = profile
+
+        # Получаем купленные книги напрямую из профиля
+        context['purchased_books'] = profile.purchased_books.all()
+
         return context
 
 

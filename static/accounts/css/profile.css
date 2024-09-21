@@ -1,0 +1,20 @@
+.edit-profile-button {
+    margin-top: 15px; /* Отступ сверху */
+}
+
+.upload-button {
+    display: inline-block; /* Встраивание кнопки в строку */
+    padding: 10px 20px; /* Отступы */
+    background-color: #007bff; /* Цвет фона */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем стандартные границы */
+    border-radius: 5px; /* Закругленные углы */
+    cursor: pointer; /* Указатель при наведении */
+    font-size: 16px; /* Размер шрифта */
+    transition: background-color 0.3s, transform 0.3s; /* Плавный переход для фона и масштаба */
+}
+
+.upload-button:hover {
+    background-color: #0056b3; /* Темный цвет фона при наведении */
+    transform: scale(1.05); /* Увеличение кнопки при наведении */
+}

@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block title %}Edit Profile{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'accounts/css/edit.css' %}">
 <section class="page-header">
     <div class="container">
         <h1>Edit Profile</h1>
@@ -17,156 +19,34 @@
             {% csrf_token %}
 
             <!-- Отображаем поля из формы ProfileEditForm -->
+            {{ profile_form.as_p }}
+
+            <!-- Кнопка для выбора изображения -->
 
 
             <!-- Отображаем поля из формы UserEditForm -->
             {{ user_form.as_p }}
-            {{ profile_form.as_p }}
+            <div class="image-upload">
+                <label for="id_photo" class="upload-button">
+                    <span>Select Image</span>
+                </label>
+                <input id="id_photo" type="file" accept="image/*"/>
+            </div>
 
             <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
     </div>
 </section>
 
-<style>
-/* Стиль для поля выбора файла */
-.custom-file-upload {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    background: #f8f9fa;
-    color: #495057;
-    overflow: hidden;
-}
-
-.custom-file-upload input[type="file"] {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.custom-file-label {
-    display: block;
-    padding: 10px 20px;
-    border-radius: 5px;
-    background: #e2e6ea;
-    color: #007bff;
-    cursor: pointer;
-    text-align: center;
-}
-
-.custom-file-label img {
-    display: block;
-    margin-top: 10px;
-}
-
-.custom-file-label:hover {
-    background: #ced4da;
-}
-
-/* Стиль для полей ввода */
-input[type="text"], input[type="email"], input[type="password"], textarea, input[type="date"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    box-sizing: border-box;
-    font-size: 16px;
-}
-
-input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus, input[type="date"]:focus {
-    border-color: #80bdff;
-    outline: none;
-}
-
-/* Стиль для кнопки отправки */
-button[type="submit"] {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background: #007bff;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-button[type="submit"]:hover {
-    background: #0056b3;
-}
-
-/* Стиль для поля выбора файла */
-.custom-file-upload {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    padding: 10px;
-    background: #f8f9fa;
-    color: #495057;
-    overflow: hidden;
-    text-align: center;
-    margin: 10px 0;
-}
-
-.custom-file-upload input[type="file"] {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.custom-file-label {
-    display: block;
-    padding: 10px;
-    border-radius: 5px;
-    background: #e2e6ea;
-    color: #007bff;
-    cursor: pointer;
-    text-align: center;
-    font-size: 16px;
-    line-height: 1.5;
-}
-
-.custom-file-label img {
-    max-width: 100%;
-    height: auto;
-    margin-top: 10px;
-    border-radius: 5px;
-}
-
-.custom-file-label:hover {
-    background: #ced4da;
-}
-
-.custom-file-upload input[type="file"]:focus + .custom-file-label {
-    border-color: #80bdff;
-}
-
-</style>
-
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var fileInput = document.getElementById('id_photo');
-    var fileLabel = document.querySelector('.custom-file-label');
+    document.addEventListener('DOMContentLoaded', function() {
+        var fileInput = document.getElementById('id_photo');
+        var fileLabel = document.querySelector('.upload-button span');
 
-    fileInput.addEventListener('change', function(event) {
-        var fileName = event.target.files[0] ? event.target.files[0].name : 'Choose a file';
-        fileLabel.textContent = fileName;
+        fileInput.addEventListener('change', function(event) {
+            var fileName = event.target.files[0] ? event.target.files[0].name : 'Select Image';
+            fileLabel.textContent = fileName;
+        });
     });
-});
 </script>
 {% endblock %}

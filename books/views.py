@@ -9,6 +9,8 @@ import stripe
 from .models import Books, Author
 from subscriptions.models import BookPurchase
 from .forms import SearchForm
+from django.http import FileResponse, Http404
+from .models import Books
 
 # Убедитесь, что вы установили API-ключи Stripe
 stripe.api_key = 'sk_test_51Q00p605q7WRrvT5jTfofvlcC0vR5IBnUVApJc3Vxy8lmVsFszMN3GLoLTiux0mL00XCm9VsUn6rbScf9ys89NX400FqEnX62P'
@@ -77,6 +79,11 @@ class BookDetailView(DetailView):
     model = Books
     template_name = 'books/book_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = self.get_object()
+        return context
+
     def post(self, request, *args, **kwargs):
         book = self.get_object()
 
@@ -122,3 +129,12 @@ def success_view(request):
 
 def canceled_view(request):
     return render(request, 'books/canceled.html')
+
+
+def view_pdf(request, book_id):
+    book = get_object_or_404(Books, id=book_id)
+    if book.pdf_file:
+        response = FileResponse(book.pdf_file.open(), content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="{}"'.format(book.pdf_file.name)
+        return response
+    raise Http404("PDF file not found")

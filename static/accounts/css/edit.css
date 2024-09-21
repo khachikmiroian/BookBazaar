@@ -1,0 +1,151 @@
+
+.custom-file-upload {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background: #f8f9fa;
+    color: #495057;
+    overflow: hidden;
+}
+
+.custom-file-upload input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.custom-file-label {
+    display: block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background: #e2e6ea;
+    color: #007bff;
+    cursor: pointer;
+    text-align: center;
+}
+
+.custom-file-label img {
+    display: block;
+    margin-top: 10px;
+}
+
+.custom-file-label:hover {
+    background: #ced4da;
+}
+
+/* Стиль для полей ввода */
+input[type="text"], input[type="email"], input[type="password"], textarea, input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus, input[type="date"]:focus {
+    border-color: #80bdff;
+    outline: none;
+}
+
+/* Стиль для кнопки отправки */
+button[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background: #0056b3;
+}
+
+/* Стиль для поля выбора файла */
+.custom-file-upload {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    background: #f8f9fa;
+    color: #495057;
+    overflow: hidden;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.custom-file-upload input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.custom-file-label {
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    background: #e2e6ea;
+    color: #007bff;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.custom-file-label img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.custom-file-label:hover {
+    background: #ced4da;
+}
+
+.custom-file-upload input[type="file"]:focus + .custom-file-label {
+    border-color: #80bdff;
+}
+.image-upload {
+    text-align: center; /* Центрирование контента */
+    margin: 20px 0; /* Отступы */
+}
+
+.upload-button {
+    display: inline-block; /* Встраивание кнопки в строку */
+    padding: 10px 20px; /* Отступы */
+    background-color: #007bff; /* Цвет фона */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем стандартные границы */
+    border-radius: 5px; /* Закругленные углы */
+    cursor: pointer; /* Указатель при наведении */
+    font-size: 16px; /* Размер шрифта */
+    transition: background-color 0.3s, transform 0.3s; /* Плавный переход для фона и масштаба */
+    margin-top: 10px; /* Отступ сверху */
+}
+
+.upload-button:hover {
+    background-color: #0056b3; /* Темный цвет фона при наведении */
+    transform: scale(1.05); /* Увеличение кнопки при наведении */
+}
+
+input[type="file"] {
+    display: none; /* Скрываем стандартный input */
+}

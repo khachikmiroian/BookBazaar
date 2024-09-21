@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}User Profile{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}">
 <!-- Page Header -->
 <section class="page-header">
     <div class="container">
@@ -23,7 +25,11 @@
                     <p><strong>First Name:</strong> {{ user.first_name }}</p>
                     <p><strong>Last Name:</strong> {{ user.last_name }}</p>
                     <!-- Edit Profile Button -->
-                    <a href="{% url 'edit' id=request.user.id %}" class="btn btn-primary">Edit Profile</a>
+                    <div class="edit-profile-button">
+                        <a href="{% url 'edit' id=request.user.id %}" class="upload-button">
+                            <span>Edit Profile</span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -32,13 +38,15 @@
                 <div class="purchased-books">
                     <h2>Purchased Books</h2>
                     {% if purchased_books %}
-                        <ul>
-                            {% for book in purchased_books %}
-                                <li>{{ book.title }} by {{ book.author }}</li>
-                            {% endfor %}
-                        </ul>
+                    <ul>
+                        {% for book in purchased_books %}
+                        <li>
+                            <a href="{% url 'books:view_pdf' book.id %}" target="_blank">{{ book.title }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
                     {% else %}
-                        <p>No purchased books.</p>
+                    <p>No purchased books.</p>
                     {% endif %}
                 </div>
             </div>
@@ -50,13 +58,13 @@
                 <div class="subscription-plans">
                     <h2>Active Subscription Plans</h2>
                     {% if subscription_plans %}
-                        <ul>
-                            {% for plan in subscription_plans %}
-                                <li>{{ plan.name }} - {{ plan.details }}</li>
-                            {% endfor %}
-                        </ul>
+                    <ul>
+                        {% for plan in subscription_plans %}
+                        <li>{{ plan.name }} - {{ plan.details }}</li>
+                        {% endfor %}
+                    </ul>
                     {% else %}
-                        <p>No active subscription plans.</p>
+                    <p>No active subscription plans.</p>
                     {% endif %}
                 </div>
             </div>

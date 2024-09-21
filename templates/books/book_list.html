@@ -1,8 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Book List{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'books/css/book_list.css' %}">
 <section class="book-list-section">
     <div class="container">
         <h1 class="text-center mb-5">Available Books</h1>
@@ -63,44 +65,4 @@
     </div>
 </section>
 
-<style>
-    .book-list-section {
-        padding: 50px 0;
-        background-color: #f9f9f9;
-    }
-    .card {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .card h5 {
-        font-size: 1.5rem;
-        color: #2c3e50;
-    }
-    .card-subtitle {
-        font-size: 1.1rem;
-        color: #7f8c8d;
-    }
-    .card-footer {
-        background-color: #fff;
-    }
-    .btn-primary {
-        background-color: #3498db;
-        border-color: #3498db;
-    }
-    .btn-primary:hover {
-        background-color: #2980b9;
-    }
-    .btn-secondary {
-        font-size: 1.2rem;
-    }
-    .pagination {
-        margin-top: 20px;
-    }
-    .pagination .page-item .page-link {
-        color: #3498db;
-    }
-    .pagination .page-item.active .page-link {
-        background-color: #3498db;
-        border-color: #3498db;
-    }
-</style>
 {% endblock %}
