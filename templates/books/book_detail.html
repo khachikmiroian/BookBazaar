@@ -16,7 +16,7 @@
         <div class="card mb-3">
             <div class="card-body">
                 <h2 class="card-title">{{ book.title }}</h2>
-                <h4>By {{ book.author }}</h4>
+                <h4>By <a href="{% url 'books:author_detail' book.author.id %}">{{ book.author }}</a></h4> <!-- Обновлено -->
                 <p><strong>Published on:</strong> {{ book.date }}</p>
                 <p><strong>Description:</strong> {{ book.description }}</p>
                 <p><strong>Price:</strong> ${{ book.price }}</p>

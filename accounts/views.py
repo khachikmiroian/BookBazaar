@@ -12,6 +12,23 @@ from django.contrib.auth.views import LogoutView
 from django.urls import reverse_lazy
 from subscriptions.models import BookPurchase
 
+class ProfileView(TemplateView):
+    template_name = 'accounts/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = get_object_or_404(Profile, user=self.request.user)
+        context['profile'] = profile
+
+        # Получаем купленные книги из профиля
+        context['purchased_books'] = profile.purchased_books.all()
+
+        # Получаем активную подписку через профиль
+        context['active_subscription'] = profile.get_active_subscription()
+
+        return context
+
+
 
 class UserLoginView(View):
     def get(self, request):

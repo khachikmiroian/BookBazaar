@@ -22,3 +22,6 @@ class Profile(models.Model):
 
     def has_trial_access(self):
         return self.trial_end_date > timezone.now()
+
+    def get_active_subscription(self):
+        return Subscription.objects.filter(user=self.user, end_date__gt=timezone.now()).first()

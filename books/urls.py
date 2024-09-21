@@ -13,9 +13,5 @@ urlpatterns = [
                   path('books/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
                   path('authors/', AuthorListView.as_view(), name='author_list'),
                   path('authors/<int:pk>/', AuthorDetailView.as_view(), name='author_detail'),
-                  path('success/', success_view, name='success'),
-                  path('canceled/', canceled_view, name='canceled'),
-                  path('create-subscription-session/<int:plan_id>/', create_subscription_session,
-                       name='create_subscription_session'),
-                  path('view-pdf/<int:book_id>/', view_pdf, name='view_pdf'),  # Другие пути
+                  path('view-pdf/<int:book_id>/', view_pdf, name='view_pdf'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -20,7 +20,7 @@ class SubscriptionPlan(models.Model):
 
 
 class Subscription(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='subscription')
     plan = models.ForeignKey(SubscriptionPlan, on_delete=models.SET_NULL, null=True, blank=True)
     start_date = models.DateTimeField(default=timezone.now)
     end_date = models.DateTimeField()
@@ -45,5 +45,3 @@ class BookPurchase(models.Model):
 
     def __str__(self):
         return f'{self.user.username} bought {self.book.title}'
-
-

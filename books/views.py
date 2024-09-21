@@ -11,9 +11,7 @@ from subscriptions.models import BookPurchase
 from .forms import SearchForm
 from django.http import FileResponse, Http404
 from .models import Books
-
-# Убедитесь, что вы установили API-ключи Stripe
-stripe.api_key = 'sk_test_51Q00p605q7WRrvT5jTfofvlcC0vR5IBnUVApJc3Vxy8lmVsFszMN3GLoLTiux0mL00XCm9VsUn6rbScf9ys89NX400FqEnX62P'
+from django.conf import settings
 
 
 class HomeView(TemplateView):
@@ -35,13 +33,11 @@ def post_search(request):
         if form.is_valid():
             query = form.cleaned_data['query']
 
-            # Поиск книг
             book_results = Books.objects.filter(
                 status=Books.Status.PUBLISHED,
                 title__icontains=query
             ).distinct()
 
-            # Поиск авторов
             author_results = Author.objects.filter(
                 Q(first_name__icontains=query) | Q(last_name__icontains=query)
             ).distinct()
@@ -61,7 +57,6 @@ class BookListView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        # Фильтруем только опубликованные книги
         return Books.objects.filter(status='PB')
 
 
@@ -71,7 +66,9 @@ class AuthorListView(ListView):
     paginate_by = 6
 
 
-stripe.api_key = 'YOUR_STRIPE_SECRET_KEY'
+class AuthorDetailView(DetailView):
+    model = Author
+    template_name = 'books/author_detail.html'
 
 
 @method_decorator(login_required, name='dispatch')
@@ -84,34 +81,6 @@ class BookDetailView(DetailView):
         context['book'] = self.get_object()
         return context
 
-    def post(self, request, *args, **kwargs):
-        book = self.get_object()
-
-        # Создание сессии Stripe
-        session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[
-                {
-                    'price_data': {
-                        'currency': 'usd',
-                        'product_data': {
-                            'name': book.title,
-                        },
-                        'unit_amount': int(book.price * 100),  # Цена в центах
-                    },
-                    'quantity': 1,
-                },
-            ],
-            mode='payment',
-            success_url=request.build_absolute_uri(reverse_lazy('books:success')),
-            cancel_url=request.build_absolute_uri(reverse_lazy('books:canceled')),
-        )
-
-        # Сохранение покупки в модели BookPurchase
-        BookPurchase.objects.create(user=request.user, book=book)
-
-        return redirect(session.url, code=303)
-
 
 class AuthorDetailView(DetailView):
     model = Author
@@ -120,15 +89,6 @@ class AuthorDetailView(DetailView):
 
 class Contact(TemplateView):
     template_name = 'books/contact.html'
-
-
-# Представления для успешного и отмененного платежей
-def success_view(request):
-    return render(request, 'books/success.html')
-
-
-def canceled_view(request):
-    return render(request, 'books/canceled.html')
 
 
 def view_pdf(request, book_id):

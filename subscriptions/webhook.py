@@ -25,6 +25,7 @@ def stripe_webhook(request):
     except stripe.error.SignatureVerificationError:
         return HttpResponse(status=400)
 
+    # Обрабатываем события
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         handle_checkout_session(session)
@@ -35,25 +36,22 @@ def stripe_webhook(request):
 def handle_checkout_session(session):
     customer_email = session.get('customer_email')
     payment_status = session.get('payment_status')
+    metadata = session.get('metadata', {})
+    purchase_type = metadata.get('purchase_type')
 
     if payment_status == 'paid':
-        metadata = session.get('metadata', {})
-        purchase_type = metadata.get('purchase_type')
-        item_id = metadata.get('item_id')
-
         if purchase_type == 'subscription':
+            # Обработка подписки
             plan_name = session['display_items'][0]['custom']['name']
             plan = SubscriptionPlan.objects.get(name=plan_name)
             user = User.objects.get(email=customer_email)
-            subscription, created = Subscription.objects.get_or_create(user=user, defaults={'plan': plan})
-            if not created:
-                subscription.plan = plan
-                subscription.start_date = now()
-                subscription.end_date = None
-                subscription.save()
-
+            Subscription.objects.update_or_create(
+                user=user,
+                defaults={'plan': plan, 'start_date': timezone.now(), 'end_date': None}
+            )
         elif purchase_type == 'book':
-
-            book = Books.objects.get(id=item_id)
+            # Обработка покупки книги
+            book_id = metadata.get('item_id')
+            book = Books.objects.get(id=book_id)
             user = User.objects.get(email=customer_email)
             BookPurchase.objects.create(user=user, book=book)

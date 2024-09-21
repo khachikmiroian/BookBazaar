@@ -9,7 +9,7 @@ class Books(models.Model):
         PUBLISHED = 'PB', 'Published'
 
     title = models.CharField(max_length=20)
-    author = models.ForeignKey('Author', on_delete=models.CASCADE, related_name='author')
+    author = models.ForeignKey('Author', on_delete=models.CASCADE, related_name='books')
     description = models.TextField()
     date = models.DateField()
     price = models.DecimalField(max_digits=10, decimal_places=2)

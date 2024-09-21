@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+from . import webhook
 app_name = 'subs'
 
 urlpatterns = [
@@ -12,5 +12,5 @@ urlpatterns = [
          name='create_book_purchase_session'),
     path('completed/', views.payment_completed, name='completed'),
     path('canceled/', views.payment_canceled, name='canceled'),
-    path('stripe-webhook/', views.stripe_webhook, name='stripe_webhook'),
+    path('webhook/', webhook.stripe_webhook),
 ]
