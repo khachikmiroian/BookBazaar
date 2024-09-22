@@ -1,6 +1,7 @@
 from django.db import models
 from taggit.managers import TaggableManager
 from django.urls import reverse
+from django.db import models
 
 
 class Books(models.Model):
@@ -45,3 +46,12 @@ class Author(models.Model):
     class Meta:
         verbose_name = 'Author'
         verbose_name_plural = 'Authors'
+
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+    description = models.TextField()
+    published_date = models.DateField()
+
+    def __str__(self):
+        return self.title
