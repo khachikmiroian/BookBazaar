@@ -8,6 +8,7 @@ app_name = 'books'
 
 urlpatterns = [
                   path('', HomeView.as_view(), name='home'),
+                  path('search/', post_search, name='search'),
                   path('about-us/', AboutUsView.as_view(), name='about_us'),
                   path('books/', BookListView.as_view(), name='book_list'),
                   path('books/<int:pk>/', BookDetailView.as_view(), name='book_detail'),

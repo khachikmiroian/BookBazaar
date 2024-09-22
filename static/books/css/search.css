@@ -1,0 +1,111 @@
+
+        /* Общие стили */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2f7; /* Мягкий светлый фон */
+        }
+
+        header {
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        main {
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px; /* Скругленные углы */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Тень для блока */
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+        }
+
+        /* Стили формы поиска */
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1.1em;
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 1em;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #3498db; /* Обновленный цвет кнопки */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease; /* Плавный переход при наведении */
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2980b9; /* Темнее при наведении */
+        }
+
+        /* Стили для результатов поиска */
+        section#results h2 {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #3498db; /* Подчеркивание заголовка */
+            padding-bottom: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+
+
+        ul li:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Тень при наведении */
+        }
+
+        ul li strong {
+            font-size: 1.2em;
+            display: block;
+            color: #333;
+        }
+
+        ul li p {
+            margin: 5px 0 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Отсутствие результатов */
+        p {
+            font-size: 1.1em;
+            color: #999;
+            text-align: center;
+        }

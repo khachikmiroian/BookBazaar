@@ -179,6 +179,13 @@
             <ul class="nav navbar-nav">
                 <li><a href="{% url 'books:home' %}">Home</a></li>
                 <li><a href="{% url 'subs:subscriptions_list' %}">Pricing</a></li>
+                <li><a href="{% url 'books:about_us' %}">About Us</a></li>
+                <div class="search-container">
+                    <form action="{% url 'books:search' %}" method="GET">
+                        <input type="text" name="query" placeholder="Search for books..." required>
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
@@ -212,7 +219,7 @@
 <footer>
     <p>&copy; 2024 Online Book Store. All rights reserved.</p>
     <div class="contact-info">
-        <p>Contact us at: info@onlinebookstore.com | <a href="{% url 'books:about_us' %}">About Us</a></p>
+        <p>Contact us at: info@onlinebookstore.com</p>
     </div>
 </footer>
 
