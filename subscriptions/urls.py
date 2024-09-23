@@ -1,7 +1,8 @@
 from django.urls import path
 from . import views
 from . import webhook
-app_name = 'subs'
+
+app_name = 'subscriptions'
 
 urlpatterns = [
     path('subscriptions-list/', views.SubscriptionsList.as_view(), name='subscriptions_list'),
@@ -13,4 +14,6 @@ urlpatterns = [
     path('completed/', views.payment_completed, name='completed'),
     path('canceled/', views.payment_canceled, name='canceled'),
     path('webhook/', webhook.stripe_webhook),
+    path('plans/', views.SubscriptionPlanViewSet.as_view({'get': 'list'}), name='plan-list'),
+
 ]

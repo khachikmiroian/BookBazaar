@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Books
+from .models import Books  # Предположим, что ваша модель для книг называется Book
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Books
-        fields = ['id', 'title', 'author', 'description', 'published_date']
+        fields = '__all__'

@@ -13,7 +13,7 @@ from django.http import FileResponse, Http404
 from .models import Books
 from django.conf import settings
 from rest_framework import viewsets
-from .models import Books 
+from .models import Books
 from .serializers import BookSerializer
 
 class HomeView(TemplateView):
@@ -101,7 +101,6 @@ def view_pdf(request, book_id):
         return response
     raise Http404("PDF file not found")
 
-
 class BookViewSet(viewsets.ModelViewSet):
-    queryset = Books.objects.all()  
+    queryset = Books.objects.all()
     serializer_class = BookSerializer

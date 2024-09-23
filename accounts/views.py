@@ -11,6 +11,8 @@ from .models import Profile
 from django.contrib.auth.views import LogoutView
 from django.urls import reverse_lazy
 from subscriptions.models import BookPurchase
+from rest_framework import viewsets
+from .serializers import ProfileSerializer
 
 class ProfileView(TemplateView):
     template_name = 'accounts/profile.html'
@@ -115,3 +117,8 @@ class ProfileView(TemplateView):
 class UserLogoutView(LogoutView):
     template_name = 'logged_out.html'
     next_page = reverse_lazy('books:home')  # Куда перенаправлять после выхода
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
