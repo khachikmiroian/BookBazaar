@@ -13,6 +13,10 @@ from django.urls import reverse_lazy
 from subscriptions.models import BookPurchase
 from rest_framework import viewsets
 from .serializers import ProfileSerializer
+import logging
+
+# Настройка логирования
+logger = logging.getLogger(__name__)
 
 class ProfileView(TemplateView):
     template_name = 'accounts/profile.html'
@@ -22,14 +26,19 @@ class ProfileView(TemplateView):
         profile = get_object_or_404(Profile, user=self.request.user)
         context['profile'] = profile
 
+        # Логируем информацию о профиле пользователя
+        logger.info(f'Профиль пользователя {profile.user.username} загружен')
+
         # Получаем купленные книги из профиля
         context['purchased_books'] = profile.purchased_books.all()
+
+        # Логируем информацию о купленных книгах
+        logger.debug(f'Купленные книги для пользователя {profile.user.username}: {context["purchased_books"]}')
 
         # Получаем активную подписку через профиль
         context['active_subscription'] = profile.get_active_subscription()
 
         return context
-
 
 
 class UserLoginView(View):
@@ -45,10 +54,13 @@ class UserLoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
+                    logger.info(f'Пользователь {user.username} успешно авторизован')
                     return HttpResponse('Authenticated successfully')
                 else:
+                    logger.warning(f'Пользователь {user.username} попытался войти в отключенный аккаунт')
                     return HttpResponse('Disabled account')
             else:
+                logger.error(f'Неверная попытка входа с именем пользователя: {cd["username"]}')
                 return HttpResponse('Invalid login')
         return render(request, 'accounts/login.html', {'form': form})
 
@@ -63,6 +75,7 @@ class UserRegistrationView(FormView):
         new_user.set_password(form.cleaned_data['password'])
         new_user.save()
         Profile.objects.create(user=new_user)
+        logger.info(f'Новый пользователь {new_user.username} зарегистрирован')
         return super().form_valid(form)
 
 
@@ -76,6 +89,7 @@ def edit(request, id):
     profile = get_object_or_404(Profile, user_id=id)
 
     if request.user.id != profile.user_id:
+        logger.warning(f'Пользователь {request.user.username} попытался редактировать чужой профиль')
         return redirect('profile')
 
     if request.method == 'POST':
@@ -85,9 +99,11 @@ def edit(request, id):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Profile updated successfully')
+            logger.info(f'Профиль пользователя {request.user.username} успешно обновлен')
             return redirect('profile')
         else:
             messages.error(request, 'Error updating your profile')
+            logger.error(f'Ошибка при обновлении профиля пользователя {request.user.username}')
     else:
         user_form = UserEditForm(instance=profile.user)
         profile_form = ProfileEditForm(instance=profile)
@@ -99,26 +115,16 @@ def edit(request, id):
     })
 
 
-class ProfileView(TemplateView):
-    template_name = 'accounts/profile.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        profile = get_object_or_404(Profile, user=self.request.user)
-        context['profile'] = profile
-
-        # Получаем купленные книги напрямую из профиля
-        context['purchased_books'] = profile.purchased_books.all()
-
-        return context
-
-
 # Это использует стандартный LogoutView, но вы можете указать свой шаблон для страницы выхода
 class UserLogoutView(LogoutView):
     template_name = 'logged_out.html'
     next_page = reverse_lazy('books:home')  # Куда перенаправлять после выхода
+    logger.info('Пользователь успешно вышел')
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+    logger.info('Загружен ViewSet для профиля')
+
+
