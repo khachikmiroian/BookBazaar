@@ -9,10 +9,22 @@ from django.http import FileResponse, Http404
 from rest_framework import viewsets
 from .serializers import BookSerializer
 from taggit.models import Tag
+import requests
 
 
 class HomeView(TemplateView):
     template_name = 'books/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['random_quote'] = self.get_quote()
+        return context
+
+    def get_quote(self):
+        request = requests.get('https://favqs.com/api/qotd').json()
+        return f'Daily quote:{request["quote"]["body"]}'
+
 
 
 class AboutUsView(TemplateView):
