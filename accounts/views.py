@@ -13,24 +13,21 @@ from django.urls import reverse_lazy
 from subscriptions.models import BookPurchase
 from rest_framework import viewsets
 from .serializers import ProfileSerializer
+from subscriptions.models import Subscription, BookPurchase
+from django.utils import timezone
 
-class ProfileView(TemplateView):
-    template_name = 'accounts/profile.html'
+@login_required
+def profile_view(request):
+    user = request.user
+    purchased_books = BookPurchase.objects.filter(user=user)
+    active_subscription = user.subscription  # Предполагается, что у вас есть связь с подписками
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        profile = get_object_or_404(Profile, user=self.request.user)
-        context['profile'] = profile
-
-        # Получаем купленные книги из профиля
-        context['purchased_books'] = profile.purchased_books.all()
-
-        # Получаем активную подписку через профиль
-        context['active_subscription'] = profile.get_active_subscription()
-
-        return context
-
-
+    context = {
+        'user': user,
+        'purchased_books': purchased_books,
+        'active_subscription': active_subscription,
+    }
+    return render(request, 'accounts/profile.html', context)
 
 class UserLoginView(View):
     def get(self, request):

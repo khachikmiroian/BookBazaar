@@ -64,6 +64,7 @@ def create_subscription_session(request, plan_id):
             'cancel_url': cancel_url,
             'metadata': {
                 'purchase_type': 'subscription',
+                'plan_name': plan.name  # Добавляем имя плана в метаданные
             }
         }
 
@@ -72,6 +73,7 @@ def create_subscription_session(request, plan_id):
         return redirect(session.url, code=303)
     else:
         return render(request, 'subscription/subscribe.html', {'plan': plan})
+
 
 
 def payment_completed(request):
@@ -108,7 +110,7 @@ def create_book_purchase_session(request, book_id):
             'cancel_url': cancel_url,
             'metadata': {
                 'purchase_type': 'book',
-                'item_id': book_id,
+                'item_id': book.id  # Добавляем ID книги в метаданные
             }
         }
 
@@ -117,6 +119,7 @@ def create_book_purchase_session(request, book_id):
         return redirect(session.url, code=303)
     else:
         return render(request, 'books/book_detail.html', {'book': book})
+
     
 
 class SubscriptionPlanViewSet(viewsets.ModelViewSet):
