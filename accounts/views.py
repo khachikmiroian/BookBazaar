@@ -16,11 +16,16 @@ from .serializers import ProfileSerializer
 from subscriptions.models import Subscription, BookPurchase
 from django.utils import timezone
 
+
 @login_required
 def profile_view(request):
     user = request.user
     purchased_books = BookPurchase.objects.filter(user=user)
-    active_subscription = user.subscription  # Предполагается, что у вас есть связь с подписками
+
+    # Обработка получения активной подписки
+    active_subscription = getattr(user, 'subscription', None)
+    if active_subscription and not active_subscription.is_active:
+        active_subscription = None  # Если подписка не активна, установите значение в None
 
     context = {
         'user': user,
@@ -94,20 +99,6 @@ def edit(request, id):
         'profile_form': profile_form,
         'profile': profile
     })
-
-
-class ProfileView(TemplateView):
-    template_name = 'accounts/profile.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        profile = get_object_or_404(Profile, user=self.request.user)
-        context['profile'] = profile
-
-        # Получаем купленные книги напрямую из профиля
-        context['purchased_books'] = profile.purchased_books.all()
-
-        return context
 
 
 # Это использует стандартный LogoutView, но вы можете указать свой шаблон для страницы выхода

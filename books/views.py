@@ -16,6 +16,7 @@ from rest_framework import viewsets
 from .models import Books
 from .serializers import BookSerializer
 
+
 class HomeView(TemplateView):
     template_name = 'books/home.html'
 
@@ -73,7 +74,6 @@ class AuthorDetailView(DetailView):
     template_name = 'books/author_detail.html'
 
 
-@method_decorator(login_required, name='dispatch')
 class BookDetailView(DetailView):
     model = Books
     template_name = 'books/book_detail.html'
@@ -81,12 +81,14 @@ class BookDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['book'] = self.get_object()
+
+        if self.request.user.is_authenticated:
+            purchased_books = BookPurchase.objects.filter(user=self.request.user).values_list('book_id', flat=True)
+            context['purchased_books'] = purchased_books
+        else:
+            context['purchased_books'] = []
+
         return context
-
-
-class AuthorDetailView(DetailView):
-    model = Author
-    template_name = 'books/author_detail.html'
 
 
 class Contact(TemplateView):
@@ -100,6 +102,7 @@ def view_pdf(request, book_id):
         response['Content-Disposition'] = 'inline; filename="{}"'.format(book.pdf_file.name)
         return response
     raise Http404("PDF file not found")
+
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Books.objects.all()

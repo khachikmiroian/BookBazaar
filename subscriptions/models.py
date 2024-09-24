@@ -38,6 +38,7 @@ class Subscription(models.Model):
         super().save(*args, **kwargs)
 
 
+
 class BookPurchase(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     book = models.ForeignKey(Books, on_delete=models.CASCADE)
