@@ -11,6 +11,7 @@ from datetime import timedelta
 stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
+
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
@@ -43,37 +44,51 @@ def stripe_webhook(request):
 
     return HttpResponse(status=200)
 
+
 def handle_checkout_session(session):
+    print(session)
     customer_email = session.get('customer_email')
     payment_status = session.get('payment_status')
     metadata = session.get('metadata', {})
     purchase_type = metadata.get('purchase_type')
 
-    print(f'Обрабатывается сессия для {customer_email}, статус платежа: {payment_status}, тип покупки: {purchase_type}')
+    print(f'Processing session for {customer_email}, payment status: {payment_status}, purchase type: {purchase_type}')
 
     if payment_status == 'paid':
         if purchase_type == 'subscription':
             # Обработка подписки
             plan_name = metadata.get('plan_name')  # Достаем название плана из метаданных
+            print(f"Plan name from metadata: {plan_name}")
             try:
                 plan = SubscriptionPlan.objects.get(name=plan_name)
                 user = User.objects.get(email=customer_email)
+                print(f'User: {user}, Plan: {plan}')
 
-                # Создание или обновление подписки
-                Subscription.objects.update_or_create(
-                    user=user,
-                    defaults={
-                        'plan': plan,
-                        'start_date': timezone.now(),
-                        'end_date': timezone.now() + timedelta(days=30),
-                        'is_active': True  # Убедитесь, что вы активируете подписку
-                    }
-                )
-                print(f'Подписка для {customer_email} на план {plan_name} успешно создана.')
+                if str(plan) == 'M':
+                    Subscription.objects.update_or_create(
+                        user=user,
+                        defaults={
+                            'plan': plan,
+                            'start_date': timezone.now(),
+                            'end_date': timezone.now() + timedelta(days=30),
+                        }
+                    )
+                    print(f'Подписка для {customer_email} на план {plan_name} успешно создана.')
+                elif str(plan) == 'Y':
+                    Subscription.objects.update_or_create(
+                        user=user,
+                        defaults={
+                            'plan': plan,
+                            'start_date': timezone.now(),
+                            'end_date': timezone.now() + timedelta(days=365),
+                        }
+                    )
+                    print(f'Подписка для {customer_email} на план {plan_name} успешно создана.')
             except SubscriptionPlan.DoesNotExist:
                 print(f'План подписки с именем {plan_name} не найден.')
             except User.DoesNotExist:
                 print(f'Пользователь с email {customer_email} не найден.')
+
             except Exception as e:
                 print(f'Ошибка при обработке подписки: {str(e)}')
 
