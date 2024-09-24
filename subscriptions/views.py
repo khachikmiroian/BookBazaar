@@ -1,19 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views.generic import TemplateView, ListView
 from django.conf import settings
-from .models import SubscriptionPlan
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User
-from subscriptions.models import BookPurchase
 from books.models import Books
-from accounts.models import Profile
 import stripe
 from rest_framework import viewsets
 from .models import SubscriptionPlan
 from .serializers import SubscriptionSerializer
-
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 stripe.api_version = settings.STRIPE_API_VERSION
@@ -33,6 +26,7 @@ class SubscriptionView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['subscription'] = SubscriptionPlan.objects.get(pk=self.kwargs['pk'])
         context['STRIPE_PUBLIC_KEY'] = settings.STRIPE_PUBLISHABLE_KEY
 
         return context
@@ -73,7 +67,6 @@ def create_subscription_session(request, plan_id):
         return redirect(session.url, code=303)
     else:
         return render(request, 'subscription/subscribe.html', {'plan': plan})
-
 
 
 def payment_completed(request):
@@ -120,10 +113,7 @@ def create_book_purchase_session(request, book_id):
     else:
         return render(request, 'books/book_detail.html', {'book': book})
 
-    
 
 class SubscriptionPlanViewSet(viewsets.ModelViewSet):
     queryset = SubscriptionPlan.objects.all()
     serializer_class = SubscriptionSerializer
-
-

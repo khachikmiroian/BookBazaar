@@ -20,7 +20,16 @@
                 <p><strong>Published on:</strong> {{ book.date }}</p>
                 <p><strong>Description:</strong> {{ book.description }}</p>
                 <p><strong>Price:</strong> ${{ book.price }}</p>
-
+                {% if tag %}
+                <h2>Posts tagged with "{{ tag.name }}"</h2>
+                {% endif %}
+                <p class="tags">
+                    Tags:
+                    {% for tag in book.tags.all %}
+                    <a href="{% url 'books:book_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                    {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
                 {% if book.id in purchased_books %}
 
                 {% if book.pdf_file %}
@@ -48,13 +57,13 @@
                 <p>No PDF available for this book.</p>
                 {% endif %}
 
-            {% else %}
+                {% else %}
                 <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
                     {% csrf_token %}
                     <button type="submit">Purchase</button>
                 </form>
 
-            {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>
