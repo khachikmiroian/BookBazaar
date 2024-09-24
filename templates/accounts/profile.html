@@ -24,7 +24,7 @@
                     <p><strong>First Name:</strong> {{ user.first_name }}</p>
                     <p><strong>Last Name:</strong> {{ user.last_name }}</p>
                     <div class="edit-profile-button">
-                        <a href="{% url 'edit' id=request.user.id %}" class="upload-button">
+                        <a href="{% url 'edit' request.user.id %}" class="upload-button">
                             <span>Edit Profile</span>
                         </a>
                     </div>
@@ -33,19 +33,24 @@
 
             <!-- Purchased Books -->
             <div class="col-md-6">
-                <div class="purchased-books">
-                    <h2>Purchased Books</h2>
-                    {% if purchased_books %}
-                    <ul>
-                        {% for book in purchased_books %}
-                        <li><a href="{% url 'books:view_pdf' book.id %}" target="_blank">{{ book.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                    <p>No purchased books.</p>
-                    {% endif %}
-                </div>
-            </div>
+    <div class="purchased-books">
+        <h2>Purchased Books</h2>
+        {% if purchased_books %}
+            <ul>
+                {% for purchase in purchased_books %}
+                    <li>
+                        <a href="{% url 'books:view_pdf' purchase.book.id %}" target="_blank">
+                            {{ purchase.book.title }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No purchased books.</p>
+        {% endif %}
+    </div>
+</div>
+
         </div>
 
         <!-- Subscription Plans -->
@@ -54,10 +59,10 @@
                 <div class="subscription-plans">
                     <h2>Active Subscription Plans</h2>
                     {% if active_subscription %}
-                    <p>Plan: {{ active_subscription.plan.name }} ({{ active_subscription.plan.price }})</p>
-                    <p>Expires on: {{ active_subscription.end_date|date:"d-m-Y" }}</p>
+                        <p>Plan: {{ active_subscription.plan.name }} ({{ active_subscription.plan.price|floatformat:2 }})</p>
+                        <p>Expires on: {{ active_subscription.end_date|date:"d-m-Y" }}</p>
                     {% else %}
-                    <p>No active subscription plans.</p>
+                        <p>No active subscription plans.</p>
                     {% endif %}
                 </div>
             </div>

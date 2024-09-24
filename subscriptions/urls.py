@@ -6,7 +6,7 @@ app_name = 'subscriptions'
 
 urlpatterns = [
     path('subscriptions-list/', views.SubscriptionsList.as_view(), name='subscriptions_list'),
-    path('subscription/', views.SubscriptionView.as_view(), name='subscription'),
+    path('subscription/<int:pk>/', views.SubscriptionView.as_view(), name='subscription_detail'),
     path('create-subscription-session/<int:plan_id>/', views.create_subscription_session,
          name='create_subscription_session'),
     path('create-book-purchase-session/<int:book_id>/', views.create_book_purchase_session,

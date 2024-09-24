@@ -1,8 +1,7 @@
-<form id="subscription-form" method="POST">
-    {% csrf_token %}
-    <input type="hidden" id="plan-id" value="{{ plan.id }}">
-    <button type="submit">Subscribe</button>
-</form>
+<form action="{% url 'subs:create_subscription_session' subscription.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Purchase</button>
+                </form>
 <script src="https://js.stripe.com/v3/"></script>
 <script>
     const stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");

@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 from datetime import timedelta
 from books.models import Books
+from django.urls import reverse
 
 
 # Create your models here.
@@ -16,8 +17,11 @@ class SubscriptionPlan(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f'{self.name} - {self.price}'
+        return f'{self.name}'
 
+
+    def get_absolute_url(self):
+        return reverse('subscriptions:subscription_detail', args=[str(self.id)])
 
 class Subscription(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='subscription')
@@ -38,10 +42,15 @@ class Subscription(models.Model):
         super().save(*args, **kwargs)
 
 
+
+
 class BookPurchase(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     book = models.ForeignKey(Books, on_delete=models.CASCADE)
     purchase_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'book')
 
     def __str__(self):
         return f'{self.user.username} bought {self.book.title}'
