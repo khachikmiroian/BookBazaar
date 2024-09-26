@@ -9,162 +9,245 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <style>
-        /* Body Styling */
-        body {
-            background-color: #f5f5f5;
-            font-family: 'Arial', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        /* Global Styling */
+body {
+    background: linear-gradient(to bottom, #f0ede5, #e2d8c3); /* Мягкий фон с земляными тонами */
+    font-family: 'Merriweather', serif; /* Классический книжный шрифт */
+    color: #4d4d4d;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background-color 0.5s ease; /* Плавный переход цвета фона */
+}
 
-        /* Navbar Styling */
-        .navbar {
-            background-color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-        }
+/* Navbar Styling */
+.navbar {
+    background-color: #2d3a34; /* Темный оливковый */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        .navbar .navbar-brand {
-            color: #ecf0f1;
-            font-weight: bold;
-            font-size: 1.5em;
-        }
+.navbar .navbar-brand {
+    font-size: 2em;
+    color: #ffe2b4; /* Светло-горчичный */
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.3s ease-in-out;
+}
 
-        .navbar .nav > li > a {
-            color: #ecf0f1;
-            font-size: 1.2em;
-        }
+.navbar .navbar-brand:hover {
+    transform: scale(1.1); /* Легкое увеличение при наведении */
+}
 
-        .navbar .nav > li.active > a,
-        .navbar .nav > li > a:focus,
-        .navbar .nav > li > a:hover {
-            background-color: #3498db;
-            color: white !important;
-        }
+.navbar .nav > li > a {
+    color: #ffe2b4;
+    font-size: 1.2em;
+    margin-left: 20px;
+    text-decoration: none;
+    transition: color 0.3s, background-color 0.3s;
+}
 
-        /* Page header */
-        .page-header {
-            background-color: #3498db;
-            color: white;
-            padding: 60px 0;
-            text-align: center;
-            margin-bottom: 40px;
-        }
+.navbar .nav > li > a:hover {
+    background-color: #d98c47;
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+}
 
-        .page-header h1 {
-            font-size: 3.5em;
-            margin-bottom: 10px;
-        }
+/* Page Header */
+.page-header {
+    background-color: #f07167; /* Коралловый цвет */
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 1.5s ease-in-out;
+}
 
-        .page-header p {
-            font-size: 1.5em;
-            margin-bottom: 40px;
-        }
+.page-header h1 {
+    font-size: 4em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
 
-        /* Search Section */
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
+.page-header p {
+    font-size: 1.6em;
+    margin-bottom: 30px;
+}
 
-        .search-container input[type="text"] {
-            width: 70%;
-            padding: 10px;
-            font-size: 1.2em;
-            border: 2px solid #3498db;
-            border-radius: 4px;
-            color: #000; /* Цвет текста в поле поиска */
-            background-color: #fff; /* Цвет фона поля поиска */
-        }
+/* Animation for Fade In */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
 
-        .search-container button {
-            padding: 10px 20px;
-            font-size: 1.2em;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+/* Search Section */
+.search-container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 40px;
+    animation: bounceIn 1s ease-in-out; /* Добавляем bounce эффект для интерактивности */
+}
 
-        .search-container button:hover {
-            background-color: #2980b9;
-        }
+.search-container input[type="text"] {
+    width: 70%;
+    padding: 12px;
+    font-size: 1.2em;
+    border: 2px solid #ff9f68; /* Оранжево-розовый */
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+}
 
-        /* Button for Books Page */
-        .books-button {
-            margin-top: 20px;
-            display: block;
-            text-align: center;
-        }
+.search-container input[type="text"]:focus {
+    border-color: #f07167;
+    outline: none;
+}
 
-        .books-button a {
-            font-size: 1.5em;
-            background-color: #2c3e50;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 4px;
-        }
+.search-container button {
+    padding: 12px 25px;
+    font-size: 1.2em;
+    background-color: #d98c47; /* Горчичный */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Плавная анимация при наведении */
+}
 
-        .books-button a:hover {
-            background-color: #34495e;
-        }
+.search-container button:hover {
+    background-color: #af5c34;
+    transform: scale(1.1); /* Увеличение кнопки при наведении */
+}
 
-        /* Footer */
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            margin-top: auto;
-        }
+/* Animation for Search Bounce In */
+@keyframes bounceIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    80% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); }
+}
 
-        footer p {
-            margin: 0;
-            font-size: 0.9em;
-        }
+/* Book Cards */
+.book-card {
+    background-color: #fff3e6; /* Кремовый фон для карточек */
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: float 5s ease-in-out infinite; /* Анимация "плавания" */
+}
 
-        footer .contact-info {
-            margin-top: 10px;
-            font-size: 0.8em;
-        }
+.book-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
 
-        footer .contact-info a {
-            color: #3498db;
-            text-decoration: none;
-        }
+.book-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
 
-        footer .contact-info a:hover {
-            text-decoration: underline;
-        }
+.book-card .title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #f07167;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
 
-        /* Styling for the logout button to match the navbar links */
-        .logout-btn {
-            background: none;
-            border: none;
-            color: #ecf0f1;
-            font-size: 1.2em;
-            padding: 14px 20px;
-            cursor: pointer;
-        }
+.book-card .title:hover {
+    color: #ff9f68;
+}
 
-        .logout-btn:hover,
-        .logout-btn:focus {
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-        }
+.book-card .author {
+    font-size: 1.2em;
+    color: #6d6875;
+    margin-bottom: 10px;
+}
 
-        /* Profile photo styling */
-        .profile-photo {
-            width: 30px;  /* Размер фотографии */
-            height: 30px; /* Размер фотографии */
-            border-radius: 50%;  /* Скругляем края до круга */
-            object-fit: cover;  /* Центрируем изображение в круге */
-            margin-right: 8px;  /* Отступ справа от имени */
-        }
+.book-card .description {
+    font-size: 1em;
+    color: #4d4d4d;
+    margin-bottom: 20px;
+}
+
+.book-card .price {
+    font-size: 1.3em;
+    color: #e63946; /* Красный для цен */
+    font-weight: bold;
+}
+
+/* Special Animation for Floating Effect */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Footer Styling */
+footer {
+    background-color: #4a7c59; /* Темно-зеленый для футера */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    margin-top: auto;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+}
+
+footer p {
+    margin: 0;
+    font-size: 1em;
+}
+
+footer .contact-info a {
+    color: #d4e157;
+    text-decoration: none;
+    transition: text-decoration 0.2s ease, color 0.3s ease; /* Плавный переход цвета и подчеркивания */
+}
+
+footer .contact-info a:hover {
+    color: #ffeb3b;
+    text-decoration: underline;
+}
+
+/* Profile Photo Styling */
+.profile-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    transition: transform 0.3s ease; /* Анимация при наведении */
+}
+
+.profile-photo:hover {
+    transform: rotate(360deg); /* Вращение фото профиля при наведении */
+}
+
+/* Logout Button */
+.logout-btn {
+    background: none;
+    border: none;
+    color: #ffe2b4;
+    font-size: 1.2em;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #d98c47;
+    color: white;
+    border-radius: 4px;
+}
+
 
     </style>
     <title>{% block title %}{% endblock %}</title>
