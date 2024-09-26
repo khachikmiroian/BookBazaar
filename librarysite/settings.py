@@ -158,7 +158,7 @@ STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
 CELERY_RESULT_BACKEND = "django-db"
 
 # This configures Redis as the datastore between Django + Celery
-CELERY_BROKER_URL = env('CELERY_BROKER_REDIS_URL', default='redis://localhost:6379')
+CELERY_BROKER_URL = env('CELERY_BROKER_REDIS_URL')
 
 # this allows you to schedule items in the Django admin.
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
