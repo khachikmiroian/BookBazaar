@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 from books.models import Books
 from django.utils import timezone
-from datetime import timedelta
 from subscriptions.models import Subscription
 
 

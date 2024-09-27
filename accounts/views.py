@@ -3,18 +3,20 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login
 from django.views import View
-from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import Profile
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LogoutView, PasswordResetView
 from django.urls import reverse_lazy
-from subscriptions.models import BookPurchase
 from rest_framework import viewsets
 from .serializers import ProfileSerializer
 from subscriptions.models import Subscription, BookPurchase
-from django.utils import timezone
+from .tasks import send_registration_email, send_profile_updated_email, send_password_change_email, send_password_reset_email
+from django.contrib.auth.views import PasswordChangeView
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
 
 
 @login_required
@@ -22,10 +24,9 @@ def profile_view(request):
     user = request.user
     purchased_books = BookPurchase.objects.filter(user=user)
 
-    # Обработка получения активной подписки
     active_subscription = getattr(user, 'subscription', None)
     if active_subscription and not active_subscription.is_active:
-        active_subscription = None  # Если подписка не активна, установите значение в None
+        active_subscription = None
 
     context = {
         'user': user,
@@ -33,6 +34,7 @@ def profile_view(request):
         'active_subscription': active_subscription,
     }
     return render(request, 'accounts/profile.html', context)
+
 
 class UserLoginView(View):
     def get(self, request):
@@ -65,6 +67,7 @@ class UserRegistrationView(FormView):
         new_user.set_password(form.cleaned_data['password'])
         new_user.save()
         Profile.objects.create(user=new_user)
+        send_registration_email.delay(new_user.email, new_user.username)
         return super().form_valid(form)
 
 
@@ -86,6 +89,7 @@ def edit(request, id):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            send_profile_updated_email.delay(profile.user.email, profile.user.username)
             messages.success(request, 'Profile updated successfully')
             return redirect('profile')
         else:
@@ -101,11 +105,41 @@ def edit(request, id):
     })
 
 
-# Это использует стандартный LogoutView, но вы можете указать свой шаблон для страницы выхода
 class UserLogoutView(LogoutView):
     template_name = 'logged_out.html'
-    next_page = reverse_lazy('books:home')  # Куда перенаправлять после выхода
+    next_page = reverse_lazy('books:home')
 
+
+class CustomPasswordResetView(PasswordResetView):
+    def form_valid(self, form):
+        user_email = form.cleaned_data['email']
+        users = form.get_users(user_email)
+
+        response = super().form_valid(form)
+
+        if users:
+            user = users[0]
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+
+            send_password_reset_email.delay(user_email, uid, token, user.username)
+
+        return response
+
+
+class CustomPasswordChangeView(PasswordChangeView):
+    success_url = reverse_lazy('password_change_done')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        user = form.user
+        username = user.username
+        user_email = user.email
+
+        send_password_change_email.delay(user_email, username)
+
+        return response
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()

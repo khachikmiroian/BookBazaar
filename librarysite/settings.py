@@ -214,8 +214,6 @@ LOGGING = {
     },
 }
 
-
-
 # save Celery task results in Django's database
 CELERY_RESULT_BACKEND = "django-db"
 
@@ -227,3 +225,8 @@ CELERY_BROKER_URL = config('redis://localhost:6380', default='redis://localhost:
 
 # this allows you to schedule items in the Django admin.
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+
+
+PROTOCOL = 'http'
+DOMAIN = '127.0.0.1:8000'
+RESET_URL = 'accounts/reset/'
