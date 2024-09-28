@@ -1,24 +1,22 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login
 from django.views import View
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
-from .models import Profile
-from django.contrib.auth.views import LogoutView, PasswordResetView
+from .models import Profile, User
 from django.urls import reverse_lazy
 from rest_framework import viewsets
 from .serializers import ProfileSerializer
 from subscriptions.models import Subscription, BookPurchase
 from .tasks import send_registration_email, send_profile_updated_email, send_password_change_email, \
     send_password_reset_email
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
+    PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView, LogoutView
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.models import User
 
 
 @login_required
@@ -127,6 +125,23 @@ class UserLogoutView(LogoutView):
     next_page = reverse_lazy('books:home')
 
 
+class PasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'accounts/password_reset_done.html'
+
+
+class PasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'accounts/password_reset_confirm.html'  # Укажите ваш шаблон
+    success_url = reverse_lazy('password_reset_complete')
+
+
+class PasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'accounts/password_reset_complete.html'  # Укажите ваш шаблон
+
+
+class PasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = 'accounts/password_change_done.html'
+
+
 class CustomPasswordResetView(PasswordResetView):
     def form_valid(self, form):
         user_email = form.cleaned_data['email']
@@ -144,22 +159,20 @@ class CustomPasswordResetView(PasswordResetView):
         return response
 
 
-# class CustomPasswordChangeView(PasswordChangeView):
-#     success_url = reverse_lazy('password_change_done')
-#
-#     def form_valid(self, form):
-#         # Сначала получаем пользователя
-#         user = form.user
-#         username = user.username
-#         user_email = user.email
-#
-#         # Вызываем стандартную обработку изменения пароля
-#         response = super().form_valid(form)
-#
-#         # Отправляем уведомление об изменении пароля
-#         send_password_change_email.delay(user_email, username)
-#
-#         return response
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'accounts/password_change.html'
+    success_url = reverse_lazy('password_change_done')
+
+    def form_valid(self, form):
+        user = form.user
+        username = user.username
+        user_email = user.email
+
+        response = super().form_valid(form)
+
+        send_password_change_email.delay(user_email, username)
+
+        return response
 
 
 class ProfileViewSet(viewsets.ModelViewSet):

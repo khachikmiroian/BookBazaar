@@ -1,15 +1,21 @@
 from django.db import models
-from django.conf import settings
 from books.models import Books
 from django.utils import timezone
 from subscriptions.models import Subscription
 
 
-class Profile(models.Model):
-    first_name = models.CharField(max_length=16)
-    last_name = models.CharField(max_length=16)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+class User(models.Model):
+    username = models.CharField(max_length=20, unique=True)
+    first_name = models.CharField(max_length=15)
+    last_name = models.CharField(max_length=15)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=35)
+    date_joined = models.DateTimeField(auto_now_add=True)
     date_of_birth = models.DateField(blank=True, null=True)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to='users/%Y/%m/%d/', blank=True)
     purchased_books = models.ManyToManyField(Books, related_name='purchasers', blank=True)
     bookmarks = models.ManyToManyField(Books, related_name='bookmarked_by', blank=True)
