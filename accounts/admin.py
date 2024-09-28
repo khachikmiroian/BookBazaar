@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import User, Profile
+from .models import MyUser, Profile
 from books.models import Books
 
 class ProfileInline(admin.StackedInline):
     model = Profile
     extra = 1  # Количество пустых форм для добавления профиля
 
-@admin.register(User)
+@admin.register(MyUser)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'first_name', 'last_name', 'email', 'date_joined', 'date_of_birth')
     search_fields = ('username', 'email', 'first_name', 'last_name')

@@ -5,9 +5,9 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Subscription, SubscriptionPlan, BookPurchase
 from books.models import Books
-from django.contrib.auth.models import User
 from datetime import timedelta
 from .tasks import send_purchase_email
+from accounts.models import MyUser
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
@@ -54,7 +54,7 @@ def handle_checkout_session(session):
 
             try:
                 plan = SubscriptionPlan.objects.get(name=plan_name)
-                user = User.objects.get(email=customer_email)
+                user = MyUser.objects.get(email=customer_email)
 
                 if str(plan) == 'M':
                     Subscription.objects.update_or_create(
@@ -81,7 +81,7 @@ def handle_checkout_session(session):
                     print(f'Подписка для {customer_email} на план {plan_name} успешно создана.')
             except SubscriptionPlan.DoesNotExist:
                 print(f'План подписки с именем {plan_name} не найден.')
-            except User.DoesNotExist:
+            except MyUser.DoesNotExist:
                 print(f'Пользователь с email {customer_email} не найден.')
 
             except Exception as e:
@@ -92,14 +92,14 @@ def handle_checkout_session(session):
             book_id = metadata.get('item_id')  # Достаем ID книги из метаданных
             try:
                 book = Books.objects.get(id=book_id)
-                user = User.objects.get(email=customer_email)
+                user = MyUser.objects.get(email=customer_email)
                 BookPurchase.objects.create(user=user, book=book)
 
                 send_purchase_email.delay(user.email, 'book', book.title, user.username)
                 print(f'Книга {book.title} успешно куплена пользователем {customer_email}.')
             except Books.DoesNotExist:
                 print(f'Книга с ID {book_id} не найдена.')
-            except User.DoesNotExist:
+            except MyUser.DoesNotExist:
                 print(f'Пользователь с email {customer_email} не найден.')
             except Exception as e:
                 print(f'Ошибка при обработке покупки книги: {str(e)}')

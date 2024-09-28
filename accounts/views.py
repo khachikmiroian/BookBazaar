@@ -1,21 +1,26 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, update_session_auth_hash
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
-from .models import Profile, User
+from .models import Profile, MyUser
 from django.urls import reverse_lazy
 from rest_framework import viewsets
 from .serializers import ProfileSerializer
 from subscriptions.models import Subscription, BookPurchase
-from .tasks import send_registration_email, send_profile_updated_email, send_password_change_email, \
+from .tasks import (
+    send_registration_email,
+    send_profile_updated_email,
+    send_password_change_email,
     send_password_reset_email
-from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
-    PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView, LogoutView
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
+)
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
+from django.contrib.auth.views import LogoutView
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import default_token_generator
 
 
@@ -52,12 +57,12 @@ class UserLoginView(View):
 
             if user is None:
                 try:
-                    user = User.objects.get(email=username_or_email)
+                    user = MyUser.objects.get(email=username_or_email)
                     if user.check_password(password):
                         login(request, user)
                     else:
                         user = None
-                except User.DoesNotExist:
+                except MyUser.DoesNotExist:
                     user = None
 
             if user is not None:
@@ -82,7 +87,7 @@ class UserRegistrationView(FormView):
         new_user.set_password(form.cleaned_data['password'])
         new_user.save()
         Profile.objects.create(user=new_user)
-        send_registration_email.delay(new_user.email, new_user.username)
+        send_registration_email.delay(new_user.email, new_user.username)  # Отправка email
         return super().form_valid(form)
 
 
@@ -104,7 +109,7 @@ def edit(request, id):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            send_profile_updated_email.delay(profile.user.email, profile.user.username)
+            send_profile_updated_email.delay(profile.user.email, profile.user.username)  # Отправка email
             messages.success(request, 'Profile updated successfully')
             return redirect('profile')
         else:
@@ -125,54 +130,83 @@ class UserLogoutView(LogoutView):
     next_page = reverse_lazy('books:home')
 
 
-class PasswordResetDoneView(PasswordResetDoneView):
-    template_name = 'accounts/password_reset_done.html'
+class CustomPasswordResetView(View):
+    def get(self, request):
+        form = PasswordResetForm()
+        return render(request, 'registration/password_reset.html', {'form': form})
+
+    def post(self, request):
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            user = MyUser.objects.filter(email=email).first()
+            if user:
+                token = default_token_generator.make_token(user)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                send_password_reset_email.delay(email, uid, token, user.username)
+                return redirect('password_reset_done')
+            return render(request, 'registration/password_reset.html', {'form': form})
 
 
-class PasswordResetConfirmView(PasswordResetConfirmView):
-    template_name = 'accounts/password_reset_confirm.html'  # Укажите ваш шаблон
-    success_url = reverse_lazy('password_reset_complete')
+class CustomPasswordResetDoneView(View):
+    def get(self, request):
+        return render(request, 'registration/password_reset_done.html')
 
 
-class PasswordResetCompleteView(PasswordResetCompleteView):
-    template_name = 'accounts/password_reset_complete.html'  # Укажите ваш шаблон
+class CustomPasswordResetConfirmView(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))  # Декодирование
+            user = MyUser.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, MyUser.DoesNotExist):
+            user = None
+
+        form = SetPasswordForm(user=user)
+        return render(request, 'registration/password_reset_confirm.html', {'form': form})
+
+    def post(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))  # Декодирование
+            user = MyUser.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, MyUser.DoesNotExist):
+            user = None
+
+        # Проверьте, что пользователь не None перед передачей в форму
+        if user is not None:
+            form = SetPasswordForm(user=user, data=request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('password_reset_complete')
+        else:
+            form = SetPasswordForm(user=user)  # Если user None, создаем пустую форму
+
+        return render(request, 'registration/password_reset_confirm.html', {'form': form})
 
 
-class PasswordChangeDoneView(PasswordChangeDoneView):
-    template_name = 'accounts/password_change_done.html'
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
 
 
-class CustomPasswordResetView(PasswordResetView):
-    def form_valid(self, form):
-        user_email = form.cleaned_data['email']
-        users = list(form.get_users(user_email))
-
-        response = super().form_valid(form)
-
-        if users:
-            user = users[0]
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
-
-            send_password_reset_email.delay(user_email, uid, token, user.username)
-
-        return response
-
-
+@method_decorator(login_required, name='dispatch')
 class CustomPasswordChangeView(PasswordChangeView):
-    template_name = 'accounts/password_change.html'
-    success_url = reverse_lazy('password_change_done')
+    template_name = 'registration/password_change.html'
+    success_url = reverse_lazy('password_reset_confirm.html')
+    form_class = PasswordChangeForm
 
     def form_valid(self, form):
-        user = form.user
-        username = user.username
-        user_email = user.email
+        user = form.save()
+        update_session_auth_hash(self.request, user)  # Обновляем сессию пользователя
+        messages.success(self.request, 'Пароль был успешно изменен.')
+        send_password_change_email.delay(user.email, user.username)  # Отправляем email
+        return super().form_valid(form)
 
-        response = super().form_valid(form)
+    def form_invalid(self, form):
+        messages.error(self.request, 'Произошла ошибка при изменении пароля.')
+        return super().form_invalid(form)
 
-        send_password_change_email.delay(user_email, username)
-
-        return response
+class CustomPasswordResetCompleteView(View):
+    def get(self, request):
+        return render(request, 'registration/password_reset_complete.html')
 
 
 class ProfileViewSet(viewsets.ModelViewSet):

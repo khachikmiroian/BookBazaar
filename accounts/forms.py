@@ -1,8 +1,8 @@
 from django import forms
-from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, MyUser
 from django.forms.widgets import DateInput
 import re
+
 
 
 class LoginForm(forms.Form):
@@ -11,20 +11,19 @@ class LoginForm(forms.Form):
 
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='Password',
-                               widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Repeat password',
-                                widget=forms.PasswordInput)
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
 
     class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email',]
+        model = MyUser
+        fields = ['username', 'first_name', 'last_name', 'email']
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
         if not self.is_strong_password(password):
             raise forms.ValidationError(
-                'Password must be at least 8 characters long and contain letters, numbers and special characters.')
+                'Password must be at least 8 characters long and contain letters, numbers, and special characters.'
+            )
         return password
 
     def is_strong_password(self, password):
@@ -44,23 +43,22 @@ class UserRegistrationForm(forms.ModelForm):
         return cleaned_data
 
     def clean_email(self):
-        data = self.cleaned_data['email']
-        if User.objects.filter(email=data).exists():
+        data = self.cleaned_data.get('email')
+        if MyUser.objects.filter(email=data).exists():
             raise forms.ValidationError('Email already in use.')
         return data
 
 
 class UserEditForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = MyUser
         fields = ['first_name', 'last_name', 'email']
 
     def clean_email(self):
-        data = self.cleaned_data['email']
-        qs = User.objects.exclude(id=self.instance.id) \
-            .filter(email=data)
+        data = self.cleaned_data.get('email')
+        qs = MyUser.objects.exclude(id=self.instance.id).filter(email=data)
         if qs.exists():
-            raise forms.ValidationError(' Email already in use.')
+            raise forms.ValidationError('Email already in use.')
         return data
 
 
@@ -77,6 +75,6 @@ class ProfileEditForm(forms.ModelForm):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         if user:
-            self.fields['first_name'].initial = user.first_name
-            self.fields['last_name'].initial = user.last_name
-            self.fields['email'].initial = user.email
+            self.fields['first_name'] = forms.CharField(initial=user.first_name)
+            self.fields['last_name'] = forms.CharField(initial=user.last_name)
+            self.fields['email'] = forms.EmailField(initial=user.email)
