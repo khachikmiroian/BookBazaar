@@ -6,7 +6,7 @@ import re
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField()
+    username_or_email = forms.CharField(label='Username or Email')
     password = forms.CharField(widget=forms.PasswordInput)
 
 
@@ -18,7 +18,7 @@ class UserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'email']
+        fields = ['username', 'first_name', 'last_name', 'email',]
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
@@ -71,7 +71,7 @@ class ProfileEditForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['date_of_birth', 'photo']  # Add any other fields from the Profile model if needed
+        fields = ['date_of_birth', 'photo']
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)

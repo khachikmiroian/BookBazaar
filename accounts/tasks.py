@@ -47,9 +47,9 @@ def send_profile_updated_email(user_email, username):
 def send_password_reset_email(user_email, uid, token, username):
     subject = 'Your password reset request'
     message = (
-        f'Someone asked for a password reset for email {user_email}. '
-        f'Follow the link below:\n'
-        f'{settings.PROTOCOL}://{settings.DOMAIN}{settings.RESET_URL}{uid}/{token}/\n'
+        f'Someone asked for a password reset for the email {user_email}.\n\n'
+        f'Follow the link below to reset your password:\n'
+        f'{settings.PROTOCOL}://{settings.DOMAIN}/{settings.RESET_URL}/{uid}/{token}/\n\n'
         f'Your username, in case you\'ve forgotten: {username}'
     )
     from_email = settings.DEFAULT_FROM_EMAIL

@@ -6,11 +6,21 @@
 <div class="auth-container">
     <div class="auth-box">
         <h2>Login to Your Account</h2>
+
+        <!-- Блок для отображения сообщений об ошибках -->
+        {% if messages %}
+            <ul class="alert alert-danger">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         <form method="POST" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" name="username" class="form-control" id="username" placeholder="Enter Username" required>
+                <label for="username_or_email">Username or Email</label>
+                <input type="text" name="username_or_email" class="form-control" id="username_or_email" placeholder="Enter Username or Email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
@@ -18,6 +28,11 @@
             </div>
             <button type="submit" class="btn btn-primary btn-block">Login</button>
         </form>
+
+        <p class="text-center">
+            <a href="{% url 'password_reset' %}">Forgot your password?</a>
+        </p>
+
         <p class="text-center">Don't have an account? <a href="{% url 'register' %}">Sign up here</a></p>
     </div>
 </div>

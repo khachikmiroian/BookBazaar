@@ -12,11 +12,13 @@ from django.urls import reverse_lazy
 from rest_framework import viewsets
 from .serializers import ProfileSerializer
 from subscriptions.models import Subscription, BookPurchase
-from .tasks import send_registration_email, send_profile_updated_email, send_password_change_email, send_password_reset_email
+from .tasks import send_registration_email, send_profile_updated_email, send_password_change_email, \
+    send_password_reset_email
 from django.contrib.auth.views import PasswordChangeView
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import User
 
 
 @login_required
@@ -45,15 +47,30 @@ class UserLoginView(View):
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(request, username=cd['username'], password=cd['password'])
+            username_or_email = cd['username_or_email']
+            password = cd['password']
+
+            user = authenticate(request, username=username_or_email, password=password)
+
+            if user is None:
+                try:
+                    user = User.objects.get(email=username_or_email)
+                    if user.check_password(password):
+                        login(request, user)
+                    else:
+                        user = None
+                except User.DoesNotExist:
+                    user = None
+
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponse('Authenticated successfully')
+                    return redirect('profile')
                 else:
-                    return HttpResponse('Disabled account')
+                    return redirect('login')
             else:
-                return HttpResponse('Invalid login')
+                return redirect('login')
+
         return render(request, 'accounts/login.html', {'form': form})
 
 
@@ -113,7 +130,7 @@ class UserLogoutView(LogoutView):
 class CustomPasswordResetView(PasswordResetView):
     def form_valid(self, form):
         user_email = form.cleaned_data['email']
-        users = form.get_users(user_email)
+        users = list(form.get_users(user_email))
 
         response = super().form_valid(form)
 
@@ -127,19 +144,23 @@ class CustomPasswordResetView(PasswordResetView):
         return response
 
 
-class CustomPasswordChangeView(PasswordChangeView):
-    success_url = reverse_lazy('password_change_done')
+# class CustomPasswordChangeView(PasswordChangeView):
+#     success_url = reverse_lazy('password_change_done')
+#
+#     def form_valid(self, form):
+#         # Сначала получаем пользователя
+#         user = form.user
+#         username = user.username
+#         user_email = user.email
+#
+#         # Вызываем стандартную обработку изменения пароля
+#         response = super().form_valid(form)
+#
+#         # Отправляем уведомление об изменении пароля
+#         send_password_change_email.delay(user_email, username)
+#
+#         return response
 
-    def form_valid(self, form):
-        response = super().form_valid(form)
-
-        user = form.user
-        username = user.username
-        user_email = user.email
-
-        send_password_change_email.delay(user_email, username)
-
-        return response
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()

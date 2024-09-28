@@ -3,12 +3,13 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, ListView
 from django.views.generic import DetailView
 from .models import Books, Author
-from subscriptions.models import BookPurchase
+from subscriptions.models import BookPurchase, Subscription
 from .forms import SearchForm
 from django.http import FileResponse, Http404
 from rest_framework import viewsets
 from .serializers import BookSerializer
 import requests
+from django.utils import timezone
 
 
 class HomeView(TemplateView):
@@ -99,9 +100,14 @@ class BookDetailView(DetailView):
 
         if self.request.user.is_authenticated:
             purchased_books = BookPurchase.objects.filter(user=self.request.user).values_list('book_id', flat=True)
+            subscription = Subscription.objects.filter(user=self.request.user, end_date__gt=timezone.now()).exists()
+            context['has_active_subscription'] = subscription
             context['purchased_books'] = purchased_books
+            context['can_purchase'] = self.get_object().id not in purchased_books
         else:
             context['purchased_books'] = []
+            context['has_active_subscription'] = False
+            context['can_purchase'] = False
 
         return context
 
