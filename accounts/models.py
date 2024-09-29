@@ -4,14 +4,13 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from subscriptions.models import Subscription
 
-
 class MyUserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, **extra_fields)
-        user.set_password(password)
+        user.set_password(password)  # Используйте метод set_password от AbstractBaseUser
         user.save(using=self._db)
         return user
 
@@ -20,7 +19,6 @@ class MyUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
 
         return self.create_user(email, username, password, **extra_fields)
-
 
 class MyUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=20, unique=True)
@@ -39,13 +37,6 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
-
-    def set_password(self, raw_password):
-        self.password = make_password(raw_password)
-
-    def check_password(self, raw_password):
-        return check_password(raw_password, self.password)
-
 
 class Profile(models.Model):
     user = models.OneToOneField(MyUser, on_delete=models.CASCADE)

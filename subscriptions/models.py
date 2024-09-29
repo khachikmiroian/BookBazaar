@@ -1,10 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
-from books.models import Books
 from django.urls import reverse
 
-# Create your models here.
 
 class SubscriptionPlan(models.Model):
     PLAN_CHOICES = (
@@ -41,7 +39,7 @@ class Subscription(models.Model):
 
 class BookPurchase(models.Model):
     user = models.ForeignKey('accounts.MyUser', on_delete=models.CASCADE)
-    book = models.ForeignKey(Books, on_delete=models.CASCADE)
+    book = models.ForeignKey('books.Books', on_delete=models.CASCADE)
     purchase_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:

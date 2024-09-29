@@ -2,8 +2,8 @@ from django.utils import timezone
 from django.db import models
 from taggit.managers import TaggableManager
 from django.urls import reverse
+from accounts.models import Profile, MyUser
 
-# Уберите импорт Profile
 
 class Books(models.Model):
     class Status(models.TextChoices):
@@ -32,8 +32,7 @@ class Books(models.Model):
 
 class Comments(models.Model):
     books = models.ForeignKey(Books, on_delete=models.CASCADE, related_name='comments')
-    # Уберите прямой импорт Profile
-    profile = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
 
