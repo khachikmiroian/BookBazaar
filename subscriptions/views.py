@@ -36,13 +36,17 @@ class SubscriptionView(TemplateView):
 def create_subscription_session(request, plan_id):
     plan = get_object_or_404(SubscriptionPlan, id=plan_id)
 
+    # Отладочная информация
+    print("Current User:", request.user)  # Печатает текущего пользователя
+    print("User Email:", request.user.email)  # Печатает email пользователя
+
     if request.method == 'POST':
         success_url = request.build_absolute_uri(reverse('subs:completed'))
         cancel_url = request.build_absolute_uri(reverse('subs:canceled'))
 
         session_data = {
             'payment_method_types': ['card'],
-            'customer_email': request.user.email,
+            'customer_email': request.user.email,  # Замените MyUser на request.user
             'line_items': [{
                 'price_data': {
                     'currency': 'usd',
@@ -58,7 +62,7 @@ def create_subscription_session(request, plan_id):
             'cancel_url': cancel_url,
             'metadata': {
                 'purchase_type': 'subscription',
-                'plan_name': plan.name  # Добавляем имя плана в метаданные
+                'plan_name': plan.name
             }
         }
 
@@ -81,13 +85,17 @@ def payment_canceled(request):
 def create_book_purchase_session(request, book_id):
     book = get_object_or_404(Books, id=book_id)
 
+    # Отладочная информация
+    print("Current User:", request.user)  # Печатает текущего пользователя
+    print("User Email:", request.user.email)  # Печатает email пользователя
+
     if request.method == 'POST':
         success_url = request.build_absolute_uri(reverse('subs:completed'))
         cancel_url = request.build_absolute_uri(reverse('subs:canceled'))
 
         session_data = {
             'payment_method_types': ['card'],
-            'customer_email': request.user.email,
+            'customer_email': request.user.email,  # Замените MyUser на request.user
             'line_items': [{
                 'price_data': {
                     'currency': 'usd',

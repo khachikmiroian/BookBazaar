@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 from django.utils import timezone
 from datetime import timedelta
 from books.models import Books
@@ -33,11 +32,12 @@ class Subscription(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.end_date:
-            if self.plan.name == 'M':
+            if self.plan and self.plan.name == 'M':
                 self.end_date = self.start_date + timedelta(days=30)
-            elif self.plan.name == 'Y':
+            elif self.plan and self.plan.name == 'Y':
                 self.end_date = self.start_date + timedelta(days=365)
         super().save(*args, **kwargs)
+
 
 class BookPurchase(models.Model):
     user = models.ForeignKey('accounts.MyUser', on_delete=models.CASCADE)

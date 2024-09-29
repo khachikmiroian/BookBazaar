@@ -1,8 +1,9 @@
+from django.utils import timezone
 from django.db import models
 from taggit.managers import TaggableManager
 from django.urls import reverse
-from django.db import models
 
+# Уберите импорт Profile
 
 class Books(models.Model):
     class Status(models.TextChoices):
@@ -22,12 +23,25 @@ class Books(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('books:book_detail',
-                       args=[self.id])
+        return reverse('books:book_detail', args=[self.id])
 
     class Meta:
         verbose_name = 'Book'
         verbose_name_plural = 'Books'
+
+
+class Comments(models.Model):
+    books = models.ForeignKey(Books, on_delete=models.CASCADE, related_name='comments')
+    # Уберите прямой импорт Profile
+    profile = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Comment by {self.profile.user.username}'
 
 
 class Author(models.Model):

@@ -22,6 +22,8 @@ from django.contrib.auth.views import LogoutView
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
 
 
 @login_required
@@ -150,41 +152,40 @@ class CustomPasswordResetView(View):
 
 class CustomPasswordResetDoneView(View):
     def get(self, request):
+        # STEXEL MAIL PTI UXARKVI  send_password_change_email.delay(user.email, user.username)
         return render(request, 'registration/password_reset_done.html')
 
 
 class CustomPasswordResetConfirmView(View):
     def get(self, request, uidb64, token):
         try:
-            uid = force_str(urlsafe_base64_decode(uidb64))  # Декодирование
-            user = MyUser.objects.get(pk=uid)
+            uid = force_str(urlsafe_base64_decode(uidb64))
         except (TypeError, ValueError, OverflowError, MyUser.DoesNotExist):
             user = None
 
-        form = SetPasswordForm(user=user)
+        if user is not None and default_token_generator.check_token(user, token):
+            form = SetPasswordForm(user=user)
+        else:
+            form = None
+
         return render(request, 'registration/password_reset_confirm.html', {'form': form})
 
     def post(self, request, uidb64, token):
         try:
-            uid = force_str(urlsafe_base64_decode(uidb64))  # Декодирование
+            uid = force_str(urlsafe_base64_decode(uidb64))
             user = MyUser.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, MyUser.DoesNotExist):
             user = None
 
-        # Проверьте, что пользователь не None перед передачей в форму
-        if user is not None:
+        if user is not None and default_token_generator.check_token(user, token):
             form = SetPasswordForm(user=user, data=request.POST)
             if form.is_valid():
                 form.save()
                 return redirect('password_reset_complete')
         else:
-            form = SetPasswordForm(user=user)  # Если user None, создаем пустую форму
+            form = SetPasswordForm(user=user)
 
         return render(request, 'registration/password_reset_confirm.html', {'form': form})
-
-
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.views import PasswordChangeView
 
 
 @method_decorator(login_required, name='dispatch')
@@ -195,14 +196,15 @@ class CustomPasswordChangeView(PasswordChangeView):
 
     def form_valid(self, form):
         user = form.save()
-        update_session_auth_hash(self.request, user)  # Обновляем сессию пользователя
+        update_session_auth_hash(self.request, user)
         messages.success(self.request, 'Пароль был успешно изменен.')
-        send_password_change_email.delay(user.email, user.username)  # Отправляем email
+        send_password_change_email.delay(user.email, user.username)
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.error(self.request, 'Произошла ошибка при изменении пароля.')
         return super().form_invalid(form)
+
 
 class CustomPasswordResetCompleteView(View):
     def get(self, request):
