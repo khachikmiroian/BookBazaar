@@ -4,7 +4,7 @@ from django.views.generic import TemplateView, ListView
 from django.views.generic import DetailView
 from .models import Books, Author
 from subscriptions.models import BookPurchase, Subscription
-from .forms import SearchForm
+from .forms import SearchForm, CommentsForm
 from django.http import FileResponse, Http404
 from rest_framework import viewsets
 from .serializers import BookSerializer
@@ -24,7 +24,6 @@ class HomeView(TemplateView):
     def get_quote(self):
         request = requests.get('https://favqs.com/api/qotd').json()
         return f'Daily quote:{request["quote"]["body"]}'
-
 
 
 class AboutUsView(TemplateView):
@@ -97,19 +96,37 @@ class BookDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['book'] = self.get_object()
+        context['form'] = CommentsForm()
 
         if self.request.user.is_authenticated:
             purchased_books = BookPurchase.objects.filter(user=self.request.user).values_list('book_id', flat=True)
             subscription = Subscription.objects.filter(user=self.request.user, end_date__gt=timezone.now()).exists()
             context['has_active_subscription'] = subscription
             context['purchased_books'] = purchased_books
-            context['can_purchase'] = self.get_object().id not in purchased_books
+
+            context['has_purchased'] = context['book'].id in purchased_books
+            context['can_purchase'] = context['book'].id not in purchased_books
         else:
             context['purchased_books'] = []
             context['has_active_subscription'] = False
             context['can_purchase'] = False
+            context['has_purchased'] = False
 
+        context['comments'] = context['book'].comments.all()  # Получаем все комментарии к книге
         return context
+
+    def post(self, request, *args, **kwargs):
+        book = self.get_object()
+        form = CommentsForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.books = book  # Убедитесь, что поле книги правильно заполняется
+            comment.profile = request.user.profile  # Предполагая, что у пользователя есть профиль
+            comment.save()
+            return self.get(request, *args, **kwargs)  # Возвращаем обновленное представление с новыми комментариями
+        else:
+            print(form.errors)  # Отладочная информация для проверки ошибок
+            return self.get(request, *args, **kwargs)
 
 
 class Contact(TemplateView):
