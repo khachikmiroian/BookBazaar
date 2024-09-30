@@ -9,246 +9,468 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <style>
-        /* Global Styling */
+        /* Body Styling */
 body {
-    background: linear-gradient(to bottom, #f0ede5, #e2d8c3); /* Мягкий фон с земляными тонами */
-    font-family: 'Merriweather', serif; /* Классический книжный шрифт */
-    color: #4d4d4d;
+    background: linear-gradient(to bottom right, #fafafa, #ffe0b2); /* Light beige gradient */
+    font-family: 'Merriweather', serif; /* A more classic font */
+    color: #333; /* Dark gray for text */
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    overflow-x: hidden;
-    transition: background-color 0.5s ease; /* Плавный переход цвета фона */
 }
 
 /* Navbar Styling */
 .navbar {
-    background-color: #2d3a34; /* Темный оливковый */
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.9); /* Light transparent white */
+    padding: 15px 40px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+.navbar:hover {
+    background-color: rgba(255, 255, 255, 1); /* Fully opaque on hover */
 }
 
 .navbar .navbar-brand {
-    font-size: 2em;
-    color: #ffe2b4; /* Светло-горчичный */
+    font-size: 2.5em;
+    color: #6d4c41; /* Brown */
     font-weight: bold;
     text-decoration: none;
-    transition: transform 0.3s ease-in-out;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .navbar .navbar-brand:hover {
-    transform: scale(1.1); /* Легкое увеличение при наведении */
+    transform: rotate(-3deg) scale(1.1); /* Slight rotation and scaling on hover */
+    color: #4e3b31; /* Darker brown on hover */
 }
 
 .navbar .nav > li > a {
-    color: #ffe2b4;
+    color: #6d4c41; /* Brown */
     font-size: 1.2em;
-    margin-left: 20px;
+    margin-left: 25px;
     text-decoration: none;
-    transition: color 0.3s, background-color 0.3s;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .navbar .nav > li > a:hover {
-    background-color: #d98c47;
-    color: white;
-    padding: 10px;
-    border-radius: 4px;
+    color: #3e2723; /* Darker brown on hover */
+    transform: translateY(-4px); /* Slight lift on hover */
 }
 
 /* Page Header */
 .page-header {
-    background-color: #f07167; /* Коралловый цвет */
-    color: white;
-    padding: 60px 0;
+    background: linear-gradient(to right, #a19206, #59b336); /* Light green to pale green gradient */
+    color: white; /* White text for contrast */
+    padding: 90px 0;
     text-align: center;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    animation: fadeIn 1.5s ease-in-out;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
 .page-header h1 {
-    font-size: 4em;
-    font-weight: bold;
-    letter-spacing: 1px;
-    margin-bottom: 15px;
+    font-size: 4.8em;
+    font-weight: 900; /* Bolder font weight */
+    letter-spacing: 3px;
+    animation: bounceIn 1s ease forwards;
 }
 
 .page-header p {
-    font-size: 1.6em;
-    margin-bottom: 30px;
+    font-size: 1.4em;
+    margin-top: 20px;
+    opacity: 0.9;
+}
+/* Page Header */
+.page-header {
+    background: linear-gradient(135deg, #a19206, #59b336); /* Diagonal gradient for a dynamic look */
+    color: white; /* White text for contrast */
+    padding: 90px 0;
+    text-align: center;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
 }
 
-/* Animation for Fade In */
-@keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(-20px); }
-    100% { opacity: 1; transform: translateY(0); }
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 200%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+    animation: shine 4s infinite linear; /* Adds a moving shine effect */
+    z-index: 0;
 }
+
+@keyframes shine {
+    0% {
+        left: -50%;
+    }
+    100% {
+        left: 150%;
+    }
+}
+
+.page-header h1 {
+    font-size: 4.8em;
+    font-weight: 900; /* Bolder font weight */
+    letter-spacing: 3px;
+    animation: bounceIn 1s ease forwards, glow 1.5s ease-in-out infinite alternate; /* Added glowing effect */
+    position: relative;
+    z-index: 1; /* Ensures text is above the shine */
+}
+
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 10px rgba(255, 235, 59, 0.8), 0 0 20px rgba(255, 235, 59, 0.5);
+    }
+    100% {
+        text-shadow: 0 0 20px rgba(255, 235, 59, 1), 0 0 30px rgba(255, 235, 59, 0.5);
+    }
+}
+
+.page-header p {
+    font-size: 1.4em;
+    margin-top: 20px;
+    opacity: 0.9;
+    position: relative;
+    z-index: 1; /* Text above background shine */
+    animation: fadeIn 1s ease forwards; /* Added fade-in animation */
+    transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover effect for paragraph */
+.page-header p:hover {
+    color: #ffeb3b; /* Change text color on hover */
+    transform: scale(1.05); /* Slightly scale up the text */
+    text-shadow: 0 0 10px rgba(255, 235, 59, 0.5); /* Add a glow effect on hover */
+}
+
+/* Enhanced Page Header Link Styling */
+.page-header a {
+    color: #ffeb3b; /* Bright yellow for link color */
+    font-size: 1.3em; /* Slightly larger font size */
+    text-decoration: none; /* Remove default underline */
+    font-weight: bold;
+    position: relative;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 25px; /* Rounded corners */
+    background: rgba(255, 235, 59, 0.2); /* Slight background for buttons */
+    transition: background 0.4s ease, color 0.4s ease, transform 0.4s ease; /* Smooth transitions */
+}
+
+.page-header a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #ffeb3b; /* Yellow underline */
+    left: 0;
+    bottom: -5px; /* Position underline just below the text */
+    transform: scaleX(0); /* Start with the line hidden */
+    transform-origin: right; /* Animation starts from the right */
+    transition: transform 0.4s ease; /* Smooth underline animation */
+}
+
+.page-header a:hover::after {
+    transform: scaleX(1); /* Expand the line to full width on hover */
+    transform-origin: left; /* End the animation from the left */
+}
+
+.page-header a:hover {
+    color: #fff; /* White text on hover */
+    background: #ffeb3b; /* Bright background on hover */
+    text-shadow: 0 0 10px rgba(255, 235, 59, 0.8); /* Add a soft glow effect */
+    transform: scale(1.1) rotate(2deg); /* Slight scaling and rotation on hover */
+}
+
+/* Additional hover animation */
+.page-header a:hover span {
+    animation: pulse 0.6s infinite; /* Pulsing effect on text */
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Optional - BounceIn Keyframe Animation */
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-200px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(30px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Fade In Keyframe Animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 
 /* Search Section */
 .search-container {
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 700px;
+    margin: 40px auto;
     text-align: center;
-    margin-bottom: 40px;
-    animation: bounceIn 1s ease-in-out; /* Добавляем bounce эффект для интерактивности */
 }
 
 .search-container input[type="text"] {
-    width: 70%;
+    width: 75%;
     padding: 12px;
-    font-size: 1.2em;
-    border: 2px solid #ff9f68; /* Оранжево-розовый */
-    border-radius: 6px;
-    transition: border-color 0.3s ease;
+    font-size: 1.3em;
+    border: 2px solid #6d4c41; /* Brown border */
+    border-radius: 30px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .search-container input[type="text"]:focus {
-    border-color: #f07167;
+    border-color: #ffb74d; /* Warm color on focus */
+    box-shadow: 0 0 20px rgba(255, 183, 77, 0.5); /* Soft glow */
     outline: none;
 }
 
 .search-container button {
-    padding: 12px 25px;
-    font-size: 1.2em;
-    background-color: #d98c47; /* Горчичный */
+    padding: 12px 28px;
+    font-size: 1.3em;
+    background-color: #6d4c41; /* Brown button */
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 30px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Плавная анимация при наведении */
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .search-container button:hover {
-    background-color: #af5c34;
-    transform: scale(1.1); /* Увеличение кнопки при наведении */
-}
-
-/* Animation for Search Bounce In */
-@keyframes bounceIn {
-    0% { transform: scale(0.8); opacity: 0; }
-    80% { transform: scale(1.05); opacity: 1; }
-    100% { transform: scale(1); }
+    background-color: #4e3b31; /* Darker brown on hover */
+    transform: scale(1.05); /* Button scaling */
 }
 
 /* Book Cards */
+/* Book List Section */
+.book-list-section .row {
+    display: flex; /* Use flexbox for layout */
+    flex-wrap: wrap; /* Allow items to wrap onto the next line */
+    justify-content: center; /* Center the content */
+    margin: 0 -10px; /* Negative margin to offset padding of columns */
+}
+
+/* Individual column styling */
+.book-list-section .row .col {
+    flex: 1 1 calc(33.333% - 20px); /* Three columns layout with spacing */
+    margin: 10px; /* Spacing between columns */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 10px; /* Rounded corners for each column */
+    background-color: #fff; /* White background for book cards */
+    transition: transform 0.3s ease; /* Smooth transform transition */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .book-list-section .row .col {
+        flex: 1 1 calc(50% - 20px); /* Two columns on medium screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .book-list-section .row .col {
+        flex: 1 1 100%; /* Full width on small screens */
+    }
+}
+
+/* Hover effect for columns */
+.book-list-section .row .col:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+}
+
+
+/* Individual Book Card Styling */
 .book-card {
-    background-color: #fff3e6; /* Кремовый фон для карточек */
-    border-radius: 12px;
+    background-color: #fff; /* White background */
+    border-radius: 15px;
     padding: 20px;
-    margin: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin: 15px; /* Adjusted margin for spacing */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: float 5s ease-in-out infinite; /* Анимация "плавания" */
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    position: relative; /* For positioning child elements */
 }
 
+/* Card Hover Effect */
 .book-card:hover {
-    transform: scale(1.1);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(-10px); /* Lift effect */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
+/* Image Styling */
 .book-card img {
     width: 100%;
     height: auto;
-    border-radius: 10px;
+    border-radius: 12px; /* Rounded corners for images */
     margin-bottom: 15px;
+    transition: transform 0.3s ease; /* Image scaling on hover */
 }
 
+/* Image Hover Effect */
+.book-card img:hover {
+    transform: scale(1.1); /* Slight image scaling */
+}
+
+/* Title Styling */
 .book-card .title {
-    font-size: 1.5em;
+    font-size: 1.8em; /* Adjusted title size */
     font-weight: bold;
-    color: #f07167;
+    color: #ff7043; /* Coral for title */
     margin-bottom: 10px;
-    transition: color 0.3s ease;
+    text-decoration: underline; /* Underline title */
+    transition: color 0.3s ease; /* Smooth color transition */
 }
 
+/* Title Hover Effect */
 .book-card .title:hover {
-    color: #ff9f68;
+    color: #d32f2f; /* Darker red on hover */
 }
 
+/* Author Styling */
 .book-card .author {
-    font-size: 1.2em;
-    color: #6d6875;
+    font-size: 1.4em;
+    color: #555; /* Medium gray for author */
     margin-bottom: 10px;
 }
 
+/* Description Styling */
 .book-card .description {
-    font-size: 1em;
-    color: #4d4d4d;
-    margin-bottom: 20px;
+    font-size: 1.2em; /* Increased description size */
+    color: #333;
+    margin-bottom: 15px;
+    opacity: 0.8; /* Slightly faded */
 }
 
+/* Price Styling */
 .book-card .price {
-    font-size: 1.3em;
-    color: #e63946; /* Красный для цен */
+    font-size: 1.6em;
+    color: #d32f2f; /* Red for price */
     font-weight: bold;
+    transition: color 0.3s ease; /* Smooth color transition */
 }
 
-/* Special Animation for Floating Effect */
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+/* Price Hover Effect */
+.book-card .price:hover {
+    color: #c62828; /* Darker red on hover */
+}
+
+/* Button Styling */
+.book-card .buy-btn {
+    background-color: #6d4c41; /* Brown button */
+    color: white;
+    border: none;
+    border-radius: 25px; /* Rounded corners */
+    padding: 12px 25px; /* Button padding */
+    font-size: 1.3em; /* Button font size */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+/* Button Hover Effect */
+.book-card .buy-btn:hover {
+    background-color: #4e3b31; /* Darker brown on hover */
+    transform: scale(1.05); /* Button scaling */
+}
+
+
+/* Link Styling */
+a {
+    color: #6d4c41; /* Brown */
+    text-decoration: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease; /* Transition for link hover */
+}
+
+a:hover {
+    color: #3e2723; /* Darker brown on hover */
+    text-shadow: 0 0 5px rgba(109, 76, 65, 0.6); /* Subtle shadow effect on hover */
 }
 
 /* Footer Styling */
 footer {
-    background-color: #4a7c59; /* Темно-зеленый для футера */
+    background-color: #333;
     color: white;
-    padding: 20px;
+    padding: 40px;
     text-align: center;
-    margin-top: auto;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.1);
 }
 
 footer p {
+    font-size: 1.2em;
     margin: 0;
-    font-size: 1em;
 }
 
 footer .contact-info a {
-    color: #d4e157;
+    color: #ffb74d; /* Warm color for contact links */
     text-decoration: none;
-    transition: text-decoration 0.2s ease, color 0.3s ease; /* Плавный переход цвета и подчеркивания */
+    transition: color 0.3s ease;
 }
 
 footer .contact-info a:hover {
-    color: #ffeb3b;
-    text-decoration: underline;
+    color: #ff7043; /* Darker warm color on hover */
 }
 
 /* Profile Photo Styling */
 .profile-photo {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 10px;
-    transition: transform 0.3s ease; /* Анимация при наведении */
+    margin-right: 12px;
+    transition: transform 0.3s ease;
 }
 
 .profile-photo:hover {
-    transform: rotate(360deg); /* Вращение фото профиля при наведении */
+    transform: scale(1.1) rotate(10deg); /* Slightly enlarge and rotate on hover */
 }
 
 /* Logout Button */
 .logout-btn {
     background: none;
     border: none;
-    color: #ffe2b4;
+    color: #ffe0b2; /* Light beige */
     font-size: 1.2em;
     padding: 14px 20px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .logout-btn:hover {
-    background-color: #d98c47;
+    background-color: #d4a373; /* Light brown on hover */
     color: white;
     border-radius: 4px;
 }
-
-
     </style>
     <title>{% block title %}{% endblock %}</title>
 </head>

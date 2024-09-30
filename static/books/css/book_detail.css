@@ -1,106 +1,77 @@
-щ.book-detail {
-    background-color: #f9f9f9;
-    padding: 3rem 2rem; /* Увеличены отступы */
-    display: flex; /* Flexbox для размещения информации о книге */
-    flex-direction: column;
-    align-items: center; /* Центрирование содержимого */
+.book-detail {
+    background-color: #f8f9fa; /* Light background for the section */
+    padding: 2rem; /* Padding around the section */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-bottom: 2rem; /* Space below the section */
+}
+
+.book-detail .container {
+    max-width: 800px; /* Limit the maximum width of the container */
+    margin: 0 auto; /* Center the container */
 }
 
 .book-detail .card {
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Занимает 100% ширины */
-    max-width: 800px; /* Максимальная ширина карты */
+    border: none; /* No border for the card */
+    border-radius: 15px; /* Rounded corners for the card */
+    overflow: hidden; /* Hide overflow */
+    transition: transform 0.3s; /* Smooth transition for hover effect */
 }
 
-.book-detail .card-title {
-    font-size: 2.5rem; /* Увеличен размер заголовка */
-    font-weight: bold;
-    margin-bottom: 1rem; /* Добавлен отступ снизу */
-}
-
-.book-detail .card-subtitle {
-    font-size: 1.5rem; /* Увеличен размер подзаголовка */
-    color: #6c757d;
-    margin-bottom: 1rem; /* Добавлен отступ снизу */
-}
-
-.book-detail img {
-    border-radius: 15px 0 0 15px;
-    max-width: 100%; /* Изображение адаптируется под ширину родителя */
-    height: auto; /* Автоматическая высота для сохранения пропорций */
+.book-detail .card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
 }
 
 .book-detail .card-body {
-    padding: 2.5rem; /* Увеличены отступы внутри карты */
+    padding: 2rem; /* Padding inside the card body */
+    background-color: #ffffff; /* White background for the card body */
+}
+
+.book-detail .card-title {
+    font-size: 2.5rem; /* Font size for book title */
+    font-weight: 700; /* Bold font weight */
+    color: #2c3e50; /* Dark color for title */
+    margin-bottom: 1rem; /* Space below title */
+}
+
+.book-detail h4 {
+    font-size: 1.5rem; /* Font size for author name */
+    color: #7f8c8d; /* Gray color for author name */
+    margin-bottom: 1rem; /* Space below author name */
 }
 
 .book-detail p {
-    font-size: 1.2rem; /* Увеличен размер текста */
-    margin-bottom: 1rem;
+    font-size: 1.1rem; /* Font size for paragraphs */
+    color: #34495e; /* Dark blue color for text */
+    line-height: 1.6; /* Line height for readability */
+    margin-bottom: 1rem; /* Space below paragraph */
+}
+
+.book-detail .tags {
+    font-size: 1rem; /* Font size for tags */
+    color: #2980b9; /* Blue color for tags */
+}
+
+.book-detail .tags a {
+    color: #2980b9; /* Blue color for links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.book-detail .tags a:hover {
+    text-decoration: underline; /* Underline on hover for links */
 }
 
 .book-detail .btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 1.2rem;
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* White text */
+    padding: 0.75rem 1.5rem; /* Padding for button */
+    font-size: 1.2rem; /* Font size for button */
+    border-radius: 25px; /* Rounded corners for button */
+    border: none; /* No border */
+    transition: background-color 0.3s, transform 0.3s; /* Transition for hover effects */
 }
 
-/* Styles for comments */
-.book-detail h3 {
-    margin-top: 2rem;
-    font-size: 2rem; /* Увеличен размер заголовка секции комментариев */
-    font-weight: bold;
-}
-
-.book-detail .comments {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 2rem; /* Увеличен отступ сверху */
-    width: 100%; /* Занимает 100% ширины */
-    max-width: 800px; /* Максимальная ширина для секции комментариев */
-}
-
-.book-detail .comments p {
-    margin: 0.5rem 0;
-}
-
-.book-detail .comments strong {
-    color: #007bff;
-}
-
-/* Styles for comment form */
-.book-detail form {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 1.5rem; /* Увеличен отступ сверху */
-    width: 100%; /* Занимает 100% ширины */
-    max-width: 800px; /* Максимальная ширина для формы комментариев */
-}
-
-.book-detail form input[type="text"],
-.book-detail form textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-}
-
-.book-detail form button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.book-detail form button:hover {
-    background-color: #0056b3;
+.book-detail .btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
 }

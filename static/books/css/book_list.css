@@ -1,64 +1,85 @@
 /* book_list.css */
 
 body {
-    background-color: #f8f9fa; /* Светлый фон для всего тела */
-    font-family: 'Arial', sans-serif; /* Шрифт для текста */
+    background-color: #f0f8ff; /* Нежно-голубой фон для всего тела */
+    font-family: 'Poppins', sans-serif; /* Более современный и стильный шрифт */
+    color: #444; /* Темно-серый цвет для текста */
+    margin: 0;
+    padding: 0;
 }
 
 .book-list-section {
-    padding: 40px 20px; /* Отступы для секции */
+    padding: 50px 30px; /* Увеличенные отступы для воздушного дизайна */
+    max-width: 1200px;
+    margin: auto;
 }
 
 .card {
     border: none; /* Убираем стандартные границы карт */
-    border-radius: 8px; /* Закругленные углы для карт */
-    transition: transform 0.2s, box-shadow 0.2s; /* Плавный переход для эффектов */
+    border-radius: 12px; /* Более заметные закругленные углы */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Плавный переход с более выраженным эффектом */
+    overflow: hidden;
+    background: linear-gradient(145deg, #e6f1ff, #ffffff); /* Легкий градиент для карт */
 }
 
 .card:hover {
-    transform: scale(1.05); /* Увеличение карты при наведении */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Легкая тень при наведении */
+    transform: scale(1.08); /* Более сильное увеличение при наведении */
+    box-shadow: 0 6px 30px rgba(0, 123, 255, 0.2); /* Более глубокая тень */
 }
 
 .card-body {
     background-color: #ffffff; /* Белый фон для тела карты */
-    padding: 20px; /* Отступы для текста */
-    border-radius: 8px; /* Закругленные углы для тела карты */
+    padding: 25px; /* Увеличенные отступы */
+    border-radius: 12px;
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.05); /* Легкая внутренняя тень для объема */
 }
 
 .card-title {
-    font-size: 1.25rem; /* Размер заголовка карты */
+    font-size: 1.5rem; /* Увеличенный размер заголовка */
     color: #333; /* Темный цвет заголовка */
+    margin-bottom: 10px; /* Отступ снизу */
 }
 
 .card-subtitle {
-    color: #6c757d; /* Серый цвет для подзаголовка */
+    color: #6c757d; /* Нейтральный серый цвет для подзаголовка */
+    font-size: 1.1rem;
 }
 
 .card-text {
     color: #555; /* Серый цвет текста описания */
-    line-height: 1.5; /* Межстрочный интервал для лучшей читаемости */
-    margin-bottom: 15px; /* Отступ снизу */
+    line-height: 1.6; /* Межстрочный интервал для лучшей читаемости */
+    margin-bottom: 20px; /* Увеличенный отступ снизу */
 }
 
 .pagination {
-    margin-top: 30px; /* Отступ сверху для пагинации */
+    margin-top: 40px; /* Увеличенный отступ сверху для пагинации */
+    display: flex;
+    justify-content: center; /* Выравнивание пагинации по центру */
 }
 
 .page-item.active .page-link {
-    background-color: #007bff; /* Синий цвет для активной страницы */
-    border-color: #007bff; /* Цвет границы для активной страницы */
+    background-color: #ff6f61; /* Насыщенный цвет для активной страницы */
+    border-color: #ff6f61; /* Цвет границы для активной страницы */
+    color: white;
+    border-radius: 50px; /* Закругленные ссылки */
+    box-shadow: 0 0 15px rgba(255, 111, 97, 0.4); /* Тень для активной страницы */
 }
 
 .page-link {
-    color: #007bff; /* Синий цвет для ссылок на страницы */
+    color: #007bff; /* Насыщенный синий для ссылок на страницы */
+    border-radius: 50px;
+    padding: 8px 16px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .page-link:hover {
-    background-color: #e9ecef; /* Светлый фон при наведении на ссылку */
-    color: #0056b3; /* Более темный синий цвет при наведении */
+    background-color: #f8d7da; /* Светлый розовый фон при наведении */
+    color: #c82333; /* Темный красный текст при наведении */
 }
 
 .text-center {
-    margin-top: 40px; /* Отступ сверху для центра текста */
+    margin-top: 50px; /* Отступ сверху для центра текста */
+    font-size: 1.2rem;
+    font-weight: 500;
 }
+
