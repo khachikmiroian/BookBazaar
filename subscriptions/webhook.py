@@ -62,35 +62,47 @@ def handle_checkout_session(session):
                 plan = SubscriptionPlan.objects.get(name=plan_name)
                 user = MyUser.objects.get(email=customer_email)
 
+                # Получить текущую активную подписку пользователя, если есть
+                current_subscription = Subscription.objects.filter(user=user, end_date__gt=timezone.now()).first()
+
                 if str(plan) == 'M':
+                    # Определить начальную дату: если есть активная подписка, используем её end_date
+                    start_date = current_subscription.end_date if current_subscription else timezone.now()
+                    end_date = start_date + timedelta(days=30)
+
                     Subscription.objects.update_or_create(
                         user=user,
                         defaults={
                             'plan': plan,
-                            'start_date': timezone.now(),
-                            'end_date': timezone.now() + timedelta(days=30),
+                            'start_date': timezone.now() if not current_subscription else current_subscription.start_date,
+                            'end_date': end_date,
                         }
                     )
                     send_purchase_email.delay(user.email, 'subscription', plan_name, user.username)
-                    print(f'Subscription for {customer_email} on plan {plan_name} created successfully.')
+                    print(f'Subscription for {customer_email} on plan {plan_name} updated successfully.')
+
                 elif str(plan) == 'Y':
+                    # Аналогично для годовой подписки
+                    start_date = current_subscription.end_date if current_subscription else timezone.now()
+                    end_date = start_date + timedelta(days=365)
+
                     Subscription.objects.update_or_create(
                         user=user,
                         defaults={
                             'plan': plan,
-                            'start_date': timezone.now(),
-                            'end_date': timezone.now() + timedelta(days=365),
+                            'start_date': timezone.now() if not current_subscription else current_subscription.start_date,
+                            'end_date': end_date,
                         }
                     )
                     send_purchase_email.delay(user.email, 'subscription', plan_name, user.username)
-                    print(f'Subscription for {customer_email} on plan {plan_name} created successfully.')
+                    print(f'Subscription for {customer_email} on plan {plan_name} updated successfully.')
+
             except SubscriptionPlan.DoesNotExist:
                 print(f'Subscription plan with name {plan_name} not found.')
             except MyUser.DoesNotExist:
                 print(f'User with email {customer_email} not found.')
             except Exception as e:
                 print(f'Error processing subscription: {str(e)}')
-
         elif purchase_type == 'book':
             # Обработка покупки книги
             book_id = metadata.get('item_id')  # Достаем ID книги из метаданных
@@ -111,4 +123,3 @@ def handle_checkout_session(session):
                 print(f'User with email {customer_email} not found.')
             except Exception as e:
                 print(f'Error processing book purchase: {str(e)}')
-

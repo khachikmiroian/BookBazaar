@@ -11,126 +11,24 @@
 <section class="book-detail">
     <div class="container">
         <div class="row">
-            <!-- Book Information -->
             <div class="col-md-8">
                 <div class="card mb-3">
                     <div class="card-body">
                         <h2 class="card-title">{{ book.title }}</h2>
-                        <h4>Author: <a href="{% url 'books:author_detail' book.author.id %}">{{ book.author }}</a></h4>
-                        <p><strong>Publication Date:</strong> {{ book.date }}</p>
+                        <h4>Author: <a href="#">{{ book.author }}</a></h4>
                         <p><strong>Description:</strong> {{ book.description }}</p>
                         <p><strong>Price:</strong> ${{ book.price }}</p>
 
-                        {% if tag %}
-                        <h2>Posts tagged with "{{ tag.name }}"</h2>
-                        {% endif %}
-                        <p class="tags">
-                            Tags:
-                            {% for tag in book.tags.all %}
-                            <a href="{% url 'books:book_list_by_tag' tag.slug %}">{{ tag.name }}</a>
-                            {% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        </p>
-
-                        {% if book.id in purchased_books %}
                         {% if book.pdf_file %}
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pdfModal">
-                            View PDF
-                        </button>
-                        <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog"
-                             aria-labelledby="pdfModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="pdfModalLabel">{{ book.title }}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <iframe src="{{ book.pdf_file.url }}" width="100%" height="600px"></iframe>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Кнопка для открытия PDF в новой вкладке -->
+                        <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
+                            Open PDF in New Tab
+                        </a>
                         {% else %}
                         <p>PDF file for this book is not available.</p>
                         {% endif %}
-                        {% elif has_active_subscription %}
-                        <p>You can read this book as part of your subscription.</p>
-                        {% if book.pdf_file %}
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pdfModal">
-                            View PDF
-                        </button>
-                        <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog"
-                             aria-labelledby="pdfModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="pdfModalLabel">{{ book.title }}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <iframe src="{{ book.pdf_file.url }}" width="100%" height="600px"></iframe>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% else %}
-                        <p>You can buy this book at any time.</p>
-                        {% if can_purchase %}
-                        <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
-                            {% csrf_token %}
-                            <button type="submit">Buy</button>
-                        </form>
-                        {% endif %}
-                        {% endif %}
                     </div>
                 </div>
-            </div>
-
-            {% if user.is_authenticated %}
-            <div class="col-md-4">
-                {% if bookmarked %}
-                <form action="{% url 'books:remove_bookmark' book.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Remove Bookmark</button>
-                </form>
-                {% else %}
-                <form action="{% url 'books:add_bookmark' book.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Add Bookmark</button>
-                </form>
-                {% endif %}
-            </div>
-            {% endif %}
-
-            <!-- Comments -->
-            <div class="col-md-4">
-                <h3>Comments:</h3>
-                <div>
-                    {% for comment in book.comments.all %}
-                    <strong>{{ comment.profile.user.username }}</strong>
-                    <p>{{ comment.content }}</p>
-                    <p><small>Published {{ comment.created_at }}</small></p>
-                    {% empty %}
-                    <p>No comments yet.</p>
-                    {% endfor %}
-                </div>
-
-                {% if user.is_authenticated %}
-                <h3>Leave a Comment</h3>
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit">Submit</button>
-                </form>
-                {% else %}
-                <p>You must log in to leave a comment.</p>
-                {% endif %}
             </div>
         </div>
     </div>

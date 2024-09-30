@@ -61,8 +61,7 @@
                 <div class="subscription-plans">
                     <h2>Active Subscription Plans</h2>
                     {% if active_subscription %}
-                    <p>Plan: {{ active_subscription.plan.name }} ({{ active_subscription.plan.price|floatformat:2
-                        }})</p>
+                    <p>Plan: {{ active_subscription.plan.name }} ({{ active_subscription.plan.price|floatformat:2 }})</p>
                     <p>Expires on: {{ active_subscription.end_date|date:"d-m-Y" }}</p>
                     {% else %}
                     <p>No active subscription plans.</p>

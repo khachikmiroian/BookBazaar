@@ -17,5 +17,6 @@ urlpatterns = [
                   path('books/<int:pk>/remove_bookmark/', RemoveBookmarkView.as_view(), name='remove_bookmark'),
                   path('authors/', AuthorListView.as_view(), name='author_list'),
                   path('authors/<int:pk>/', AuthorDetailView.as_view(), name='author_detail'),
-                  path('view-pdf/<int:book_id>/', view_pdf, name='view_pdf'),
+                  path('view_pdf_in_new_tab/<int:book_id>/', view_pdf_in_new_tab, name='view_pdf_in_new_tab'),
+                  path('view_pdf_file/<int:book_id>/', view_pdf, name='view_pdf_file'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
