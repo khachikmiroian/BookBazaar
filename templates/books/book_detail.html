@@ -21,6 +21,7 @@
                         <p><strong>Description:</strong> {{ book.description }}</p>
                         <p><strong>Price:</strong> ${{ book.price }}</p>
 
+                        <!-- Tags Section -->
                         {% if tag %}
                         <h2>Posts tagged with "{{ tag.name }}"</h2>
                         {% endif %}
@@ -32,66 +33,52 @@
                             {% endfor %}
                         </p>
 
-                        {% if book.id in purchased_books %}
-                        {% if book.pdf_file %}
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pdfModal">
-                            View PDF
-                        </button>
-                        <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog"
-                             aria-labelledby="pdfModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="pdfModalLabel">{{ book.title }}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <iframe src="{{ book.pdf_file.url }}" width="100%" height="600px"></iframe>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% else %}
-                        <p>PDF file for this book is not available.</p>
-                        {% endif %}
-                        {% elif has_active_subscription %}
-                        <p>You can read this book as part of your subscription.</p>
-                        {% if book.pdf_file %}
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pdfModal">
-                            View PDF
-                        </button>
-                        <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog"
-                             aria-labelledby="pdfModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="pdfModalLabel">{{ book.title }}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <iframe src="{{ book.pdf_file.url }}" width="100%" height="600px"></iframe>
+                        <!-- If user has purchased the book or has an active subscription -->
+                        {% if book.id in purchased_books or has_active_subscription %}
+                            {% if book.pdf_file %}
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pdfModal">
+                                View PDF
+                            </button>
+                            <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="pdfModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="pdfModalLabel">{{ book.title }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <iframe src="{{ book.pdf_file.url }}" width="100%" height="600px"></iframe>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {% endif %}
+                            {% else %}
+                            <p>PDF file for this book is not available.</p>
+                            {% endif %}
+
+                            <!-- Option to buy the book even if subscribed -->
+                            {% if can_purchase %}
+                            <p>You can also buy this book.</p>
+                            <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success">Buy this Book</button>
+                            </form>
+                            {% endif %}
                         {% else %}
                         <p>You can buy this book at any time.</p>
-                        {% if can_purchase %}
                         <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
                             {% csrf_token %}
-                            <button type="submit">Buy</button>
+                            <button type="submit" class="btn btn-success">Buy</button>
                         </form>
-                        {% endif %}
                         {% endif %}
                     </div>
                 </div>
             </div>
 
+            <!-- Bookmark and Comments Section -->
             {% if user.is_authenticated %}
             <div class="col-md-4">
                 {% if bookmarked %}
@@ -105,11 +92,7 @@
                     <button type="submit">Add Bookmark</button>
                 </form>
                 {% endif %}
-            </div>
-            {% endif %}
 
-            <!-- Comments -->
-            <div class="col-md-4">
                 <h3>Comments:</h3>
                 <div>
                     {% for comment in book.comments.all %}
@@ -121,17 +104,16 @@
                     {% endfor %}
                 </div>
 
-                {% if user.is_authenticated %}
                 <h3>Leave a Comment</h3>
                 <form method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit">Submit</button>
                 </form>
-                {% else %}
-                <p>You must log in to leave a comment.</p>
-                {% endif %}
             </div>
+            {% else %}
+            <p>You must log in to leave a comment.</p>
+            {% endif %}
         </div>
     </div>
 </section>
