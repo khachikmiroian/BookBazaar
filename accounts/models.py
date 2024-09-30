@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from subscriptions.models import Subscription
 
+
 class MyUserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
         if not email:
@@ -19,6 +20,7 @@ class MyUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
 
         return self.create_user(email, username, password, **extra_fields)
+
 
 class MyUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=20, unique=True)
@@ -38,15 +40,16 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+
 class Profile(models.Model):
     user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to='users/%Y/%m/%d/', blank=True)
-
     purchased_books = models.ManyToManyField('books.Books', related_name='purchasers', blank=True)
-    bookmarks = models.ManyToManyField('books.Books', related_name='bookmarked_by', blank=True)
-
+    
     def __str__(self):
         return f'Profile of {self.user.username}'
 
     def get_active_subscription(self):
         return Subscription.objects.filter(user=self.user, end_date__gt=timezone.now()).first()
+
+

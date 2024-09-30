@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %}
 {{ book.title }} - Book Details
 {% endblock %}
@@ -36,7 +37,8 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pdfModal">
                             View PDF
                         </button>
-                        <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="pdfModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog"
+                             aria-labelledby="pdfModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -60,7 +62,8 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pdfModal">
                             View PDF
                         </button>
-                        <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="pdfModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog"
+                             aria-labelledby="pdfModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -76,18 +79,6 @@
                             </div>
                         </div>
                         {% endif %}
-                        {% endif %}
-
-                        {% if book.id not in purchased_books and not has_active_subscription %}
-                        <p>As a new user, you can purchase this book:</p>
-                        {% if can_purchase %}
-                        <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
-                            {% csrf_token %}
-                            <button type="submit">Buy</button>
-                        </form>
-                        {% endif %}
-                        {% elif has_purchased %}
-                        <p>Happy reading!</p>
                         {% else %}
                         <p>You can buy this book at any time.</p>
                         {% if can_purchase %}
@@ -100,6 +91,22 @@
                     </div>
                 </div>
             </div>
+
+            {% if user.is_authenticated %}
+            <div class="col-md-4">
+                {% if bookmarked %}
+                <form action="{% url 'books:remove_bookmark' book.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Remove Bookmark</button>
+                </form>
+                {% else %}
+                <form action="{% url 'books:add_bookmark' book.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Add Bookmark</button>
+                </form>
+                {% endif %}
+            </div>
+            {% endif %}
 
             <!-- Comments -->
             <div class="col-md-4">

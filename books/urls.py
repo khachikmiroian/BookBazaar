@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from .views import *
 from django.conf import settings
 from django.conf.urls.static import static
@@ -13,6 +13,8 @@ urlpatterns = [
                   path('books/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
                   path('tag/<slug:tag_slug>/',
                        BookListByTagView.as_view(), name='book_list_by_tag'),
+                  path('books/<int:pk>/add_bookmark/', AddBookmarkView.as_view(), name='add_bookmark'),
+                  path('books/<int:pk>/remove_bookmark/', RemoveBookmarkView.as_view(), name='remove_bookmark'),
                   path('authors/', AuthorListView.as_view(), name='author_list'),
                   path('authors/<int:pk>/', AuthorDetailView.as_view(), name='author_detail'),
                   path('view-pdf/<int:book_id>/', view_pdf, name='view_pdf'),

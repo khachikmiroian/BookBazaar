@@ -1,8 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views import View
 from django.views.generic import TemplateView, ListView
 from django.views.generic import DetailView
-from .models import Books, Author
+from accounts.models import Profile
+from .models import Books, Author, Bookmarks
 from subscriptions.models import BookPurchase, Subscription
 from .forms import SearchForm, CommentsForm
 from django.http import FileResponse, Http404
@@ -78,6 +81,25 @@ class BookListByTagView(ListView):
         return Books.objects.filter(tags__slug=tag_slug, status='PB').prefetch_related('tags')
 
 
+class AddBookmarkView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        book = get_object_or_404(Books, id=pk)
+        profile = get_object_or_404(Profile, user=request.user)
+
+        Bookmarks.objects.get_or_create(profile=profile, book=book)
+        return redirect('books:book_detail', pk=pk)
+
+
+class RemoveBookmarkView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        book = get_object_or_404(Books, id=pk)
+        profile = get_object_or_404(Profile, user=request.user)
+
+        bookmark = get_object_or_404(Bookmarks, profile=profile, book=book)
+        bookmark.delete()
+        return redirect('books:book_detail', pk=pk)
+
+
 class AuthorListView(ListView):
     model = Author
     template_name = 'books/author_list.html'
@@ -103,16 +125,16 @@ class BookDetailView(DetailView):
             subscription = Subscription.objects.filter(user=self.request.user, end_date__gt=timezone.now()).exists()
             context['has_active_subscription'] = subscription
             context['purchased_books'] = purchased_books
-
             context['has_purchased'] = context['book'].id in purchased_books
             context['can_purchase'] = context['book'].id not in purchased_books
+            context['bookmarked'] = Bookmarks.objects.filter(profile=self.request.user.profile, book=context['book']).exists()
         else:
             context['purchased_books'] = []
             context['has_active_subscription'] = False
             context['can_purchase'] = False
             context['has_purchased'] = False
-
-        context['comments'] = context['book'].comments.all()  # Получаем все комментарии к книге
+            context['bookmarked'] = False
+        context['comments'] = context['book'].comments.all()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -120,12 +142,11 @@ class BookDetailView(DetailView):
         form = CommentsForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.books = book  # Убедитесь, что поле книги правильно заполняется
-            comment.profile = request.user.profile  # Предполагая, что у пользователя есть профиль
+            comment.books = book
+            comment.profile = request.user.profile
             comment.save()
-            return self.get(request, *args, **kwargs)  # Возвращаем обновленное представление с новыми комментариями
+            return self.get(request, *args, **kwargs)
         else:
-            print(form.errors)  # Отладочная информация для проверки ошибок
             return self.get(request, *args, **kwargs)
 
 
