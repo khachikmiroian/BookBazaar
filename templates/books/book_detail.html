@@ -19,17 +19,78 @@
                         <p><strong>Description:</strong> {{ book.description }}</p>
                         <p><strong>Price:</strong> ${{ book.price }}</p>
 
-                        {% if book.pdf_file %}
-                        <!-- Кнопка для открытия PDF в новой вкладке -->
-                        <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
-                            Open PDF in New Tab
-                        </a>
-                        {% else %}
-                        <p>PDF file for this book is not available.</p>
+                        <!-- Tags Section -->
+                        {% if tag %}
+                        <h2>Posts tagged with "{{ tag.name }}"</h2>
                         {% endif %}
+                        <p class="tags">
+                            Tags:
+                            {% for tag in book.tags.all %}
+                            <a href="{% url 'books:book_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                            {% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+
+                        <!-- If user has purchased the book or has an active subscription -->
+                        {% if book.id in purchased_books or has_active_subscription %}
+                            {% if book.pdf_file %}
+                            <!-- Button to open PDF in a new tab -->
+                            <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
+                                Open PDF in New Tab
+                            </a>
+                            {% else %}
+                            <p>PDF file for this book is not available.</p>
+                            {% endif %}
+
+                            <!-- Option to buy the book even if subscribed -->
+                            {% if can_purchase %}
+                            <p>You can also buy this book.</p>
+                            <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success">Buy this Book</button>
+                            </form>
+                            {% endif %}
+                        {% endif %} <!-- Close the purchased book or subscription block -->
                     </div>
                 </div>
             </div>
+
+            <!-- Bookmark and Comments Section -->
+            {% if user.is_authenticated %}
+            <div class="col-md-4">
+                {% if bookmarked %}
+                <form action="{% url 'books:remove_bookmark' book.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Remove Bookmark</button>
+                </form>
+                {% else %}
+                <form action="{% url 'books:add_bookmark' book.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Add Bookmark</button>
+                </form>
+                {% endif %}
+
+                <h3>Comments:</h3>
+                <div>
+                    {% for comment in book.comments.all %}
+                    <strong>{{ comment.profile.user.username }}</strong>
+                    <p>{{ comment.content }}</p>
+                    <p><small>Published {{ comment.created_at }}</small></p>
+                    {% empty %}
+                    <p>No comments yet.</p>
+                    {% endfor %}
+                </div>
+
+                <h3>Leave a Comment</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+            {% else %}
+            <p>You must log in to leave a comment.</p>
+            {% endif %}
         </div>
     </div>
 </section>
