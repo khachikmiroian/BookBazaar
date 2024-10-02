@@ -8,7 +8,7 @@ from accounts.models import Profile
 from .models import Books, Author, Bookmarks
 from subscriptions.models import BookPurchase, Subscription
 from .forms import SearchForm, CommentsForm
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, HttpResponse
 from rest_framework import viewsets
 from .serializers import BookSerializer
 import requests
@@ -127,7 +127,8 @@ class BookDetailView(DetailView):
             context['purchased_books'] = purchased_books
             context['has_purchased'] = context['book'].id in purchased_books
             context['can_purchase'] = context['book'].id not in purchased_books
-            context['bookmarked'] = Bookmarks.objects.filter(profile=self.request.user.profile, book=context['book']).exists()
+            context['bookmarked'] = Bookmarks.objects.filter(profile=self.request.user.profile,
+                                                             book=context['book']).exists()
         else:
             context['purchased_books'] = []
             context['has_active_subscription'] = False
@@ -161,6 +162,16 @@ def view_pdf(request, book_id):
         response['Content-Disposition'] = 'inline; filename="{}"'.format(book.pdf_file.name)
         return response
     raise Http404("PDF file not found")
+
+
+def view_pdf_in_new_tab(request, book_id):
+    book = get_object_or_404(Books, id=book_id)
+
+    if not book.pdf_file:
+        return HttpResponse('PDF not available', status=404)
+
+    # Отображаем отдельную страницу с PDF через PDF.js
+    return render(request, 'books/view_pdf.html', {'book': book})
 
 
 class BookViewSet(viewsets.ModelViewSet):

@@ -160,6 +160,7 @@ class CustomPasswordResetConfirmView(View):
     def get(self, request, uidb64, token):
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
+            user = MyUser.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, MyUser.DoesNotExist):
             user = None
 

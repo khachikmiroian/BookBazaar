@@ -11,13 +11,11 @@
 <section class="book-detail">
     <div class="container">
         <div class="row">
-            <!-- Book Information -->
             <div class="col-md-8">
                 <div class="card mb-3">
                     <div class="card-body">
                         <h2 class="card-title">{{ book.title }}</h2>
-                        <h4>Author: <a href="{% url 'books:author_detail' book.author.id %}">{{ book.author }}</a></h4>
-                        <p><strong>Publication Date:</strong> {{ book.date }}</p>
+                        <h4>Author: <a href="#">{{ book.author }}</a></h4>
                         <p><strong>Description:</strong> {{ book.description }}</p>
                         <p><strong>Price:</strong> ${{ book.price }}</p>
 
@@ -36,25 +34,10 @@
                         <!-- If user has purchased the book or has an active subscription -->
                         {% if book.id in purchased_books or has_active_subscription %}
                             {% if book.pdf_file %}
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pdfModal">
-                                View PDF
-                            </button>
-                            <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog"
-                                 aria-labelledby="pdfModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="pdfModalLabel">{{ book.title }}</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <iframe src="{{ book.pdf_file.url }}" width="100%" height="600px"></iframe>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- Button to open PDF in a new tab -->
+                            <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
+                                Open PDF in New Tab
+                            </a>
                             {% else %}
                             <p>PDF file for this book is not available.</p>
                             {% endif %}
@@ -67,13 +50,7 @@
                                 <button type="submit" class="btn btn-success">Buy this Book</button>
                             </form>
                             {% endif %}
-                        {% else %}
-                        <p>You can buy this book at any time.</p>
-                        <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-success">Buy</button>
-                        </form>
-                        {% endif %}
+                        {% endif %} <!-- Close the purchased book or subscription block -->
                     </div>
                 </div>
             </div>
