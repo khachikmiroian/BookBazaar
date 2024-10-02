@@ -8,17 +8,30 @@
 <!-- Page Header -->
 <section class="page-header">
     <div class="container">
-        <h1>Welcome to Our Online Book Store</h1>
-        <p>{{ random_quote }}</p>
+        <h1>Unlock the Magic of Reading</h1>
+        <p>Welcome to <strong>Online Book Store</strong>, your gateway to a universe of literary treasures! Delve into our diverse collection, featuring everything from cherished classics that have stood the test of time to the latest bestsellers that captivate todays readers. Each book promises a new adventure waiting to be discovered.</p>
+        
+    </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="page-info">
+    <div class="container">
+        <h2>Why Choose Us?</h2>
+        <ul>
+            <li>📚 A curated collection of books across various genres</li>
+            <li>📖 Handpicked recommendations tailored to your preferences</li>
+            <li>🎁 Exclusive offers and discounts for our registered users</li>
+            <li>🚚 Fast and reliable delivery, bringing your favorite books right to your doorstep</li>
+            <li>🔍 Easy-to-use search feature to help you find exactly what you're looking for</li>
+        </ul>
+        <p>Explore our <a href="{% url 'books:book_list' %}" style="color: #6d4c41; text-decoration: underline; font-weight: bold;">Book Collection</a> and uncover the perfect book for your next reading adventure.</p>
+    </div>
 
         <!-- Search Section -->
 
 
-        <!-- Button for Books Page -->
-        <div class="books-button">
-            <a href="{% url 'books:book_list' %}">Browse All Books</a>
-        </div>
-    </div>
+        
 </section>
 
 {% endblock %}

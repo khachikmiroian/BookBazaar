@@ -7,29 +7,213 @@
 
 <section class="about-us">
     <div class="container">
-        <h1>About Us</h1>
-        <p>Welcome to Online Book Store! We are passionate about books and dedicated to providing you with the best
+        <!-- Main Title with Icon -->
+        <h1 class="section-title">
+            <i class="bi bi-book"></i> About Us
+        </h1>
+        
+        <!-- About Text with Book Icon -->
+        <p class="about-text">
+            <i class="bi bi-book-open"></i> Welcome to Online Book Store! We are passionate about books and dedicated to providing you with the best
             reading experience. Our goal is to offer a wide selection of books that cater to all tastes and interests.
-            Whether you're looking for bestsellers, new releases, or classic literature, you'll find it here.</p>
+            Whether you're looking for bestsellers, new releases, or classic literature, you'll find it here.
+        </p>
 
-        <h2>Contact Us</h2>
-        <p>If you have any questions or need assistance, please feel free to reach out to us. We're here to help!</p>
+        <!-- Contact Us Section with Icon -->
+        <h2 class="section-subtitle">
+            <i class="bi bi-telephone"></i> Contact Us
+        </h2>
+        
+        <p class="about-text">
+            If you have any questions or need assistance, please feel free to reach out to us. We're here to help!
+        </p>
 
+        <!-- Contact Information Section with Icons -->
         <div class="contact-info">
-            <h3>Contact Information</h3>
-            <p>Email: <a href="mailto:info@onlinebookstore.com">info@onlinebookstore.com</a></p>
-            <p>Phone: <a href="tel:+1234567890">+123 456 7890</a></p>
-            <p>Address: 123 Book Street, Readington, RB 45678</p>
+            <h3 class="contact-title"><i class="bi bi-info-circle"></i> Contact Information</h3>
+            <p><i class="bi bi-envelope"></i> Email: <a href="mailto:info@onlinebookstore.com">info@onlinebookstore.com</a></p>
+            <p><i class="bi bi-telephone"></i> Phone: <a href="tel:+1234567890">+123 456 7890</a></p>
+            <p><i class="bi bi-map"></i> Address: 123 Book Street, Readington, RB 45678</p>
         </div>
 
-        <h2>Our Team</h2>
-        <p>Meet the people behind Online Book Store:</p>
-        <ul>
-            <li><strong>Jane Doe</strong> - Founder & CEO</li>
-            <li><strong>John Smith</strong> - Chief Technology Officer</li>
-            <li><strong>Emily Johnson</strong> - Head of Customer Service</li>
+        <!-- Our Team Section with Icon -->
+        <h2 class="section-subtitle">
+            <i class="bi bi-people"></i> Our Team
+        </h2>
+
+        <p class="about-text">Meet the people behind Online Book Store:</p>
+        
+        <!-- Team Members with Icons -->
+        <ul class="team-list">
+            <li><i class="bi bi-person-badge"></i> <strong>Jane Doe</strong> - Founder & CEO</li>
+            <li><i class="bi bi-laptop"></i> <strong>John Smith</strong> - Chief Technology Officer</li>
+            <li><i class="bi bi-headset"></i> <strong>Emily Johnson</strong> - Head of Customer Service</li>
         </ul>
+
+        <!-- Social Media Section with Icons -->
+        <h2 class="section-subtitle">
+            <i class="bi bi-share"></i> Follow Us
+        </h2>
+        <p class="about-text">
+            Stay connected with us on social media:
+            <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+        </p>
     </div>
 </section>
+
+<style>
+    /* Body and Container */
+    body {
+        background: linear-gradient(135deg, #d8f1ff, #f3e9ff);
+        font-family: 'Helvetica', sans-serif;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    /* Title and Subtitle */
+    .section-title {
+        text-align: center;
+        font-size: 3em;
+        color: #673ab7;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        position: relative;
+        animation: slideIn 1s ease-out;
+    }
+
+    .section-title i {
+        margin-right: 10px;
+    }
+
+    .section-subtitle {
+        font-size: 2em;
+        color: #2196f3;
+        margin: 30px 0 10px;
+        text-transform: capitalize;
+        animation: fadeUp 1s ease-in;
+        position: relative;
+    }
+
+    .section-subtitle i {
+        margin-right: 10px;
+    }
+
+    /* About Text */
+    .about-text {
+        font-size: 1.2em;
+        line-height: 1.8;
+        color: #555;
+        margin-bottom: 20px;
+        animation: fadeUp 1.2s ease-in;
+    }
+
+    /* Contact Info */
+    .contact-info {
+        background: #f0f4ff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+    .contact-title {
+        font-size: 1.6em;
+        color: #673ab7;
+        margin-bottom: 10px;
+    }
+
+    .contact-title i {
+        margin-right: 10px;
+    }
+
+    .contact-info p {
+        font-size: 1.1em;
+        color: #666;
+        margin: 8px 0;
+    }
+
+    .contact-info a {
+        color: #00bcd4;
+        text-decoration: none;
+        transition: color 0.3s ease-in-out;
+    }
+
+    .contact-info a:hover {
+        color: #673ab7;
+    }
+
+    .contact-info i {
+        margin-right: 8px;
+        color: #ff9800;
+    }
+
+    /* Team List */
+    .team-list {
+        list-style: none;
+        padding: 0;
+        animation: fadeIn 1.5s;
+    }
+
+    .team-list li {
+        font-size: 1.2em;
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        animation: fadeUp 1.3s ease-in;
+    }
+
+    .team-list i {
+        margin-right: 10px;
+        font-size: 1.8em;
+        color: #673ab7;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .team-list li:hover i {
+        transform: scale(1.2);
+    }
+
+    /* Social Icons */
+    .social-icon {
+        color: #673ab7;
+        font-size: 1.5em;
+        margin-right: 15px;
+        transition: color 0.3s;
+    }
+
+    .social-icon:hover {
+        color: #2196f3;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+</style>
 
 {% endblock %}
