@@ -1,93 +1,133 @@
-    {% extends 'base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-    {% block content %}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Subscription Plans</title>
-        <style>
-            .card {
-                width: 22rem;
-                margin: 20px auto;
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                background-color: #fff8f5;
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-                text-align: center;
-                padding: 20px;
-            }
+{% block content %}
+<style>
+    /* General Styles */
+    html, body {
+        height: 100%; /* Устанавливаем высоту для html и body */
+        margin: 0; /* Убираем отступы */
+        display: flex; /* Используем Flexbox */
+        flex-direction: column; /* Устанавливаем вертикальную ориентацию */
+    }
 
-            .card-title {
-                font-size: 1.7rem;
-                color: #007bff;
-            }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 0; /* Убираем внутренние отступы для body */
+    }
 
-            .card-text {
-                margin: 15px 0;
-                color: #333;
-            }
+    .container {
+        flex: 1; /* Контейнер занимает оставшееся пространство */
+        max-width: 1200px; /* Adjusted for a bigger container */
+        margin: 0 auto; /* Центрируем контейнер */
+        padding: 20px; /* Внутренний отступ */
+        background-color: #ffffff;
+        border-radius: 10px; /* Скругление углов */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border: 2px solid #8b5a2b; /* Граница контейнера */
+    }
 
-            .btn {
-                background-color: #00bfff;
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                border-radius: 5px;
-                text-transform: uppercase;
-            }
+    .subscriptions-container {
+        padding: 20px; /* Inner padding for the subscriptions */
+    }
 
-            .btn:hover {
-                background-color: #0099cc;
-            }
+    /* Subscription Category Styles */
+    .subscription-category {
+        margin-bottom: 30px;
+    }
 
-            .card-container {
-                display: flex;
-                justify-content: center;
-                flex-wrap: wrap;
-            }
+    .subscription-category h1 {
+        font-size: 24px;
+        color: #333333;
+        border-bottom: 2px solid #8b5a2b;
+        padding-bottom: 10px;
+    }
 
-            .page-header {
-                text-align: center;
-                margin: 40px 0;
-            }
+    /* Subscription List Styles */
+    .subscription-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px; /* Space between items */
+    }
 
-            .page-header h1 {
-                font-size: 2.5rem;
-                color: #007bff;
-            }
+    /* Subscription Item Styles */
+    .subscription-item {
+        background-color: #efefef;
+        border-radius: 8px;
+        padding: 15px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+    }
 
-            .page-header p {
-                font-size: 1.2rem;
-                color: #555;
-                margin-top: 10px;
-            }
-        </style>
-    </head>
-    <body>
-        <section class="page-header">
-            <div class="container">
-                <h1>Choose Your Plan</h1>
-                <p>Select a subscription plan that fits your needs. Whether you're an avid reader or just getting started, we have something for everyone!</p>
-            </div>
-        </section>
+    .subscription-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
 
-        <section class="subscriptions">
-            <div class="container">
-                <div class="card-container">
-                    {% for subscription in subs %}
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ subscription.get_name_display }}</h5>
-                            <p class="card-text">Price: ${{ subscription.price }}</p>
-                            <a href="{{ subscription.get_absolute_url }}" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-                    {% endfor %}
+    .subscription-item h2 {
+        font-size: 20px;
+        color: #8b5a2b;
+    }
+
+    .subscription-item p {
+        margin: 5px 0;
+        color: #555555;
+    }
+
+    /* Price Styles */
+    .subscription-item p:nth-child(2) {
+        font-weight: bold;
+        font-size: 18px;
+        color: #8b5a2b; /* Price color */
+    }
+
+    /* Footer Styles */
+    footer {
+        background-color: #333; /* Цвет футера */
+        color: white; /* Цвет текста футера */
+        text-align: center; /* Центрируем текст */
+        padding: 10px; /* Внутренний отступ футера */
+    }
+</style>
+
+<div class="container">
+    <div class="subscriptions-container">
+        <!-- Monthly Subscriptions -->
+        <div class="subscription-category">
+            <h1>Subscriptions by Month</h1>
+            <div class="subscription-list">
+                <div class="subscription-item">
+                    <h2>Basic Plan</h2>
+                    <p>Access to all basic books and content.</p>
+                    <p>Price: $5/month</p>
+                </div>
+                <div class="subscription-item">
+                    <h2>Premium Plan</h2>
+                    <p>Access to all books including premium content.</p>
+                    <p>Price: $15/month</p>
                 </div>
             </div>
-        </section>
-    </body>
-    </html>
-    {% endblock %}
+        </div>
+
+        <!-- Yearly Subscriptions -->
+        <div class="subscription-category">
+            <h1>Subscriptions by Year</h1>
+            <div class="subscription-list">
+                <div class="subscription-item">
+                    <h2>Basic Plan</h2>
+                    <p>Access to all basic books and content.</p>
+                    <p>Price: $50/year</p>
+                </div>
+                <div class="subscription-item">
+                    <h2>Premium Plan</h2>
+                    <p>Access to all books including premium content.</p>
+                    <p>Price: $150/year</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,9 +1,9 @@
 /* book_list.css */
 
 body {
-    background-color: #1a1a1a; /* Dark background for the body */
+    background-color: #f4e2d0; /* Soft Beige for a warm background */
     font-family: 'Poppins', sans-serif; /* Modern font style */
-    color: #ddd; /* Light gray color for text */
+    color: #4a4a4a; /* Dark Gray color for text */
     margin: 0;
     padding: 0;
 }
@@ -11,7 +11,7 @@ body {
 .book-list-section {
     display: flex; /* or 'grid' if you are using grid */
     flex-wrap: wrap; /* Allows wrapping of items */
-    gap: 20px; /* Space between items */
+    gap: 30px; /* Increased space between items */
     padding: 50px 30px;
     max-width: 1200px;
     margin: auto;
@@ -20,48 +20,24 @@ body {
 
 .card {
     border: none; /* Remove default card borders */
-    border-radius: 12px; /* Rounded corners */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+    border-radius: 16px; /* More rounded corners */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition */
     overflow: hidden;
-    background: linear-gradient(145deg, #3a3a3a, #4d4d4d); /* Dark gradient for cards */
+    background: linear-gradient(145deg, #c6b29a, #d8d8d8); /* Light Brown to Light Gray gradient for cards */
     position: relative; /* For absolute positioning of images */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Deeper shadow for cards */
-    animation: cardFadeIn 1.2s ease forwards; /* Fade-in effect for cards */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Softer shadow for cards */
     margin-bottom: 20px; /* Add space below each card */
 }
 
-@keyframes cardFadeIn {
-    0% {
-        opacity: 0;
-        transform: translateY(20px) scale(0.95); /* Start lower and smaller */
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1); /* End in place and normal size */
-    }
-}
-
 .card:hover {
-    transform: scale(1.05); /* Scale up on hover */
-    box-shadow: 0 8px 30px rgba(0, 255, 255, 0.4); /* Bright shadow on hover */
-    animation: cardHover 0.3s ease; /* Subtle scale effect on hover */
-}
-
-@keyframes cardHover {
-    0% {
-        transform: scale(1.05);
-    }
-    50% {
-        transform: scale(1.08); /* Slightly larger for a bounce effect */
-    }
-    100% {
-        transform: scale(1.05);
-    }
+    transform: translateY(-5px); /* Lift card on hover */
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
+    background-color: rgba(198, 178, 154, 0.9); /* Lighten background on hover */
 }
 
 .card-image {
     width: 100%; /* Full width for images */
-    height: 200px; /* Fixed height for images */
+    height: 220px; /* Increased height for images */
     object-fit: cover; /* Cover images maintaining aspect ratio */
     transition: transform 0.5s ease, filter 0.5s ease; /* Smooth transition for image scaling */
     filter: brightness(80%); /* Darken images */
@@ -73,41 +49,64 @@ body {
 }
 
 .card-body {
-    background-color: #2c2c2c; /* Dark background for card body */
-    padding: 25px; /* Increased padding */
-    border-radius: 12px;
-    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.5); /* Inner shadow for depth */
+    background-color: #f4e2d0; /* Soft Beige for card body */
+    padding: 30px; /* Increased padding */
+    border-radius: 16px;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
 }
 
 .card-title {
-    font-size: 1.5rem; /* Increased title size */
-    color: #ffcc00; /* Bright title color */
+    font-size: 1.6rem; /* Slightly larger title size */
+    color: #6a4a3b; /* Medium Brown title color */
     margin-bottom: 10px; /* Bottom margin */
-    transition: color 0.5s ease; /* Smooth color transition for title */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth color transition for title */
 }
 
 .card-title:hover {
-    color: #ff9900; /* Title color on hover */
+    color: #3b2e2e; /* Dark Brown on hover */
+    transform: scale(1.05); /* Slightly increase size on hover */
     text-shadow: 0 0 10px rgba(255, 204, 0, 0.5); /* Glow effect on hover */
 }
 
 .card-subtitle {
     color: #aaa; /* Neutral gray for subtitle */
     font-size: 1.1rem;
+    margin-bottom: 8px; /* Added bottom margin */
 }
 
 .card-text {
-    color: #ddd; /* Light gray for description text */
-    line-height: 1.6; /* Line height for readability */
+    color: #4a4a4a; /* Dark Gray for description text */
+    line-height: 1.7; /* Increased line height for readability */
     margin-bottom: 20px; /* Increased bottom margin */
-    transition: color 0.5s ease; /* Smooth transition for text color */
+    transition: color 0.3s ease; /* Smooth transition for text color */
 }
 
 .card:hover .card-text {
-    color: #00cccc; /* Change text color on hover */
-    transform: translateY(-5px); /* Lift text on hover */
+    color: #6a4a3b; /* Change text color to Medium Brown on hover */
+    transform: translateY(-3px); /* Lift text on hover */
 }
 
+/* New Card Footer Styles */
+.card-footer {
+    background: linear-gradient(145deg, #d8cfcf, #c6b29a); /* Soft gradient for footer */
+    padding: 15px; /* Padding for the footer */
+    border-top: 2px solid #6a4a3b; /* Dark Brown border on top */
+    border-radius: 0 0 16px 16px; /* Rounded corners on the bottom */
+    text-align: center; /* Centered text */
+    transition: background 0.3s ease; /* Smooth transition for background */
+}
+
+.card-footer:hover {
+    background: rgba(198, 178, 154, 0.9); /* Lighten background on hover */
+}
+
+.card-footer-text {
+    color: #4a4a4a; /* Dark Gray text color */
+    font-size: 1rem; /* Font size for footer text */
+    margin: 0; /* Remove margin */
+}
+
+/* Pagination Styles */
 .pagination {
     margin-top: 40px; /* Increased top margin for pagination */
     display: flex;
@@ -115,54 +114,37 @@ body {
 }
 
 .page-item.active .page-link {
-    background-color: #00cccc; /* Active page background color */
-    border-color: #00cccc; /* Active page border color */
-    color: white;
+    background-color: #6a4a3b; /* Active page background color */
+    border-color: #6a4a3b; /* Active page border color */
+    color: #f4e2d0; /* Soft Beige text */
     border-radius: 50px; /* Rounded links */
-    box-shadow: 0 0 15px rgba(0, 204, 204, 0.4); /* Shadow for active page */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); /* Shadow for active page */
 }
 
 .page-link {
-    color: #00b3b3; /* Rich color for page links */
+    color: #4a4a4a; /* Dark Gray for page links */
     border-radius: 50px;
-    padding: 8px 16px;
+    padding: 10px 20px;
     transition: background-color 0.5s, color 0.5s, transform 0.3s, box-shadow 0.5s; /* Smooth transition for hover effects */
     position: relative; /* For animation on hover */
 }
 
 .page-link:hover {
-    box-shadow: 0 0 30px rgba(0, 204, 204, 0.7); /* Glowing effect on hover */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); /* Glowing effect on hover */
     transform: scale(1.05); /* Scale up on hover */
-    background-color: rgba(0, 204, 204, 0.1); /* Light background on hover */
-}
-
-.page-link::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
-    border-radius: 50px; /* Rounded */
-    top: 0;
-    left: 0;
-    transform: scale(0);
-    transition: transform 0.5s; /* Smooth scale transition */
-    z-index: 0; /* Positioned behind the link text */
-}
-
-.page-link:hover::before {
-    transform: scale(1); /* Scale effect on hover */
+    background-color: rgba(198, 178, 154, 0.2); /* Semi-transparent Light Brown on hover */
 }
 
 .page-link:hover {
-    color: #c82333; /* Dark red text on hover */
+    color: #3b2e2e; /* Dark Brown text on hover */
 }
 
 .text-center {
     margin-top: 50px; /* Top margin for centered text */
     font-size: 1.2rem;
-    font-weight: 500;
+    font-weight: 600; /* Slightly bolder text */
     animation: textSlideIn 1s ease forwards; /* Slide-in effect for text */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for depth */
 }
 
 @keyframes fadeIn {
@@ -184,16 +166,18 @@ body {
         opacity: 1;
     }
 }
+
 .book-icon {
     font-size: 3rem; /* Bigger icon size */
-    transition: color 0.3s ease; /* Smooth color transition */
-    color: #007bff; /* Initial color */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth color transition */
+    color: #6a4a3b; /* Initial Medium Brown color */
 }
 
 /* Hover effect with pulse */
 .book-icon:hover {
     animation: pulse 0.6s; /* Trigger the pulse animation on hover */
-    color: #0056b3; /* Change color on hover */
+    color: #3b2e2e; /* Change color to Dark Brown on hover */
+    transform: scale(1.1); /* Scale up icon on hover */
 }
 
 /* Pulse keyframes */
