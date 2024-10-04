@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import environ
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,6 +20,7 @@ SECRET_KEY = 'django-insecure-+nlo%_^i4l@w3ox9$1v14tut+u92=5ko+b0!@5y$c5zf7gu(hz
 DEBUG = True
 ALLOWED_HOSTS = []
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -36,7 +38,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'rest_framework',
-
     'django_celery_beat',
     'django_celery_results',
 ]
@@ -93,6 +94,9 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
+
+
+AUTH_USER_MODEL = 'accounts.MyUser'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -154,15 +158,6 @@ STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 STRIPE_API_VERSION = '2024-06-20'
 STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
 
-# save Celery task results in Django's database
-CELERY_RESULT_BACKEND = "django-db"
-
-# This configures Redis as the datastore between Django + Celery
-CELERY_BROKER_URL = env('CELERY_BROKER_REDIS_URL')
-
-# this allows you to schedule items in the Django admin.
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -200,25 +195,42 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': False,
         },
-        'accounts': {  
+        'accounts': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
             'propagate': True,
         },
-        'books': {  
+        'books': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
             'propagate': True,
         },
-        'librarysite': {  
+        'librarysite': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
             'propagate': True,
         },
-        'subscriptions': { 
+        'subscriptions': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
             'propagate': True,
         },
     },
 }
+
+# save Celery task results in Django's database
+CELERY_RESULT_BACKEND = "django-db"
+
+# This configures Redis as the datastore between Django + Celery
+CELERY_BROKER_URL = config('redis://localhost:6380', default='redis://localhost:6379')
+# if you out to use os.environ the config is:
+# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_REDIS_URL', 'redis://localhost:6379')
+
+
+# this allows you to schedule items in the Django admin.
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+
+
+PROTOCOL = 'http'
+DOMAIN = '127.0.0.1:8000'
+RESET_URL = 'accounts/reset/'

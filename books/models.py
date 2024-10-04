@@ -1,7 +1,11 @@
+from django.utils import timezone
 from django.db import models
 from taggit.managers import TaggableManager
 from django.urls import reverse
+from accounts.models import Profile, MyUser
+
 from django.db import models
+from django.utils import timezone
 
 
 class Books(models.Model):
@@ -9,7 +13,7 @@ class Books(models.Model):
         DRAFT = 'DF', 'Draft'
         PUBLISHED = 'PB', 'Published'
 
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=100)
     author = models.ForeignKey('Author', on_delete=models.CASCADE, related_name='books')
     description = models.TextField()
     date = models.DateField()
@@ -22,12 +26,31 @@ class Books(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('books:book_detail',
-                       args=[self.id])
+        return reverse('books:book_detail', args=[self.id])
 
     class Meta:
         verbose_name = 'Book'
         verbose_name_plural = 'Books'
+
+
+class Comments(models.Model):
+    books = models.ForeignKey(Books, on_delete=models.CASCADE, related_name='comments')
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)  # Это поле автоматически обновляется при каждом сохранении
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Comment by {self.profile.user.username}'
+
+    @property
+    def is_modified(self):
+        """Проверяет, был ли комментарий изменен."""
+        # Проверяем, отличается ли время создания и обновления
+        return self.created_at != self.updated_at
 
 
 class Author(models.Model):
@@ -46,3 +69,12 @@ class Author(models.Model):
     class Meta:
         verbose_name = 'Author'
         verbose_name_plural = 'Authors'
+
+
+class Bookmarks(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    book = models.ForeignKey(Books, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['profile', 'book']

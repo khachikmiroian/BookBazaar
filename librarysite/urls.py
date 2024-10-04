@@ -3,7 +3,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from books.views import Contact, AboutUsView, HomeView
-from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),

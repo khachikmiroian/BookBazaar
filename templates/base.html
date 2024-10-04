@@ -4,22 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Book Store</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+    
+
     <style>
-        /* Body Styling */
-body {
-    background: linear-gradient(to bottom right, #fafafa, #ffe0b2); /* Light beige gradient */
-    font-family: 'Merriweather', serif; /* A more classic font */
-    color: #333; /* Dark gray for text */
+       body {
+    background: linear-gradient(to bottom right, #fafafa, #ffe0b2);
+    font-family: 'Merriweather', serif;
+    color: #333;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-}
+   }
 
 /* Navbar Styling */
 .navbar {
@@ -64,175 +67,94 @@ body {
 
 /* Page Header */
 .page-header {
-    background: linear-gradient(to right, #a19206, #59b336); /* Light green to pale green gradient */
-    color: white; /* White text for contrast */
-    padding: 90px 0;
+    padding: 50px 0;
     text-align: center;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
+    background: #ffecd2;
+    background: linear-gradient(to right, #ffecd2, #fcb69f);
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+   }
+   
+   .page-header h1 {
+    font-size: 3em;
+    color: #6d4c41;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+   }
+   
+   .page-header p {
+    font-size: 1.3em;
+    color: #4e342e;
+   }
+   
+   .page-header:hover {
+    transform: translateY(-10px);
+   }
+   
+   .page-header:hover h1 {
+    color: #ff7043;
+   }
 
-.page-header h1 {
-    font-size: 4.8em;
-    font-weight: 900; /* Bolder font weight */
-    letter-spacing: 3px;
-    animation: bounceIn 1s ease forwards;
-}
-
-.page-header p {
-    font-size: 1.4em;
-    margin-top: 20px;
-    opacity: 0.9;
-}
-/* Page Header */
-.page-header {
-    background: linear-gradient(135deg, #a19206, #59b336); /* Diagonal gradient for a dynamic look */
-    color: white; /* White text for contrast */
-    padding: 90px 0;
-    text-align: center;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+   .page-info {
+    padding: 50px 0;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+   }
+   
+   .page-info h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #6d4c41;
+   }
+   
+   .page-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+    font-size: 1.2em;
+    line-height: 1.8em;
+    color: #5d4037;
+   }
+   
+   .page-info ul li {
+    margin: 10px 0;
     position: relative;
-    overflow: hidden;
-}
-
-.page-header::before {
-    content: '';
+    padding-left: 40px;
+   }
+   
+   .page-info ul li::before {
+    content: '✔';
     position: absolute;
-    top: 0;
-    left: -50%;
-    width: 200%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
-    animation: shine 4s infinite linear; /* Adds a moving shine effect */
-    z-index: 0;
-}
-
-@keyframes shine {
-    0% {
-        left: -50%;
-    }
-    100% {
-        left: 150%;
-    }
-}
-
-.page-header h1 {
-    font-size: 4.8em;
-    font-weight: 900; /* Bolder font weight */
-    letter-spacing: 3px;
-    animation: bounceIn 1s ease forwards, glow 1.5s ease-in-out infinite alternate; /* Added glowing effect */
-    position: relative;
-    z-index: 1; /* Ensures text is above the shine */
-}
-
-@keyframes glow {
-    0% {
-        text-shadow: 0 0 10px rgba(255, 235, 59, 0.8), 0 0 20px rgba(255, 235, 59, 0.5);
-    }
-    100% {
-        text-shadow: 0 0 20px rgba(255, 235, 59, 1), 0 0 30px rgba(255, 235, 59, 0.5);
-    }
-}
-
-.page-header p {
-    font-size: 1.4em;
-    margin-top: 20px;
-    opacity: 0.9;
-    position: relative;
-    z-index: 1; /* Text above background shine */
-    animation: fadeIn 1s ease forwards; /* Added fade-in animation */
-    transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
-}
-
-/* Hover effect for paragraph */
-.page-header p:hover {
-    color: #ffeb3b; /* Change text color on hover */
-    transform: scale(1.05); /* Slightly scale up the text */
-    text-shadow: 0 0 10px rgba(255, 235, 59, 0.5); /* Add a glow effect on hover */
-}
-
-/* Enhanced Page Header Link Styling */
-.page-header a {
-    color: #ffeb3b; /* Bright yellow for link color */
-    font-size: 1.3em; /* Slightly larger font size */
-    text-decoration: none; /* Remove default underline */
-    font-weight: bold;
-    position: relative;
-    display: inline-block;
-    padding: 8px 20px;
-    border-radius: 25px; /* Rounded corners */
-    background: rgba(255, 235, 59, 0.2); /* Slight background for buttons */
-    transition: background 0.4s ease, color 0.4s ease, transform 0.4s ease; /* Smooth transitions */
-}
-
-.page-header a::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background-color: #ffeb3b; /* Yellow underline */
     left: 0;
-    bottom: -5px; /* Position underline just below the text */
-    transform: scaleX(0); /* Start with the line hidden */
-    transform-origin: right; /* Animation starts from the right */
-    transition: transform 0.4s ease; /* Smooth underline animation */
-}
-
-.page-header a:hover::after {
-    transform: scaleX(1); /* Expand the line to full width on hover */
-    transform-origin: left; /* End the animation from the left */
-}
-
-.page-header a:hover {
-    color: #fff; /* White text on hover */
-    background: #ffeb3b; /* Bright background on hover */
-    text-shadow: 0 0 10px rgba(255, 235, 59, 0.8); /* Add a soft glow effect */
-    transform: scale(1.1) rotate(2deg); /* Slight scaling and rotation on hover */
-}
-
-/* Additional hover animation */
-.page-header a:hover span {
-    animation: pulse 0.6s infinite; /* Pulsing effect on text */
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-/* Optional - BounceIn Keyframe Animation */
-@keyframes bounceIn {
-    0% {
-        opacity: 0;
-        transform: translateY(-200px);
-    }
-    60% {
-        opacity: 1;
-        transform: translateY(30px);
-    }
-    100% {
-        transform: translateY(0);
-    }
-}
-
-/* Fade In Keyframe Animation */
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+    top: 0;
+    color: #ff7043;
+    font-size: 1.5em;
+   }
+   
+   .page-info p {
+    font-size: 1.2em;
+    color: #4e342e;
+   }
+   
+   .page-info a {
+    color: #ff7043;
+    text-decoration: underline;
+    font-weight: bold;
+    transition: color 0.3s ease;
+   }
+   
+   .page-info a:hover {
+    color: #d84315;
+   }
+   
+   .page-info:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+   }
 
 /* Search Section */
 .search-container {
@@ -470,11 +392,11 @@ footer .contact-info a:hover {
     background-color: #d4a373; /* Light brown on hover */
     color: white;
     border-radius: 4px;
-}
+} 
 
 
 
-
+        
     </style>
     <title>{% block title %}{% endblock %}</title>
 </head>
@@ -527,6 +449,7 @@ footer .contact-info a:hover {
     </nav>
 </header>
 {% block content %}{% endblock %}
+
 <footer>
     <p>&copy; 2024 Online Book Store. All rights reserved.</p>
     <div class="contact-info">
@@ -535,16 +458,12 @@ footer .contact-info a:hover {
 </footer>
 
 <script>
-    // Найдем кнопку Log Out
+    // Log Out confirmation
     document.getElementById('logoutButton').addEventListener('click', function(event) {
-        // Отображаем окно подтверждения
         var confirmation = confirm("Are you sure you want to log out?");
-
         if (confirmation) {
-            // Если пользователь подтвердил, отправляем форму выхода
             document.getElementById('logoutForm').submit();
         } else {
-            // Если пользователь отменил, ничего не делаем
             event.preventDefault();
         }
     });

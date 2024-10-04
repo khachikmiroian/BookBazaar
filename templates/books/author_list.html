@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Authors</h1>
-    <ul>
+    <h1 class="authors-title">Authors</h1>
+    <ul class="authors-list">
         {% for author in object_list %}
-            <li>
-                <a href="{% url 'books:author_detail' author.id %}">
+            <li class="author-item">
+                <a href="{% url 'books:author_detail' author.id %}" class="author-link">
+                    <span class="icon">&#x270E;</span> <!-- Pen icon for authorship -->
                     {{ author.first_name }} {{ author.last_name }}
                 </a>
             </li>
@@ -16,8 +17,8 @@
         {% if is_paginated %}
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    <a href="?page=1" class="pagination-link">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="pagination-link">previous</a>
                 {% endif %}
 
                 <span class="current">
@@ -25,10 +26,114 @@
                 </span>
 
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">next</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    <a href="?page={{ page_obj.next_page_number }}" class="pagination-link">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-link">last &raquo;</a>
                 {% endif %}
             </span>
         {% endif %}
     </div>
+
+    <style>
+        body {
+            background-color: #f5f5f5; /* Light grey background */
+            font-family: 'Arial', sans-serif; /* Font choice */
+            margin: 0;
+            padding: 20px;
+        }
+
+        .authors-title {
+            text-align: center;
+            font-size: 2.5em;
+            color: #6a1b9a; /* Dark purple color */
+            margin-bottom: 20px;
+            text-transform: uppercase; /* Emphasizes the title */
+            letter-spacing: 1px; /* Improves readability */
+            animation: fadeIn 0.5s; /* Fade in animation for the title */
+        }
+
+        .authors-list {
+            list-style: none; /* Removes default list styling */
+            padding: 0;
+            max-width: 800px; /* Centers the list */
+            margin: 0 auto; /* Centers the list */
+            background: white; /* White background for the list */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+
+        .author-item {
+            border-bottom: 1px solid #eee; /* Light border between items */
+            transition: background-color 0.3s; /* Smooth background transition */
+        }
+
+        .author-item:last-child {
+            border-bottom: none; /* Removes the last border */
+        }
+
+        .author-link {
+            display: flex; /* Flex for alignment */
+            align-items: center; /* Center items vertically */
+            padding: 15px; /* Spacing around the link */
+            color: #4a148c; /* Deep purple for link text */
+            text-decoration: none; /* Removes underline */
+            font-size: 1.2em; /* Font size */
+            transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Smooth color transition */
+        }
+
+        .author-link:hover {
+            background-color: #f3e5f5; /* Light purple background on hover */
+            color: #6a1b9a; /* Dark purple on hover */
+            transform: translateY(-3px); /* Slightly lifts the item */
+        }
+
+        .icon {
+            margin-right: 10px; /* Spacing between icon and text */
+            font-size: 1.5em; /* Larger icon */
+            transition: transform 0.3s; /* Smooth transform transition */
+            color: #4a148c; /* Icon color matches link */
+        }
+
+        .author-link:hover .icon {
+            transform: rotate(-20deg); /* Rotates icon on hover */
+            color: #6a1b9a; /* Darker color on hover */
+        }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center; /* Centers the pagination */
+        }
+
+        .step-links {
+            display: inline-block; /* Inline block for pagination links */
+            font-size: 1.1em; /* Slightly larger font for pagination */
+            color: #4a148c; /* Deep purple color for pagination */
+        }
+
+        .pagination-link {
+            color: #6a1b9a; /* Link color */
+            text-decoration: none; /* No underline */
+            margin: 0 5px; /* Spacing between links */
+            transition: color 0.3s; /* Smooth color transition */
+        }
+
+        .pagination-link:hover {
+            color: #3e2723; /* Darker brown on hover */
+        }
+
+        .current {
+            margin: 0 10px; /* Spacing for current page display */
+            font-weight: bold; /* Bold text for current page */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px); /* Slide in from above */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 {% endblock %}

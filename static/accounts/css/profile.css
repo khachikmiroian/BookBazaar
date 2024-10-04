@@ -1,20 +1,150 @@
+/* Profile Section Styling */
+.profile-section {
+    background-color: #f8f9fa; /* Light background for contrast */
+    padding: 40px 0; /* Vertical padding */
+}
+
+/* Profile Info Container */
+.profile-info {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* Hover Effect for Profile Info */
+.profile-info:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+}
+
+/* Profile Info Paragraphs */
+.profile-info h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.profile-info p {
+    font-size: 18px;
+    color: #555;
+    margin: 10px 0;
+    position: relative;
+}
+
+/* Hover Effect for Paragraphs */
+.profile-info p:hover {
+    color: #007bff; /* Change color on hover */
+    text-shadow: 0 1px 5px rgba(0, 123, 255, 0.5); /* Subtle text shadow */
+}
+
+/* Edit Profile Button */
 .edit-profile-button {
-    margin-top: 15px; /* Отступ сверху */
+    margin-top: 20px;
 }
 
+/* Button Styling */
 .upload-button {
-    display: inline-block; /* Встраивание кнопки в строку */
-    padding: 10px 20px; /* Отступы */
-    background-color: #007bff; /* Цвет фона */
-    color: white; /* Цвет текста */
-    border: none; /* Убираем стандартные границы */
-    border-radius: 5px; /* Закругленные углы */
-    cursor: pointer; /* Указатель при наведении */
-    font-size: 16px; /* Размер шрифта */
-    transition: background-color 0.3s, transform 0.3s; /* Плавный переход для фона и масштаба */
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden; /* Contain pseudo-elements */
 }
 
+/* Hover Effect for Upload Button */
 .upload-button:hover {
-    background-color: #0056b3; /* Темный цвет фона при наведении */
-    transform: scale(1.05); /* Увеличение кнопки при наведении */
+    background-color: #0056b3; /* Darker shade on hover */
+    transform: translateY(-3px); /* Lift effect */
+}
+
+/* Ripple Effect on Button Hover */
+.upload-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: transform 0.5s ease;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0); /* Start small */
+}
+
+.upload-button:hover::after {
+    transform: translate(-50%, -50%) scale(1); /* Grow effect */
+}
+
+/* Purchased Books Section */
+.purchased-books {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* Hover Effect for Purchased Books Section */
+.purchased-books:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+}
+
+/* Purchased Books List */
+.purchased-books ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+}
+
+.purchased-books li {
+    margin: 10px 0;
+}
+
+/* Links in Purchased Books */
+.purchased-books a {
+    color: #007bff;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+/* Hover Effect for Links */
+.purchased-books a:hover {
+    color: #0056b3; /* Darker shade on hover */
+    text-shadow: 0 1px 5px rgba(0, 123, 255, 0.5); /* Text shadow */
+}
+
+/* Subscription Plans Section */
+.subscription-plans {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* Hover Effect for Subscription Plans Section */
+.subscription-plans:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+}
+
+/* Subscription Plans Text */
+.subscription-plans p {
+    font-size: 18px;
+    color: #555;
+}
+
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Optional Animation on Load */
+.profile-section {
+    animation: fadeIn 0.5s ease-in; /* Fade-in effect on load */
 }

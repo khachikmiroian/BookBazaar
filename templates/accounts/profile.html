@@ -5,12 +5,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}">
-<section class="page-header">
-    <div class="container">
-        <h1>Welcome, {{ user.username }}</h1>
-        <p>Manage your account and view your details here.</p>
-    </div>
-</section>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Link to Font Awesome -->
 
 <section class="profile-section">
     <div class="container">
@@ -19,13 +14,16 @@
             <div class="col-md-6">
                 <div class="profile-info">
                     <h2>Profile Information</h2>
-                    <p><strong>Username:</strong> {{ user.username }}</p>
-                    <p><strong>Email:</strong> {{ user.email }}</p>
-                    <p><strong>First Name:</strong> {{ user.first_name }}</p>
-                    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                    <p><i class="fas fa-user"></i> <strong>Username:</strong> {{ user.username }}</p>
+                    <p><i class="fas fa-envelope"></i> <strong>Email:</strong> {{ user.email }}</p>
+                    <p><i class="fas fa-user-tag"></i> <strong>First Name:</strong> {{ user.first_name }}</p>
+                    <p><i class="fas fa-user-tag"></i> <strong>Last Name:</strong> {{ user.last_name }}</p>
                     <div class="edit-profile-button">
                         <a href="{% url 'edit' request.user.id %}" class="upload-button">
                             <span>Edit Profile</span>
+                        </a>
+                        <a href="{% url 'password_change' %}" class="change-password-button">
+                            <i class="fas fa-lock"></i> Change Password
                         </a>
                     </div>
                 </div>
@@ -33,24 +31,23 @@
 
             <!-- Purchased Books -->
             <div class="col-md-6">
-    <div class="purchased-books">
-        <h2>Purchased Books</h2>
-        {% if purchased_books %}
-            <ul>
-                {% for purchase in purchased_books %}
-                    <li>
-                        <a href="{% url 'books:view_pdf' purchase.book.id %}" target="_blank">
-                            {{ purchase.book.title }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No purchased books.</p>
-        {% endif %}
-    </div>
-</div>
-
+                <div class="purchased-books">
+                    <h2>Purchased Books</h2>
+                    {% if purchased_books %}
+                    <ul>
+                        {% for purchase in purchased_books %}
+                        <li>
+                            <a href="{% url 'books:view_pdf_file' purchase.book.id %}" target="_blank">
+                                <i class="fas fa-book"></i> {{ purchase.book.title }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No purchased books.</p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
 
         <!-- Subscription Plans -->
@@ -59,10 +56,12 @@
                 <div class="subscription-plans">
                     <h2>Active Subscription Plans</h2>
                     {% if active_subscription %}
-                        <p>Plan: {{ active_subscription.plan.name }} ({{ active_subscription.plan.price|floatformat:2 }})</p>
-                        <p>Expires on: {{ active_subscription.end_date|date:"d-m-Y" }}</p>
+
+                    <p>Plan: {{ active_subscription.plan.name }} ({{ active_subscription.plan.price|floatformat:2 }})</p>
+                    <p>Expires on: {{ active_subscription.end_date|date:"d-m-Y" }}</p>
+
                     {% else %}
-                        <p>No active subscription plans.</p>
+                    <p>No active subscription plans.</p>
                     {% endif %}
                 </div>
             </div>
