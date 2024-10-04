@@ -6,100 +6,6 @@
 {% endblock %}
 
 {% block content %}
-<style>
-    body {
-        background-color: #f5f2e1;
-        font-family: 'Arial', sans-serif;
-    }
-    .content {
-        display: flex;
-        justify-content: space-between;
-        padding: 20px;
-    }
-    .left-section {
-        flex: 1 1 60%;
-        padding-right: 20px;
-    }
-    .right-section {
-        flex: 1 1 35%;
-        background-color: #f5ebe0;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .card-title {
-        color: #8b4513;
-        font-size: 28px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-    .tags a {
-        color: #d2691e;
-        text-decoration: none;
-        font-weight: bold;
-        border-bottom: 1px dashed #d2691e;
-        transition: color 0.3s, border-bottom 0.3s;
-    }
-    .tags a:hover {
-        color: #8b4513;
-        border-bottom: 1px solid #8b4513;
-    }
-    .comment {
-        background-color: #fff;
-        border: 1px solid #d2b48c;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 10px;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    .comment strong {
-        color: #6b4226;
-    }
-    .comment p {
-        color: #5a3d2b;
-        margin-bottom: 5px;
-    }
-    .comment small {
-        color: #8b4513;
-    }
-    .comment-form textarea {
-        width: 100%;
-        padding: 15px;
-        border: 1px solid #d2b48c;
-        border-radius: 10px;
-        resize: vertical;
-        margin-bottom: 10px;
-    }
-    .comment-form button {
-        background-color: #8b4513;
-        color: #fff;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    .comment-form button:hover {
-        background-color: #a0522d;
-    }
-    .show-more-btn {
-        background-color: #d2691e;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 10px;
-        transition: background-color 0.3s;
-    }
-    .show-more-btn:hover {
-        background-color: #8b4513;
-    }
-    .edit-options {
-        display: none; /* Initially hidden */
-    }
-</style>
-
 <section class="book-detail">
     <div class="content">
         <!-- Left section - book info -->
@@ -108,6 +14,19 @@
             <h4>Author: <a href="#">{{ book.author }}</a></h4>
             <p><strong>Description:</strong> {{ book.description }}</p>
             <p><strong>Price:</strong> ${{ book.price }}</p>
+
+            <form action="{% url 'books:add_bookmark' book.id %}" method="POST">
+                {% csrf_token %}
+                {% if bookmarked %}
+                <button type="submit" class="btn btn-warning">
+                    <i class="bi bi-bookmark-check-fill"></i> Удалить из закладок
+                </button>
+                {% else %}
+                <button type="submit" class="btn btn-outline-warning">
+                    <i class="bi bi-bookmark-plus"></i> Добавить в закладки
+                </button>
+                {% endif %}
+            </form>
 
             <!-- Tags Section -->
             {% if tag %}
@@ -183,50 +102,10 @@
                 </form>
             </div>
 
-         <script>
-    function toggleEditOptions(commentId) {
-        const options = document.getElementById(`edit-options-${commentId}`);
-        options.style.display = options.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function editComment(commentId, content) {
-        const commentElement = document.getElementById(`comment-${commentId}`);
-        const commentContentElement = commentElement.querySelector('.comment-content');
-
-        // Устанавливаем текстовое поле в текущее содержание комментария
-        document.getElementById('comment-input').value = content;
-
-        // Показать форму редактирования
-        toggleEditOptions(commentId);
-
-        // Создаем форму редактирования комментария
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = "{% url 'books:update_comment' 0 %}".replace('0', commentId); // Заменяем commentId на реальный ID
-
-        // Добавляем csrf_token
-        const csrfToken = '{{ csrf_token }}';
-        form.innerHTML = `
-            <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
-            <textarea name="content" style="width: 100%;">${content}</textarea>
-            <button type="submit" class="btn btn-primary">Сохранить</button>
-            <button type="button" class="btn btn-secondary" onclick="toggleEditOptions(${commentId})">Отмена</button>
-        `;
-
-        // Заменяем старый комментарий на новую форму
-        commentContentElement.parentNode.replaceChild(form, commentContentElement);
-    }
-</script>
-
-
             <!-- Button to load more comments -->
             {% if book.comments.count > 3 %}
             <button id="load-more-btn" class="show-more-btn" onclick="loadMoreComments()">Show more comments</button>
             {% endif %}
-
-            <!-- Comment Form -->
-
-
             {% else %}
             <p>You must log in to leave a comment.</p>
             {% endif %}
@@ -234,42 +113,6 @@
     </div>
 </section>
 
-<script>
-    let currentPage = 1;
-    const commentsPerPage = 3;
-
-    function loadMoreComments() {
-        currentPage++;
-        const commentContainer = document.getElementById('comments-container');
-
-        // All comments array
-        const allComments = [
-            {% for comment in book.comments.all %}
-            {
-                username: "{{ comment.profile.user.username }}",
-                content: "{{ comment.content }}",
-                created_at: "{{ comment.created_at }}"
-            },
-            {% endfor %}
-        ];
-
-        // Calculate next range of comments
-        const start = (currentPage - 1) * commentsPerPage;
-        const end = start + commentsPerPage;
-
-        // Append new comments
-        const newComments = allComments.slice(start, end);
-        newComments.forEach(comment => {
-            const commentElement = document.createElement('div');
-            commentElement.className = 'comment';
-            commentElement.innerHTML = `<strong>${comment.username}</strong><p>${comment.content}</p><small>Published ${comment.created_at}</small>`;
-            commentContainer.appendChild(commentElement);
-        });
-
-        // Hide the button if no more comments to load
-        if (end >= allComments.length) {
-            document.getElementById('load-more-btn').style.display = 'none';
-        }
-    }
-</script>
+<link rel="stylesheet" type="text/css" href="{% static 'books/css/book_detail.css' %}">
+<script src="{% static 'books/js/book_detail.js' %}"></script>
 {% endblock %}

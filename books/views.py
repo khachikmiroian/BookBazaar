@@ -88,7 +88,13 @@ class AddBookmarkView(LoginRequiredMixin, View):
         book = get_object_or_404(Books, id=pk)
         profile = get_object_or_404(Profile, user=request.user)
 
-        Bookmarks.objects.get_or_create(profile=profile, book=book)
+        # Проверяем, существует ли закладка
+        bookmark, created = Bookmarks.objects.get_or_create(profile=profile, book=book)
+
+        if not created:
+            # Если закладка уже существует, то удаляем ее
+            bookmark.delete()
+
         return redirect('books:book_detail', pk=pk)
 
 
@@ -136,6 +142,8 @@ class BookDetailView(DetailView):
             context['purchased_books'] = purchased_books
             context['has_purchased'] = context['book'].id in purchased_books
             context['can_purchase'] = context['book'].id not in purchased_books
+
+            # Проверка, добавлена ли книга в закладки
             context['bookmarked'] = Bookmarks.objects.filter(profile=self.request.user.profile,
                                                              book=context['book']).exists()
         else:

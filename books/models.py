@@ -4,13 +4,16 @@ from taggit.managers import TaggableManager
 from django.urls import reverse
 from accounts.models import Profile, MyUser
 
+from django.db import models
+from django.utils import timezone
+
 
 class Books(models.Model):
     class Status(models.TextChoices):
         DRAFT = 'DF', 'Draft'
         PUBLISHED = 'PB', 'Published'
 
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=100)
     author = models.ForeignKey('Author', on_delete=models.CASCADE, related_name='books')
     description = models.TextField()
     date = models.DateField()
@@ -28,14 +31,6 @@ class Books(models.Model):
     class Meta:
         verbose_name = 'Book'
         verbose_name_plural = 'Books'
-
-
-from django.db import models
-from django.utils import timezone
-from django.contrib.auth.models import User
-
-from django.db import models
-from django.utils import timezone
 
 
 class Comments(models.Model):

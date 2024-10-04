@@ -37,7 +37,7 @@
                     <ul>
                         {% for purchase in purchased_books %}
                         <li>
-                            <a href="{% url 'books:view_pdf' purchase.book.id %}" target="_blank">
+                            <a href="{% url 'books:view_pdf_file' purchase.book.id %}" target="_blank">
                                 <i class="fas fa-book"></i> {{ purchase.book.title }}
                             </a>
                         </li>

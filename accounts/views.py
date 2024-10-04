@@ -55,28 +55,39 @@ class UserLoginView(View):
             username_or_email = cd['username_or_email']
             password = cd['password']
 
+            # Attempt to authenticate using the username or email
             user = authenticate(request, username=username_or_email, password=password)
 
             if user is None:
+                # Check if the input is an email or username
                 try:
+                    # Attempt to find the user by email
                     user = MyUser.objects.get(email=username_or_email)
-                    if user.check_password(password):
-                        login(request, user)
-                    else:
-                        user = None
                 except MyUser.DoesNotExist:
+                    try:
+                        # Attempt to find the user by username if email does not exist
+                        user = MyUser.objects.get(username=username_or_email)
+                    except MyUser.DoesNotExist:
+                        user = None
+
+                # If the user is found, check the password
+                if user and user.check_password(password):
+                    # Log the user in if the password is correct
+                    login(request, user)
+                else:
                     user = None
 
+            # Handle user login
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('profile')
+                    return redirect('profile')  # Redirect to the profile page after successful login
                 else:
-                    return redirect('login')
+                    return redirect('login')  # Redirect if the account is inactive
             else:
-                return redirect('login')
+                return redirect('login')  # Redirect if authentication fails
 
-        return render(request, 'accounts/login.html', {'form': form})
+        return render(request, 'accounts/login.html', {'form': form})  # Render the login page with the form
 
 
 class UserRegistrationView(FormView):
