@@ -1,44 +1,56 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class="authors-title">Authors</h1>
-    <ul class="authors-list">
-        {% for author in object_list %}
-            <li class="author-item">
-                <a href="{% url 'books:author_detail' author.id %}" class="author-link">
-                    <span class="icon">&#x270E;</span> <!-- Pen icon for authorship -->
-                    {{ author.first_name }} {{ author.last_name }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="large-container">
+        <h1 class="authors-title">Authors</h1>
+        <ul class="authors-list">
+            {% for author in object_list %}
+                <li class="author-item">
+                    <a href="{% url 'books:author_detail' author.id %}" class="author-link">
+                        <span class="icon">&#x270E;</span> <!-- Pen icon for authorship -->
+                        {{ author.first_name }} {{ author.last_name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
 
-    <div class="pagination">
-        {% if is_paginated %}
-            <span class="step-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page=1" class="pagination-link">&laquo; first</a>
-                    <a href="?page={{ page_obj.previous_page_number }}" class="pagination-link">previous</a>
-                {% endif %}
+        <div class="pagination">
+            {% if is_paginated %}
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1" class="pagination-link">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}" class="pagination-link">previous</a>
+                    {% endif %}
 
-                <span class="current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="pagination-link">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-link">last &raquo;</a>
+                    {% endif %}
                 </span>
-
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}" class="pagination-link">next</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-link">last &raquo;</a>
-                {% endif %}
-            </span>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
 
     <style>
         body {
             background-color: #f5f5f5; /* Light grey background */
+            color: white; /* White text for better contrast */
             font-family: 'Arial', sans-serif; /* Font choice */
             margin: 0;
             padding: 20px;
+        }
+
+        .large-container {
+            width: 90%; /* Large container width */
+            margin: 0 auto; /* Centers the container */
+            background: white; /* White background for the list */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            padding: 20px; /* Adds padding inside the container */
         }
 
         .authors-title {
@@ -54,11 +66,6 @@
         .authors-list {
             list-style: none; /* Removes default list styling */
             padding: 0;
-            max-width: 800px; /* Centers the list */
-            margin: 0 auto; /* Centers the list */
-            background: white; /* White background for the list */
-            border-radius: 8px; /* Rounded corners */
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
         }
 
         .author-item {
