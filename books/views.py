@@ -212,3 +212,15 @@ def load_more_comments(request, book_id):
 
         return JsonResponse({'comments': comments_data})
     return JsonResponse({'comments': []})
+
+
+class BookmarksView(ListView):
+    model = Bookmarks
+    template_name = 'books/bookmarks.html'
+    context_object_name = 'bookmarks'
+
+    def get_queryset(self):
+        # Get the current user's profile
+        profile = self.request.user.profile
+        # Return bookmarks for the logged-in user
+        return Bookmarks.objects.filter(profile=profile).select_related('book')

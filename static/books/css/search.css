@@ -1,111 +1,111 @@
+/* Общие стили для заголовков */
+header h1 {
+    font-size: 2.5em; /* Увеличенный размер заголовка */
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        /* Общие стили */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #eef2f7; /* Мягкий светлый фон */
-        }
+/* Стили для основной формы поиска */
+main form {
+    display: flex;
+    justify-content: center; /* Центрирование формы */
+    margin-bottom: 30px; /* Отступ снизу */
+}
 
-        header {
-            text-align: center;
-        }
+main form label {
+    margin-right: 10px; /* Отступ справа для метки */
+}
 
-        h1 {
-            margin: 0;
-            font-size: 2.5em;
-        }
+main form input[type="text"] {
+    padding: 10px; /* Внутренний отступ */
+    font-size: 1em; /* Размер шрифта */
+    border: 1px solid #ccc; /* Рамка */
+    border-radius: 4px; /* Закругление углов */
+    width: 300px; /* Ширина поля ввода */
+}
 
-        main {
-            margin: 20px auto;
-            max-width: 800px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px; /* Скругленные углы */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Тень для блока */
-        }
+main form button {
+    padding: 10px 15px; /* Внутренний отступ */
+    font-size: 1em; /* Размер шрифта */
+    color: white; /* Цвет текста */
+    background-color: #007bff; /* Цвет фона */
+    border: none; /* Без рамки */
+    border-radius: 4px; /* Закругление углов */
+    cursor: pointer; /* Указатель курсора */
+}
 
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            position: absolute;
-            width: 100%;
-            bottom: 0;
-        }
+main form button:hover {
+    background-color: #0056b3; /* Темный фон при наведении */
+}
 
-        /* Стили формы поиска */
-        form {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+/* Стили для секции результатов */
+#results {
+    margin-top: 20px; /* Отступ сверху */
+}
 
-        label {
-            font-size: 1.1em;
-            margin-right: 10px;
-        }
+#results h2 {
+    font-size: 1.5em; /* Размер заголовка для секции результатов */
+    margin-bottom: 10px; /* Отступ снизу */
+}
 
-        input[type="text"] {
-            padding: 10px;
-            width: 300px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 10px;
-            font-size: 1em;
-        }
+#results ul {
+    list-style-type: none; /* Убрать маркеры списка */
+    padding: 0; /* Убрать отступы */
+}
 
-        button[type="submit"] {
-            padding: 10px 20px;
-            background-color: #3498db; /* Обновленный цвет кнопки */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease; /* Плавный переход при наведении */
-        }
+#results li {
+    border-bottom: 1px solid #ddd; /* Разделительная линия */
+    padding: 10px 0; /* Вертикальные отступы */
+}
 
-        button[type="submit"]:hover {
-            background-color: #2980b9; /* Темнее при наведении */
-        }
+#results li strong {
+    font-size: 1.2em; /* Размер шрифта для названий книг и авторов */
+}
 
-        /* Стили для результатов поиска */
-        section#results h2 {
-            font-size: 1.8em;
-            color: #333;
-            margin-bottom: 10px;
-            border-bottom: 2px solid #3498db; /* Подчеркивание заголовка */
-            padding-bottom: 10px;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
+/* Стили для сообщений об отсутствии результатов */
+#results p {
+    text-align: center; /* Центрирование текста */
+    font-style: italic; /* Курсив */
+    color: #999; /* Серый цвет для текста */
+}
 
 
+/* Search Section */
+.search-container {
+    max-width: 600px; /* Уменьшено для компактности */
+    margin: 20px auto; /* Уменьшено отступ */
+    display: flex; /* Flexbox для выравнивания */
+    justify-content: center; /* Центрирование */
+}
 
-        ul li:hover {
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Тень при наведении */
-        }
+.search-container input[type="text"] {
+    flex: 1; /* Занять оставшееся пространство */
+    padding: 10px; /* Уменьшено для компактности */
+    font-size: 1em; /* Уменьшено размер шрифта */
+    border: 2px solid #6d4c41; /* Коричневая рамка */
+    border-radius: 20px; /* Закругленные углы */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-        ul li strong {
-            font-size: 1.2em;
-            display: block;
-            color: #333;
-        }
+.search-container input[type="text"]:focus {
+    border-color: #ffb74d; /* Цвет рамки при фокусе */
+    box-shadow: 0 0 20px rgba(255, 183, 77, 0.5); /* Мягкое свечение */
+    outline: none;
+}
 
-        ul li p {
-            margin: 5px 0 0;
-            font-size: 0.9em;
-            color: #666;
-        }
+.search-container button {
+    padding: 10px 16px; /* Уменьшено для компактности */
+    font-size: 1em; /* Уменьшен размер шрифта */
+    background-color: #6d4c41; /* Коричневая кнопка */
+    color: white;
+    border: none;
+    border-radius: 20px; /* Закругленные углы */
+    cursor: pointer;
+    margin-left: 10px; /* Отступ между полем и кнопкой */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
 
-        /* Отсутствие результатов */
-        p {
-            font-size: 1.1em;
-            color: #999;
-            text-align: center;
-        }
+.search-container button:hover {
+    background-color: #4e3b31; /* Темнее коричневый при наведении */
+    transform: scale(1.05); /* Увеличение кнопки */
+}

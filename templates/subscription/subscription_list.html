@@ -9,8 +9,9 @@
             <div class="card subscription-card">
                 <div class="card-body">
                     <h5 class="card-title">{{ subscription.get_name_display }}</h5>
-                    <p class="card-text">Price: {{ subscription.price }} RUB</p>
-                    <a href="{% url 'subscriptions:subscription_detail' subscription.id %}" class="btn btn-primary">Details</a>
+                    <p class="card-text">Price: {{ subscription.price }} $</p>
+                    <a href="{% url 'subscriptions:subscription_detail' subscription.id %}" class="btn custom-button">Details</a>
+
                 </div>
             </div>
         </div>
@@ -50,37 +51,22 @@
         text-align: center; /* Center content in card */
     }
 
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #004085;
-    }
-    .col-md-4 {
-        margin-left: 150px; /* Отрицательное значение переместит элемент влево */
-    }
-    a.details-button {
-    padding: 12px 28px;
-    font-size: 1.3em;
+ .custom-button {
+    padding: 10px 16px; /* Размеры кнопки */
+    font-size: 1em; /* Размер шрифта */
     background-color: #6d4c41; /* Коричневая кнопка */
-    color: white;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    text-decoration: none; /* Убирает подчеркивание для ссылки */
-    display: inline-block; /* Обеспечивает правильное поведение кнопки */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем рамку */
+    border-radius: 20px; /* Закругленные углы */
+    cursor: pointer; /* Указатель при наведении */
+    margin-left: 10px; /* Отступ между элементами */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Плавные переходы */
 }
 
-a.details-button:hover {
+.custom-button:hover {
     background-color: #4e3b31; /* Темнее коричневый при наведении */
-    transform: scale(1.05); /* Масштабирование кнопки */
+    transform: scale(1.05); /* Увеличение кнопки при наведении */
 }
-
 
 </style>
 {% endblock %}

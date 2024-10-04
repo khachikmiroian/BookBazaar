@@ -416,6 +416,9 @@ footer .contact-info a:hover {
                 <li><a href="{% url 'books:book_list' %}">Books</a></li>
                 <li><a href="{% url 'books:author_list' %}">Authors</a></li>
                 <li><a href="{% url 'subs:subscriptions_list' %}">Pricing</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'books:bookmarks' %}">Bookmarks</a></li>
+                {% endif %}
                 <li><a href="{% url 'books:about_us' %}">About Us</a></li>
                 <div class="search-container">
                     <form action="{% url 'books:search' %}" method="GET">
@@ -426,6 +429,7 @@ footer .contact-info a:hover {
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
+
                 <li class="username_image">
                     <a href="{% url 'profile' %}">
                         {% if user.profile.photo %}

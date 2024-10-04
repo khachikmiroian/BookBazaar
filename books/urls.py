@@ -21,4 +21,5 @@ urlpatterns = [
     path('comment/delete/<int:comment_id>/', delete_comment, name='delete_comment'),
     path('comment/update/<int:comment_id>/', update_comment, name='update_comment'),
     path('books/load-more-comments/<int:book_id>/', load_more_comments, name='load_more_comments'),
+    path('bookmarks/', BookmarksView.as_view(), name='bookmarks'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
