@@ -63,15 +63,16 @@ def post_search(request):
                    'book_results': book_results})
 
 
+
 class BookListView(ListView):
     model = Books
     template_name = 'books/book_list.html'
     context_object_name = 'books'
-    paginate_by = 6
+    paginate_by = 6  # Количество книг на странице
 
     def get_queryset(self):
+        # Получаем книги со статусом 'PB'
         return Books.objects.filter(status='PB')
-
 
 class BookListByTagView(ListView):
     model = Books
@@ -176,10 +177,6 @@ class BookDetailView(DetailView):
                             pk=self.get_object().pk)  # Убедитесь, что у вас есть правильный URL для перенаправления
         except Comments.DoesNotExist:
             pass  # Обработка случая, когда комментарий не найден
-
-
-class Contact(TemplateView):
-    template_name = 'books/contact.html'
 
 
 def view_pdf(request, book_id):
