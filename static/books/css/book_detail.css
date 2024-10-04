@@ -1,40 +1,77 @@
+.book-detail {
+    background-color: #f8f9fa; /* Light background for the section */
+    padding: 2rem; /* Padding around the section */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-bottom: 2rem; /* Space below the section */
+}
 
-    .book-detail {
-        background-color: #f9f9f9;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
+.book-detail .container {
+    max-width: 800px; /* Limit the maximum width of the container */
+    margin: 0 auto; /* Center the container */
+}
 
-    .book-detail .card {
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
+.book-detail .card {
+    border: none; /* No border for the card */
+    border-radius: 15px; /* Rounded corners for the card */
+    overflow: hidden; /* Hide overflow */
+    transition: transform 0.3s; /* Smooth transition for hover effect */
+}
 
-    .book-detail .card-title {
-        font-size: 2rem;
-        font-weight: bold;
-    }
+.book-detail .card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
 
-    .book-detail .card-subtitle {
-        font-size: 1.25rem;
-        color: #6c757d;
-    }
+.book-detail .card-body {
+    padding: 2rem; /* Padding inside the card body */
+    background-color: #ffffff; /* White background for the card body */
+}
 
-    .book-detail img {
-        border-radius: 15px 0 0 15px;
-    }
+.book-detail .card-title {
+    font-size: 2.5rem; /* Font size for book title */
+    font-weight: 700; /* Bold font weight */
+    color: #2c3e50; /* Dark color for title */
+    margin-bottom: 1rem; /* Space below title */
+}
 
-    .book-detail .card-body {
-        padding: 2rem;
-    }
+.book-detail h4 {
+    font-size: 1.5rem; /* Font size for author name */
+    color: #7f8c8d; /* Gray color for author name */
+    margin-bottom: 1rem; /* Space below author name */
+}
 
-    .book-detail p {
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
-    }
+.book-detail p {
+    font-size: 1.1rem; /* Font size for paragraphs */
+    color: #34495e; /* Dark blue color for text */
+    line-height: 1.6; /* Line height for readability */
+    margin-bottom: 1rem; /* Space below paragraph */
+}
 
-    .book-detail .btn {
-        padding: 0.75rem 1.5rem;
-        font-size: 1.2rem;
-    }
+.book-detail .tags {
+    font-size: 1rem; /* Font size for tags */
+    color: #2980b9; /* Blue color for tags */
+}
+
+.book-detail .tags a {
+    color: #2980b9; /* Blue color for links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.book-detail .tags a:hover {
+    text-decoration: underline; /* Underline on hover for links */
+}
+
+.book-detail .btn {
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* White text */
+    padding: 0.75rem 1.5rem; /* Padding for button */
+    font-size: 1.2rem; /* Font size for button */
+    border-radius: 25px; /* Rounded corners for button */
+    border: none; /* No border */
+    transition: background-color 0.3s, transform 0.3s; /* Transition for hover effects */
+}
+
+.book-detail .btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+}

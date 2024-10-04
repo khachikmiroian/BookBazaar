@@ -149,3 +149,81 @@ button[type="submit"]:hover {
 input[type="file"] {
     display: none; /* Скрываем стандартный input */
 }
+.edit-profile-section {
+    background-color: #f7f7f7; /* Light background for the section */
+    padding: 40px; /* Space around the section */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+.edit-profile-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between form elements */
+}
+
+.edit-profile-section p {
+    font-family: 'Arial', sans-serif; /* Clean font for paragraphs */
+    color: #444; /* Dark gray for text */
+    font-size: 16px; /* Standard font size */
+    line-height: 1.6; /* Improved readability */
+    margin: 0; /* Remove default margin */
+    padding: 10px 15px; /* Padding for comfort */
+    background-color: #ffffff; /* White background for clarity */
+    border: 1px solid #e0e0e0; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition for hover */
+}
+
+.edit-profile-section p:hover {
+    background-color: #f0f0f0; /* Light gray on hover */
+}
+
+.edit-profile-section input[type="text"], 
+.edit-profile-section input[type="email"], 
+.edit-profile-section input[type="password"],
+.edit-profile-section input[type="file"] {
+    width: 100%; /* Full width for inputs */
+    padding: 10px; /* Padding inside inputs */
+    font-size: 16px; /* Font size for inputs */
+    border: 1px solid #ccc; /* Light border for inputs */
+    border-radius: 5px; /* Rounded corners for inputs */
+    transition: border-color 0.3s ease; /* Transition for border color */
+}
+
+.edit-profile-section input[type="text"]:focus, 
+.edit-profile-section input[type="email"]:focus, 
+.edit-profile-section input[type="password"]:focus {
+    border-color: #007bff; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+.edit-profile-section .upload-button {
+    display: inline-block; /* Display as an inline block */
+    padding: 10px 20px; /* Padding for button */
+    background-color: #007bff; /* Primary button color */
+    color: #fff; /* White text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size for button */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.edit-profile-section .upload-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+.edit-profile-section button[type="submit"] {
+    background-color: #28a745; /* Green submit button */
+    color: #fff; /* White text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 12px; /* Padding for button */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.edit-profile-section button[type="submit"]:hover {
+    background-color: #218838; /* Darker green on hover */
+}
