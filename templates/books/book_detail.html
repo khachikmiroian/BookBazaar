@@ -6,88 +6,227 @@
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'books/css/book_detail.css' %}">
+<style>
+    body {
+        background-color: #f5f2e1;
+        font-family: 'Arial', sans-serif;
+    }
+    .content {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+    }
+    .left-section {
+        flex: 1 1 60%;
+        padding-right: 20px;
+    }
+    .right-section {
+        flex: 1 1 35%;
+        background-color: #f5ebe0;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-title {
+        color: #8b4513;
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .tags a {
+        color: #d2691e;
+        text-decoration: none;
+        font-weight: bold;
+        border-bottom: 1px dashed #d2691e;
+        transition: color 0.3s, border-bottom 0.3s;
+    }
+    .tags a:hover {
+        color: #8b4513;
+        border-bottom: 1px solid #8b4513;
+    }
+    .comment {
+        background-color: #fff;
+        border: 1px solid #d2b48c;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .comment strong {
+        color: #6b4226;
+    }
+    .comment p {
+        color: #5a3d2b;
+        margin-bottom: 5px;
+    }
+    .comment small {
+        color: #8b4513;
+    }
+    .comment-form textarea {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #d2b48c;
+        border-radius: 10px;
+        resize: vertical;
+        margin-bottom: 10px;
+    }
+    .comment-form button {
+        background-color: #8b4513;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .comment-form button:hover {
+        background-color: #a0522d;
+    }
+    .show-more-btn {
+        background-color: #d2691e;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background-color 0.3s;
+    }
+    .show-more-btn:hover {
+        background-color: #8b4513;
+    }
+    .edit-options {
+        display: none; /* Initially hidden */
+    }
+</style>
 
 <section class="book-detail">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h2 class="card-title">{{ book.title }}</h2>
-                        <h4>Author: <a href="#">{{ book.author }}</a></h4>
-                        <p><strong>Description:</strong> {{ book.description }}</p>
-                        <p><strong>Price:</strong> ${{ book.price }}</p>
+    <div class="content">
+        <!-- Left section - book info -->
+        <div class="left-section">
+            <h2 class="card-title">{{ book.title }}</h2>
+            <h4>Author: <a href="#">{{ book.author }}</a></h4>
+            <p><strong>Description:</strong> {{ book.description }}</p>
+            <p><strong>Price:</strong> ${{ book.price }}</p>
 
-                        <!-- Tags Section -->
-                        {% if tag %}
-                        <h2>Posts tagged with "{{ tag.name }}"</h2>
-                        {% endif %}
-                        <p class="tags">
-                            Tags:
-                            {% for tag in book.tags.all %}
-                            <a href="{% url 'books:book_list_by_tag' tag.slug %}">{{ tag.name }}</a>
-                            {% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        </p>
+            <!-- Tags Section -->
+            {% if tag %}
+            <h2>Posts tagged with "{{ tag.name }}"</h2>
+            {% endif %}
+            <p class="tags">
+                Tags:
+                {% for tag in book.tags.all %}
+                <a href="{% url 'books:book_list_by_tag' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
 
-                        <!-- If user has purchased the book or has an active subscription -->
-                        {% if book.id in purchased_books or has_active_subscription %}
-                            {% if book.pdf_file %}
-                            <!-- Button to open PDF in a new tab -->
-                            <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
-                                Open PDF in New Tab
-                            </a>
-                            {% else %}
-                            <p>PDF file for this book is not available.</p>
-                            {% endif %}
+            <!-- Purchase or Read Options -->
+            {% if book.id in purchased_books or has_active_subscription %}
+            {% if book.pdf_file %}
+            <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
+                <i class="bi bi-file-earmark-pdf"></i> Open PDF in New Tab
+            </a>
+            {% else %}
+            <p>PDF file for this book is not available.</p>
+            {% endif %}
 
-                            <!-- Option to buy the book even if subscribed -->
-                            {% if can_purchase %}
-                            <p>You can also buy this book.</p>
-                            <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-success">Buy this Book</button>
-                            </form>
-                            {% endif %}
-                        {% endif %} <!-- Close the purchased book or subscription block -->
-                    </div>
-                </div>
-            </div>
+            {% if can_purchase %}
+            <p>You can also buy this book.</p>
+            <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success"><i class="bi bi-cart"></i> Buy this Book</button>
+            </form>
+            {% endif %}
+            {% endif %}
+        </div>
 
-            <!-- Bookmark and Comments Section -->
+        <!-- Right section - comments -->
+        <div class="right-section">
             {% if user.is_authenticated %}
-            <div class="col-md-4">
-                {% if bookmarked %}
-                <form action="{% url 'books:remove_bookmark' book.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Remove Bookmark</button>
-                </form>
-                {% else %}
-                <form action="{% url 'books:add_bookmark' book.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Add Bookmark</button>
-                </form>
-                {% endif %}
-
-                <h3>Comments:</h3>
-                <div>
-                    {% for comment in book.comments.all %}
+            <h3>Comments:</h3>
+            <div id="comments-container">
+                {% for comment in book.comments.all|slice:":3" %}
+                <div class="comment" id="comment-{{ comment.id }}">
                     <strong>{{ comment.profile.user.username }}</strong>
-                    <p>{{ comment.content }}</p>
+                    <p class="comment-content">{{ comment.content }} {% if comment.updated_at %}
+                        <small>(Modified)</small>{% endif %}</p>
                     <p><small>Published {{ comment.created_at }}</small></p>
-                    {% empty %}
-                    <p>No comments yet.</p>
-                    {% endfor %}
-                </div>
 
-                <h3>Leave a Comment</h3>
-                <form method="POST">
+                    {% if user.is_authenticated and comment.profile.user == user %}
+                    <button class="btn btn-link" onclick="toggleEditOptions({{ comment.id }})">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <div class="edit-options" id="edit-options-{{ comment.id }}">
+                        <form method="POST" action="{% url 'books:delete_comment' comment.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Delete</button>
+                        </form>
+                        <button class="btn btn-secondary"
+                                onclick="editComment({{ comment.id }}, '{{ comment.content|escapejs }}')">
+                            <i class="bi bi-pencil"></i> Edit
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <p>No comments yet.</p>
+                {% endfor %}
+            </div>
+
+            <h3>Leave a Comment</h3>
+            <div class="comment-form">
+                <form method="POST" id="comment-form">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit">Submit</button>
+                    <textarea name="content" placeholder="Write your comment..." class="form-control"
+                              id="comment-input"></textarea>
+                    <button type="submit"><i class="bi bi-send"></i> Submit</button>
                 </form>
             </div>
+
+         <script>
+    function toggleEditOptions(commentId) {
+        const options = document.getElementById(`edit-options-${commentId}`);
+        options.style.display = options.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function editComment(commentId, content) {
+        const commentElement = document.getElementById(`comment-${commentId}`);
+        const commentContentElement = commentElement.querySelector('.comment-content');
+
+        // Устанавливаем текстовое поле в текущее содержание комментария
+        document.getElementById('comment-input').value = content;
+
+        // Показать форму редактирования
+        toggleEditOptions(commentId);
+
+        // Создаем форму редактирования комментария
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{% url 'books:update_comment' 0 %}".replace('0', commentId); // Заменяем commentId на реальный ID
+
+        // Добавляем csrf_token
+        const csrfToken = '{{ csrf_token }}';
+        form.innerHTML = `
+            <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+            <textarea name="content" style="width: 100%;">${content}</textarea>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <button type="button" class="btn btn-secondary" onclick="toggleEditOptions(${commentId})">Отмена</button>
+        `;
+
+        // Заменяем старый комментарий на новую форму
+        commentContentElement.parentNode.replaceChild(form, commentContentElement);
+    }
+</script>
+
+
+            <!-- Button to load more comments -->
+            {% if book.comments.count > 3 %}
+            <button id="load-more-btn" class="show-more-btn" onclick="loadMoreComments()">Show more comments</button>
+            {% endif %}
+
+            <!-- Comment Form -->
+
+
             {% else %}
             <p>You must log in to leave a comment.</p>
             {% endif %}
@@ -95,4 +234,42 @@
     </div>
 </section>
 
+<script>
+    let currentPage = 1;
+    const commentsPerPage = 3;
+
+    function loadMoreComments() {
+        currentPage++;
+        const commentContainer = document.getElementById('comments-container');
+
+        // All comments array
+        const allComments = [
+            {% for comment in book.comments.all %}
+            {
+                username: "{{ comment.profile.user.username }}",
+                content: "{{ comment.content }}",
+                created_at: "{{ comment.created_at }}"
+            },
+            {% endfor %}
+        ];
+
+        // Calculate next range of comments
+        const start = (currentPage - 1) * commentsPerPage;
+        const end = start + commentsPerPage;
+
+        // Append new comments
+        const newComments = allComments.slice(start, end);
+        newComments.forEach(comment => {
+            const commentElement = document.createElement('div');
+            commentElement.className = 'comment';
+            commentElement.innerHTML = `<strong>${comment.username}</strong><p>${comment.content}</p><small>Published ${comment.created_at}</small>`;
+            commentContainer.appendChild(commentElement);
+        });
+
+        // Hide the button if no more comments to load
+        if (end >= allComments.length) {
+            document.getElementById('load-more-btn').style.display = 'none';
+        }
+    }
+</script>
 {% endblock %}

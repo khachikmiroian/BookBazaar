@@ -151,8 +151,8 @@ class CustomPasswordResetView(View):
 
 
 class CustomPasswordResetDoneView(View):
+
     def get(self, request):
-        # STEXEL MAIL PTI UXARKVI  send_password_change_email.delay(user.email, user.username)
         return render(request, 'registration/password_reset_done.html')
 
 

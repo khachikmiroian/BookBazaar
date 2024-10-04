@@ -19,4 +19,10 @@ urlpatterns = [
                   path('authors/<int:pk>/', AuthorDetailView.as_view(), name='author_detail'),
                   path('view_pdf_in_new_tab/<int:book_id>/', view_pdf_in_new_tab, name='view_pdf_in_new_tab'),
                   path('view_pdf_file/<int:book_id>/', view_pdf, name='view_pdf_file'),
+                  path('comment/delete/<int:comment_id>/', delete_comment, name='delete_comment'),
+
+                  path('comment/update/<int:comment_id>/', update_comment, name='update_comment'),
+
+                  path('books/load-more-comments/<int:book_id>/', load_more_comments, name='load_more_comments'),
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

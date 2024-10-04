@@ -30,17 +30,32 @@ class Books(models.Model):
         verbose_name_plural = 'Books'
 
 
+from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
+
+from django.db import models
+from django.utils import timezone
+
+
 class Comments(models.Model):
     books = models.ForeignKey(Books, on_delete=models.CASCADE, related_name='comments')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)  # Это поле автоматически обновляется при каждом сохранении
 
     class Meta:
         ordering = ['-created_at']
 
     def __str__(self):
         return f'Comment by {self.profile.user.username}'
+
+    @property
+    def is_modified(self):
+        """Проверяет, был ли комментарий изменен."""
+        # Проверяем, отличается ли время создания и обновления
+        return self.created_at != self.updated_at
 
 
 class Author(models.Model):
@@ -68,4 +83,3 @@ class Bookmarks(models.Model):
 
     class Meta:
         unique_together = ['profile', 'book']
-
