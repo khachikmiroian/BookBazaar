@@ -5,14 +5,6 @@
 
 {% block content %}
 
-<!-- Page Header -->
-<section class="page-header">
-    <div class="container">
-        <h1>Unlock the Magic of Reading</h1>
-        <p>Welcome to <strong>Online Book Store</strong>, your gateway to a universe of literary treasures! Delve into our diverse collection, featuring everything from cherished classics that have stood the test of time to the latest bestsellers that captivate todays readers. Each book promises a new adventure waiting to be discovered.</p>
-        
-    </div>
-</section>
 
 <!-- Why Choose Us Section -->
 <section class="page-info">
@@ -22,7 +14,6 @@
             <li>📚 A curated collection of books across various genres</li>
             <li>📖 Handpicked recommendations tailored to your preferences</li>
             <li>🎁 Exclusive offers and discounts for our registered users</li>
-            <li>🚚 Fast and reliable delivery, bringing your favorite books right to your doorstep</li>
             <li>🔍 Easy-to-use search feature to help you find exactly what you're looking for</li>
         </ul>
         <p>Explore our <a href="{% url 'books:book_list' %}" style="color: #6d4c41; text-decoration: underline; font-weight: bold;">Book Collection</a> and uncover the perfect book for your next reading adventure.</p>
@@ -35,111 +26,3 @@
 </section>
 
 {% endblock %}
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Welcome to Online Library</title>-->
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">-->
-<!--    <style>-->
-<!--        body {-->
-<!--            background-color: #f4f4f4;-->
-<!--        }-->
-<!--        .hero-section {-->
-<!--            background-image: url('https://example.com/library-bg.jpg'); /* Replace with your background image URL */-->
-<!--            background-size: cover;-->
-<!--            background-position: center;-->
-<!--            height: 100vh;-->
-<!--            display: flex;-->
-<!--            align-items: center;-->
-<!--            justify-content: center;-->
-<!--            color: white;-->
-<!--            text-align: center;-->
-<!--            position: relative;-->
-<!--        }-->
-<!--        .hero-overlay {-->
-<!--            position: absolute;-->
-<!--            top: 0;-->
-<!--            left: 0;-->
-<!--            right: 0;-->
-<!--            bottom: 0;-->
-<!--            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */-->
-<!--        }-->
-<!--        .feature-section {-->
-<!--            padding: 50px 0;-->
-<!--            background-color: #ffffff; /* White background */-->
-<!--        }-->
-<!--        .subscribe-section {-->
-<!--            background-color: #e9f7ef; /* Light green background */-->
-<!--            padding: 50px 0;-->
-<!--            border: 1px solid #c3e6cb; /* Green border */-->
-<!--        }-->
-<!--        .purchase-section {-->
-<!--            background-color: #fff3cd; /* Light yellow background */-->
-<!--            padding: 50px 0;-->
-<!--            border: 1px solid #ffeeba; /* Yellow border */-->
-<!--        }-->
-<!--        .cta-button {-->
-<!--            margin-top: 20px;-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-
-<!--    &lt;!&ndash; Hero Section &ndash;&gt;-->
-<!--    <div class="hero-section">-->
-<!--        <div class="hero-overlay"></div>-->
-<!--        <div>-->
-<!--            <h1>Welcome to Our Online Library</h1>-->
-<!--            <p>Your gateway to a world of books.</p>-->
-<!--            <a href="#subscribe" class="btn btn-primary btn-lg">Join Now</a>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    &lt;!&ndash; Features Section &ndash;&gt;-->
-<!--    <div class="container feature-section">-->
-<!--        <h2 class="text-center mb-4">Why Choose Us?</h2>-->
-<!--        <div class="row">-->
-<!--            <div class="col-md-4">-->
-<!--                <h3>Vast Collection</h3>-->
-<!--                <p>Explore our extensive library with thousands of titles across various genres.</p>-->
-<!--            </div>-->
-<!--            <div class="col-md-4">-->
-<!--                <h3>Flexible Subscription</h3>-->
-<!--                <p>Subscribe to access unlimited books or buy individual titles as you wish.</p>-->
-<!--            </div>-->
-<!--            <div class="col-md-4">-->
-<!--                <h3>User-Friendly Interface</h3>-->
-<!--                <p>Enjoy a seamless reading experience with our easy-to-navigate platform.</p>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    &lt;!&ndash; Subscription Section &ndash;&gt;-->
-<!--    <div class="subscribe-section" id="subscribe">-->
-<!--        <div class="container text-center">-->
-<!--            <h2>Subscribe for Unlimited Reading</h2>-->
-<!--            <p>Join our community of book lovers and enjoy access to our entire library.</p>-->
-<!--            <a href="#" class="btn btn-success btn-lg cta-button">Subscribe Now</a>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    &lt;!&ndash; Purchase Section &ndash;&gt;-->
-<!--    <div class="purchase-section">-->
-<!--        <div class="container text-center">-->
-<!--            <h2>Purchase Books Individually</h2>-->
-<!--            <p>Not ready to subscribe? No problem! You can purchase specific books directly from our site.</p>-->
-<!--            <a href="#" class="btn btn-info btn-lg cta-button">Browse Books</a>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    &lt;!&ndash; Footer &ndash;&gt;-->
-<!--    <footer class="text-center py-4">-->
-<!--        <p>&copy; 2024 Online Library. All Rights Reserved.</p>-->
-<!--    </footer>-->
-
-<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>-->
-<!--</body>-->
-<!--</html>-->

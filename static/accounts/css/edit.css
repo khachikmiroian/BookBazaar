@@ -61,7 +61,7 @@ button[type="submit"] {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background: #007bff;
+    background: #966701;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
@@ -126,6 +126,7 @@ button[type="submit"]:hover {
 .image-upload {
     text-align: center; /* Центрирование контента */
     margin: 20px 0; /* Отступы */
+    color: #966701;
 }
 
 .upload-button {
@@ -194,7 +195,7 @@ input[type="file"] {
 .edit-profile-section input[type="text"]:focus, 
 .edit-profile-section input[type="email"]:focus, 
 .edit-profile-section input[type="password"]:focus {
-    border-color: hsl(318, 96%, 53%); /* Change border color on focus */
+    border-color: hsla(41, 96%, 32%, 0.993); /* Change border color on focus */
     outline: none; /* Remove default outline */
 }
 
