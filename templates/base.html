@@ -10,7 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-    
+
 
     <style>
        body {
@@ -75,23 +75,23 @@
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
    }
-   
+
    .page-header h1 {
     font-size: 3em;
     color: #6d4c41;
     margin-bottom: 20px;
     transition: color 0.3s ease;
    }
-   
+
    .page-header p {
     font-size: 1.3em;
     color: #4e342e;
    }
-   
+
    .page-header:hover {
     transform: translateY(-10px);
    }
-   
+
    .page-header:hover h1 {
     color: #ff7043;
    }
@@ -104,13 +104,13 @@
     margin-top: 30px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
    }
-   
+
    .page-info h2 {
     font-size: 2.5em;
     margin-bottom: 20px;
     color: #6d4c41;
    }
-   
+
    .page-info ul {
     list-style: none;
     padding: 0;
@@ -119,13 +119,13 @@
     line-height: 1.8em;
     color: #5d4037;
    }
-   
+
    .page-info ul li {
     margin: 10px 0;
     position: relative;
     padding-left: 40px;
    }
-   
+
    .page-info ul li::before {
     content: '✔';
     position: absolute;
@@ -134,23 +134,23 @@
     color: #ff7043;
     font-size: 1.5em;
    }
-   
+
    .page-info p {
     font-size: 1.2em;
     color: #4e342e;
    }
-   
+
    .page-info a {
     color: #ff7043;
     text-decoration: underline;
     font-weight: bold;
     transition: color 0.3s ease;
    }
-   
+
    .page-info a:hover {
     color: #d84315;
    }
-   
+
    .page-info:hover {
     transform: translateY(-10px);
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
@@ -381,7 +381,7 @@ footer .contact-info a:hover {
 .logout-btn {
     background: none;
     border: none;
-    color: #ffe0b2; /* Light beige */
+    color: #6d4c41; /* Brown text color */
     font-size: 1.2em;
     padding: 14px 20px;
     cursor: pointer;
@@ -389,14 +389,18 @@ footer .contact-info a:hover {
 }
 
 .logout-btn:hover {
-    background-color: #d4a373; /* Light brown on hover */
-    color: white;
+    background-color: #6d4c41; /* Brown background on hover */
+    color: #ffe0b2; /* Light beige text on hover */
     border-radius: 4px;
-} 
+}
+
+.username_image {
+    margin-top: -13px;
+}
 
 
 
-        
+
     </style>
     <title>{% block title %}{% endblock %}</title>
 </head>
@@ -422,7 +426,7 @@ footer .contact-info a:hover {
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
-                <li>
+                <li class="username_image">
                     <a href="{% url 'profile' %}">
                         {% if user.profile.photo %}
                         <img src="{{ user.profile.photo.url }}" alt="Profile Photo" class="profile-photo img-circle">

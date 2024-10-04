@@ -12,52 +12,52 @@
 
         <div class="row">
             {% for book in books %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <i class="bi bi-book-half book-icon"></i> <!-- Book icon -->
-                        <h5 class="card-title">{{ book.title }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">by {{ book.author }}</h6>
-                        <p class="card-text">{{ book.description|truncatewords:20 }}</p>
-                        <p><strong>Price:</strong> ${{ book.price }}</p>
-                        <p><strong>Date:</strong> {{ book.date }}</p>
-                    </div>
-                    <div class="card-footer">
-                        <a href="{{ book.get_absolute_url }}" class="btn btn-primary">View Details</a>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="bi bi-book-half book-icon"></i> <!-- Book icon -->
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">by {{ book.author }}</h6>
+                            <p class="card-text">{{ book.description|truncatewords:20 }}</p>
+                            <p><strong>Price:</strong> ${{ book.price }}</p>
+                            <p><strong>Date:</strong> {{ book.date }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ book.get_absolute_url }}" class="btn btn-primary">View details</a>
+                        </div>
                     </div>
                 </div>
-            </div>
             {% empty %}
-            <p>No books are available at the moment.</p>
+                <p>No books are available at the moment.</p>
             {% endfor %}
         </div>
 
         <!-- Pagination -->
         <div class="pagination justify-content-center">
             {% if is_paginated %}
-            <ul class="pagination">
-                {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page=1">&laquo; First</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                </li>
-                {% endif %}
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
 
-                <li class="page-item active">
-                    <a class="page-link" href="#">{{ page_obj.number }}</a>
-                </li>
+                    <li class="page-item active">
+                        <a class="page-link" href="#">{{ page_obj.number }}</a>
+                    </li>
 
-                {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
-                </li>
-                {% endif %}
-            </ul>
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
             {% endif %}
         </div>
 

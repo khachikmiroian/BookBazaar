@@ -1,133 +1,86 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block content %}
-<style>
-    /* General Styles */
-    html, body {
-        height: 100%; /* Устанавливаем высоту для html и body */
-        margin: 0; /* Убираем отступы */
-        display: flex; /* Используем Flexbox */
-        flex-direction: column; /* Устанавливаем вертикальную ориентацию */
-    }
-
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        padding: 0; /* Убираем внутренние отступы для body */
-    }
-
-    .container {
-        flex: 1; /* Контейнер занимает оставшееся пространство */
-        max-width: 1200px; /* Adjusted for a bigger container */
-        margin: 0 auto; /* Центрируем контейнер */
-        padding: 20px; /* Внутренний отступ */
-        background-color: #ffffff;
-        border-radius: 10px; /* Скругление углов */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        border: 2px solid #8b5a2b; /* Граница контейнера */
-    }
-
-    .subscriptions-container {
-        padding: 20px; /* Inner padding for the subscriptions */
-    }
-
-    /* Subscription Category Styles */
-    .subscription-category {
-        margin-bottom: 30px;
-    }
-
-    .subscription-category h1 {
-        font-size: 24px;
-        color: #333333;
-        border-bottom: 2px solid #8b5a2b;
-        padding-bottom: 10px;
-    }
-
-    /* Subscription List Styles */
-    .subscription-list {
-        display: flex;
-        flex-direction: column;
-        gap: 15px; /* Space between items */
-    }
-
-    /* Subscription Item Styles */
-    .subscription-item {
-        background-color: #efefef;
-        border-radius: 8px;
-        padding: 15px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        cursor: pointer;
-    }
-
-    .subscription-item:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .subscription-item h2 {
-        font-size: 20px;
-        color: #8b5a2b;
-    }
-
-    .subscription-item p {
-        margin: 5px 0;
-        color: #555555;
-    }
-
-    /* Price Styles */
-    .subscription-item p:nth-child(2) {
-        font-weight: bold;
-        font-size: 18px;
-        color: #8b5a2b; /* Price color */
-    }
-
-    /* Footer Styles */
-    footer {
-        background-color: #333; /* Цвет футера */
-        color: white; /* Цвет текста футера */
-        text-align: center; /* Центрируем текст */
-        padding: 10px; /* Внутренний отступ футера */
-    }
-</style>
-
 <div class="container">
-    <div class="subscriptions-container">
-        <!-- Monthly Subscriptions -->
-        <div class="subscription-category">
-            <h1>Subscriptions by Month</h1>
-            <div class="subscription-list">
-                <div class="subscription-item">
-                    <h2>Basic Plan</h2>
-                    <p>Access to all basic books and content.</p>
-                    <p>Price: $5/month</p>
-                </div>
-                <div class="subscription-item">
-                    <h2>Premium Plan</h2>
-                    <p>Access to all books including premium content.</p>
-                    <p>Price: $15/month</p>
+    <h1 class="text-center">Available Subscriptions</h1>
+    <div class="row d-flex justify-content-center">
+        {% for subscription in subs %}
+        <div class="col-md-4 mb-4 d-flex justify-content-center">
+            <div class="card subscription-card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ subscription.get_name_display }}</h5>
+                    <p class="card-text">Price: {{ subscription.price }} RUB</p>
+                    <a href="{% url 'subscriptions:subscription_detail' subscription.id %}" class="btn btn-primary">Details</a>
                 </div>
             </div>
         </div>
-
-        <!-- Yearly Subscriptions -->
-        <div class="subscription-category">
-            <h1>Subscriptions by Year</h1>
-            <div class="subscription-list">
-                <div class="subscription-item">
-                    <h2>Basic Plan</h2>
-                    <p>Access to all basic books and content.</p>
-                    <p>Price: $50/year</p>
-                </div>
-                <div class="subscription-item">
-                    <h2>Premium Plan</h2>
-                    <p>Access to all books including premium content.</p>
-                    <p>Price: $150/year</p>
-                </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning text-center" role="alert">
+                No available subscriptions.
             </div>
         </div>
+        {% endfor %}
     </div>
 </div>
 
+<style>
+    .text-center {
+        text-align: center;
+    }
 
+    .subscription-card {
+        border: none; /* Remove default card borders */
+        border-radius: 16px; /* Rounded corners */
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+        overflow: hidden;
+        background: linear-gradient(145deg, #c6b29a, #d8d8d8); /* Light Brown to Light Gray gradient for cards */
+        position: relative;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Softer shadow */
+        margin-bottom: 20px;
+
+    }
+
+    .subscription-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+    }
+
+    .subscription-card .card-body {
+        text-align: center; /* Center content in card */
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+    .col-md-4 {
+        margin-left: 150px; /* Отрицательное значение переместит элемент влево */
+    }
+    a.details-button {
+    padding: 12px 28px;
+    font-size: 1.3em;
+    background-color: #6d4c41; /* Коричневая кнопка */
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-decoration: none; /* Убирает подчеркивание для ссылки */
+    display: inline-block; /* Обеспечивает правильное поведение кнопки */
+}
+
+a.details-button:hover {
+    background-color: #4e3b31; /* Темнее коричневый при наведении */
+    transform: scale(1.05); /* Масштабирование кнопки */
+}
+
+
+</style>
 {% endblock %}

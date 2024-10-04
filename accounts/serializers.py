@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile  # Предположим, что ваша модель для аккаунтов называется UserAccount
+from .models import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:

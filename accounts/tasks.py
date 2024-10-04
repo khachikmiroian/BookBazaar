@@ -16,7 +16,7 @@ def send_registration_email(user_email, username):
 
 @shared_task
 def send_profile_updated_email(user_email, username):
-    subject = 'Your Profile successufuly updated'
+    subject = 'Your Profile successfully updated'
     message = f'Dear {username}, your profile successfully updated'
     from_email = settings.DEFAULT_FROM_EMAIL
     result = send_mail(subject, message, from_email, [user_email])
@@ -29,7 +29,7 @@ def send_password_reset_email(user_email, uid, token, username):
     message = (
         f'Someone asked for a password reset for the email {user_email}.\n\n'
         f'Follow the link below to reset your password:\n'
-        f'{settings.PROTOCOL}://{settings.DOMAIN}/{settings.RESET_URL}/{uid}/{token}/\n\n'
+        f'{settings.PROTOCOL}://{settings.DOMAIN}{settings.RESET_URL}/{uid}/{token}/\n\n'
         f'Your username, in case you\'ve forgotten: {username}'
     )
     from_email = settings.DEFAULT_FROM_EMAIL
@@ -39,7 +39,7 @@ def send_password_reset_email(user_email, uid, token, username):
 
 @shared_task
 def send_password_change_email(user_email, username):
-    subject = 'Password changed succesfully !'
+    subject = 'Password changed successfully !'
     message = f'Dear {username}, your password changed successfully!'
     from_email = settings.DEFAULT_FROM_EMAIL
     result = send_mail(subject, message, from_email, [user_email])
