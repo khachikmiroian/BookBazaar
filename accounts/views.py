@@ -5,25 +5,33 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.edit import FormView
 from django.contrib import messages
-from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
-from .models import Profile, MyUser
 from django.urls import reverse_lazy
 from rest_framework import viewsets
-from .serializers import ProfileSerializer
+
+from .forms import (
+    LoginForm,
+    UserRegistrationForm,
+    UserEditForm,
+    ProfileEditForm
+)
+from .models import Profile, MyUser
 from subscriptions.models import Subscription, BookPurchase
+from .serializers import ProfileSerializer
 from .tasks import (
     send_registration_email,
     send_profile_updated_email,
     send_password_change_email,
     send_password_reset_email
 )
-from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.forms import (
+    PasswordResetForm,
+    SetPasswordForm,
+    PasswordChangeForm
+)
+from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import LogoutView, PasswordChangeView
 
 
 @login_required
@@ -54,40 +62,32 @@ class UserLoginView(View):
             cd = form.cleaned_data
             username_or_email = cd['username_or_email']
             password = cd['password']
-
-            # Attempt to authenticate using the username or email
             user = authenticate(request, username=username_or_email, password=password)
 
             if user is None:
-                # Check if the input is an email or username
                 try:
-                    # Attempt to find the user by email
                     user = MyUser.objects.get(email=username_or_email)
                 except MyUser.DoesNotExist:
                     try:
-                        # Attempt to find the user by username if email does not exist
                         user = MyUser.objects.get(username=username_or_email)
                     except MyUser.DoesNotExist:
                         user = None
 
-                # If the user is found, check the password
                 if user and user.check_password(password):
-                    # Log the user in if the password is correct
                     login(request, user)
                 else:
                     user = None
 
-            # Handle user login
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('profile')  # Redirect to the profile page after successful login
+                    return redirect('profile')
                 else:
-                    return redirect('login')  # Redirect if the account is inactive
+                    return redirect('login')
             else:
-                return redirect('login')  # Redirect if authentication fails
+                return redirect('login')
 
-        return render(request, 'accounts/login.html', {'form': form})  # Render the login page with the form
+        return render(request, 'accounts/login.html', {'form': form})
 
 
 class UserRegistrationView(FormView):
@@ -100,7 +100,7 @@ class UserRegistrationView(FormView):
         new_user.set_password(form.cleaned_data['password'])
         new_user.save()
         Profile.objects.create(user=new_user)
-        send_registration_email.delay(new_user.email, new_user.username)  # Отправка email
+        send_registration_email.delay(new_user.email, new_user.username)
         return super().form_valid(form)
 
 
@@ -122,7 +122,7 @@ def edit(request, id):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            send_profile_updated_email.delay(profile.user.email, profile.user.username)  # Отправка email
+            send_profile_updated_email.delay(profile.user.email, profile.user.username)
             messages.success(request, 'Profile updated successfully')
             return redirect('profile')
         else:
@@ -162,7 +162,6 @@ class CustomPasswordResetView(View):
 
 
 class CustomPasswordResetDoneView(View):
-
     def get(self, request):
         return render(request, 'registration/password_reset_done.html')
 
@@ -209,12 +208,12 @@ class CustomPasswordChangeView(PasswordChangeView):
     def form_valid(self, form):
         user = form.save()
         update_session_auth_hash(self.request, user)
-        messages.success(self.request, 'Пароль был успешно изменен.')
+        messages.success(self.request, 'Password was successfully changed.')
         send_password_change_email.delay(user.email, user.username)
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Произошла ошибка при изменении пароля.')
+        messages.error(self.request, 'An error occurred while changing the password.')
         return super().form_invalid(form)
 
 

@@ -1,11 +1,8 @@
-from django.utils import timezone
 from django.db import models
-from taggit.managers import TaggableManager
+from django.utils import timezone
 from django.urls import reverse
+from taggit.managers import TaggableManager
 from accounts.models import Profile, MyUser
-
-from django.db import models
-from django.utils import timezone
 
 
 class Books(models.Model):
@@ -38,7 +35,7 @@ class Comments(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
-    updated_at = models.DateTimeField(auto_now=True)  # Это поле автоматически обновляется при каждом сохранении
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created_at']
@@ -48,8 +45,6 @@ class Comments(models.Model):
 
     @property
     def is_modified(self):
-        """Проверяет, был ли комментарий изменен."""
-        # Проверяем, отличается ли время создания и обновления
         return self.created_at != self.updated_at
 
 
@@ -63,8 +58,7 @@ class Author(models.Model):
         return f'{self.first_name} {self.last_name}'
 
     def get_absolute_url(self):
-        return reverse('books:actor_detail',
-                       args=[self.id])
+        return reverse('books:actor_detail', args=[self.id])
 
     class Meta:
         verbose_name = 'Author'

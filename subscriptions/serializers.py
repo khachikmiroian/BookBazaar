@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SubscriptionPlan  # Предположим, что ваша модель называется Subscription
+from .models import SubscriptionPlan
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:

@@ -4,7 +4,7 @@ from books.models import Books
 
 class ProfileInline(admin.StackedInline):
     model = Profile
-    extra = 1  # Количество пустых форм для добавления профиля
+    extra = 1
 
 @admin.register(MyUser)
 class UserAdmin(admin.ModelAdmin):

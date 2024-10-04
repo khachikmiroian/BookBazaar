@@ -20,24 +20,18 @@ def stripe_webhook(request):
 
     try:
         event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
-        print("Webhook event constructed successfully.")
-    except ValueError as e:
-        print(f"ValueError: {str(e)}")
+    except ValueError:
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        print(f"SignatureVerificationError: {str(e)}")
+    except stripe.error.SignatureVerificationError:
         return HttpResponse(status=400)
 
     current_time = timezone.now().timestamp()
     event_time = event['data']['object']['created']
-    print(f"Current time: {current_time}, Event time: {event_time}")
 
     if current_time - event_time > 300:
-        print("Event is too old. Ignoring.")
         return HttpResponse(status=400)
 
     if event['type'] == 'checkout.session.completed':
-        print("Processing checkout session completed event.")
         session = event['data']['object']
         handle_checkout_session(session)
 
@@ -45,28 +39,21 @@ def stripe_webhook(request):
 
 
 def handle_checkout_session(session):
-    print("Handling checkout session...")
     customer_email = session.get('customer_email')
     payment_status = session.get('payment_status')
     metadata = session.get('metadata', {})
     purchase_type = metadata.get('purchase_type')
-
-    print(f'Customer Email: {customer_email}, Payment Status: {payment_status}, Purchase Type: {purchase_type}')
 
     if payment_status == 'paid':
         if purchase_type == 'subscription':
             plan_name = metadata.get('plan_name')
 
             try:
-                print(f'Attempting to retrieve subscription plan: {plan_name}')
                 plan = SubscriptionPlan.objects.get(name=plan_name)
                 user = MyUser.objects.get(email=customer_email)
-
-                # Получить текущую активную подписку пользователя, если есть
                 current_subscription = Subscription.objects.filter(user=user, end_date__gt=timezone.now()).first()
 
                 if str(plan) == 'M':
-                    # Определить начальную дату: если есть активная подписка, используем её end_date
                     start_date = current_subscription.end_date if current_subscription else timezone.now()
                     end_date = start_date + timedelta(days=30)
 
@@ -79,10 +66,8 @@ def handle_checkout_session(session):
                         }
                     )
                     send_purchase_email.delay(user.email, 'subscription', plan_name, user.username)
-                    print(f'Subscription for {customer_email} on plan {plan_name} updated successfully.')
 
                 elif str(plan) == 'Y':
-                    # Аналогично для годовой подписки
                     start_date = current_subscription.end_date if current_subscription else timezone.now()
                     end_date = start_date + timedelta(days=365)
 
@@ -95,31 +80,26 @@ def handle_checkout_session(session):
                         }
                     )
                     send_purchase_email.delay(user.email, 'subscription', plan_name, user.username)
-                    print(f'Subscription for {customer_email} on plan {plan_name} updated successfully.')
 
             except SubscriptionPlan.DoesNotExist:
-                print(f'Subscription plan with name {plan_name} not found.')
+                pass
             except MyUser.DoesNotExist:
-                print(f'User with email {customer_email} not found.')
-            except Exception as e:
-                print(f'Error processing subscription: {str(e)}')
+                pass
+            except Exception:
+                pass
+
         elif purchase_type == 'book':
-            # Обработка покупки книги
-            book_id = metadata.get('item_id')  # Достаем ID книги из метаданных
+            book_id = metadata.get('item_id')
             try:
-                print(f'Attempting to retrieve book with ID: {book_id}')
                 book = Books.objects.get(id=book_id)
                 user = MyUser.objects.get(email=customer_email)
-                print(f'Found book: {book.title}, User: {user.email}')
 
-                print('Creating book purchase...')
                 BookPurchase.objects.create(user=user, book=book)
 
                 send_purchase_email.delay(user.email, 'book', book.title, user.username)
-                print(f'Book {book.title} successfully purchased by user {customer_email}.')
             except Books.DoesNotExist:
-                print(f'Book with ID {book_id} not found.')
+                pass
             except MyUser.DoesNotExist:
-                print(f'User with email {customer_email} not found.')
-            except Exception as e:
-                print(f'Error processing book purchase: {str(e)}')
+                pass
+            except Exception:
+                pass
