@@ -195,7 +195,11 @@ input[type="file"] {
 .edit-profile-section input[type="text"]:focus, 
 .edit-profile-section input[type="email"]:focus, 
 .edit-profile-section input[type="password"]:focus {
+<<<<<<< HEAD
     border-color: hsla(41, 96%, 32%, 0.993); /* Change border color on focus */
+=======
+    border-color: #007bff; /* Change border color on focus */
+>>>>>>> c8e2b8e900ce59b6de7324384f0d5dd6c18104f7
     outline: none; /* Remove default outline */
 }
 

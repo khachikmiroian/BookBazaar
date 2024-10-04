@@ -1,7 +1,7 @@
-from django.utils import timezone
 from django.db import models
-from taggit.managers import TaggableManager
+from django.utils import timezone
 from django.urls import reverse
+from taggit.managers import TaggableManager
 from accounts.models import Profile, MyUser
 
 
@@ -10,7 +10,7 @@ class Books(models.Model):
         DRAFT = 'DF', 'Draft'
         PUBLISHED = 'PB', 'Published'
 
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=100)
     author = models.ForeignKey('Author', on_delete=models.CASCADE, related_name='books')
     description = models.TextField()
     date = models.DateField()
@@ -35,12 +35,17 @@ class Comments(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created_at']
 
     def __str__(self):
         return f'Comment by {self.profile.user.username}'
+
+    @property
+    def is_modified(self):
+        return self.created_at != self.updated_at
 
 
 class Author(models.Model):
@@ -53,8 +58,7 @@ class Author(models.Model):
         return f'{self.first_name} {self.last_name}'
 
     def get_absolute_url(self):
-        return reverse('books:actor_detail',
-                       args=[self.id])
+        return reverse('books:actor_detail', args=[self.id])
 
     class Meta:
         verbose_name = 'Author'
@@ -68,4 +72,3 @@ class Bookmarks(models.Model):
 
     class Meta:
         unique_together = ['profile', 'book']
-

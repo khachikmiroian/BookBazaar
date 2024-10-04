@@ -1,77 +1,92 @@
-.book-detail {
-    background-color: #f8f9fa; /* Light background for the section */
-    padding: 2rem; /* Padding around the section */
-    border-radius: 15px; /* Rounded corners */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    margin-bottom: 2rem; /* Space below the section */
-}
 
-.book-detail .container {
-    max-width: 800px; /* Limit the maximum width of the container */
-    margin: 0 auto; /* Center the container */
+body {
+    background-color: #f5f2e1;
+    font-family: 'Arial', sans-serif;
 }
-
-.book-detail .card {
-    border: none; /* No border for the card */
-    border-radius: 15px; /* Rounded corners for the card */
-    overflow: hidden; /* Hide overflow */
-    transition: transform 0.3s; /* Smooth transition for hover effect */
+.content {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
 }
-
-.book-detail .card:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
+.left-section {
+    flex: 1 1 60%;
+    padding-right: 20px;
 }
-
-.book-detail .card-body {
-    padding: 2rem; /* Padding inside the card body */
-    background-color: #ffffff; /* White background for the card body */
+.right-section {
+    flex: 1 1 35%;
+    background-color: #f5ebe0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
-
-.book-detail .card-title {
-    font-size: 2.5rem; /* Font size for book title */
-    font-weight: 700; /* Bold font weight */
-    color: #2c3e50; /* Dark color for title */
-    margin-bottom: 1rem; /* Space below title */
+.card-title {
+    color: #8b4513;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
-
-.book-detail h4 {
-    font-size: 1.5rem; /* Font size for author name */
-    color: #7f8c8d; /* Gray color for author name */
-    margin-bottom: 1rem; /* Space below author name */
+.tags a {
+    color: #d2691e;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 1px dashed #d2691e;
+    transition: color 0.3s, border-bottom 0.3s;
 }
-
-.book-detail p {
-    font-size: 1.1rem; /* Font size for paragraphs */
-    color: #34495e; /* Dark blue color for text */
-    line-height: 1.6; /* Line height for readability */
-    margin-bottom: 1rem; /* Space below paragraph */
+.tags a:hover {
+    color: #8b4513;
+    border-bottom: 1px solid #8b4513;
 }
-
-.book-detail .tags {
-    font-size: 1rem; /* Font size for tags */
-    color: #2980b9; /* Blue color for tags */
+.comment {
+    background-color: #fff;
+    border: 1px solid #d2b48c;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
-
-.book-detail .tags a {
-    color: #2980b9; /* Blue color for links */
-    text-decoration: none; /* Remove underline from links */
+.comment strong {
+    color: #6b4226;
 }
-
-.book-detail .tags a:hover {
-    text-decoration: underline; /* Underline on hover for links */
+.comment p {
+    color: #5a3d2b;
+    margin-bottom: 5px;
 }
-
-.book-detail .btn {
-    background-color: #007bff; /* Bootstrap primary color */
-    color: white; /* White text */
-    padding: 0.75rem 1.5rem; /* Padding for button */
-    font-size: 1.2rem; /* Font size for button */
-    border-radius: 25px; /* Rounded corners for button */
-    border: none; /* No border */
-    transition: background-color 0.3s, transform 0.3s; /* Transition for hover effects */
+.comment small {
+    color: #8b4513;
 }
-
-.book-detail .btn:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: translateY(-2px); /* Slight lift on hover */
+.comment-form textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #d2b48c;
+    border-radius: 10px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+.comment-form button {
+    background-color: #8b4513;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.comment-form button:hover {
+    background-color: #a0522d;
+}
+.show-more-btn {
+    background-color: #d2691e;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+.show-more-btn:hover {
+    background-color: #8b4513;
+}
+.edit-options {
+    display: none; /* Initially hidden */
 }

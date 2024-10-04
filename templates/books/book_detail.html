@@ -6,88 +6,106 @@
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'books/css/book_detail.css' %}">
-
 <section class="book-detail">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h2 class="card-title">{{ book.title }}</h2>
-                        <h4>Author: <a href="#">{{ book.author }}</a></h4>
-                        <p><strong>Description:</strong> {{ book.description }}</p>
-                        <p><strong>Price:</strong> ${{ book.price }}</p>
+    <div class="content">
+        <!-- Left section - book info -->
+        <div class="left-section">
+            <h2 class="card-title">{{ book.title }}</h2>
+            <h4>Author: <a href="#">{{ book.author }}</a></h4>
+            <p><strong>Description:</strong> {{ book.description }}</p>
+            <p><strong>Price:</strong> ${{ book.price }}</p>
 
-                        <!-- Tags Section -->
-                        {% if tag %}
-                        <h2>Posts tagged with "{{ tag.name }}"</h2>
-                        {% endif %}
-                        <p class="tags">
-                            Tags:
-                            {% for tag in book.tags.all %}
-                            <a href="{% url 'books:book_list_by_tag' tag.slug %}">{{ tag.name }}</a>
-                            {% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        </p>
-
-                        <!-- If user has purchased the book or has an active subscription -->
-                        {% if book.id in purchased_books or has_active_subscription %}
-                            {% if book.pdf_file %}
-                            <!-- Button to open PDF in a new tab -->
-                            <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
-                                Open PDF in New Tab
-                            </a>
-                            {% else %}
-                            <p>PDF file for this book is not available.</p>
-                            {% endif %}
-
-                            <!-- Option to buy the book even if subscribed -->
-                            {% if can_purchase %}
-                            <p>You can also buy this book.</p>
-                            <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-success">Buy this Book</button>
-                            </form>
-                            {% endif %}
-                        {% endif %} <!-- Close the purchased book or subscription block -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bookmark and Comments Section -->
-            {% if user.is_authenticated %}
-            <div class="col-md-4">
+            <form action="{% url 'books:add_bookmark' book.id %}" method="POST">
+                {% csrf_token %}
                 {% if bookmarked %}
-                <form action="{% url 'books:remove_bookmark' book.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Remove Bookmark</button>
-                </form>
+                <button type="submit" class="btn btn-warning">
+                    <i class="bi bi-bookmark-check-fill"></i> Удалить из закладок
+                </button>
                 {% else %}
-                <form action="{% url 'books:add_bookmark' book.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Add Bookmark</button>
-                </form>
+                <button type="submit" class="btn btn-outline-warning">
+                    <i class="bi bi-bookmark-plus"></i> Добавить в закладки
+                </button>
                 {% endif %}
+            </form>
 
-                <h3>Comments:</h3>
-                <div>
-                    {% for comment in book.comments.all %}
+            <!-- Tags Section -->
+            {% if tag %}
+            <h2>Posts tagged with "{{ tag.name }}"</h2>
+            {% endif %}
+            <p class="tags">
+                Tags:
+                {% for tag in book.tags.all %}
+                <a href="{% url 'books:book_list_by_tag' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+
+            <!-- Purchase or Read Options -->
+            {% if book.id in purchased_books or has_active_subscription %}
+            {% if book.pdf_file %}
+            <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
+                <i class="bi bi-file-earmark-pdf"></i> Open PDF in New Tab
+            </a>
+            {% else %}
+            <p>PDF file for this book is not available.</p>
+            {% endif %}
+
+            {% if can_purchase %}
+            <p>You can also buy this book.</p>
+            <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success"><i class="bi bi-cart"></i> Buy this Book</button>
+            </form>
+            {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- Right section - comments -->
+        <div class="right-section">
+            {% if user.is_authenticated %}
+            <h3>Comments:</h3>
+            <div id="comments-container">
+                {% for comment in book.comments.all|slice:":3" %}
+                <div class="comment" id="comment-{{ comment.id }}">
                     <strong>{{ comment.profile.user.username }}</strong>
-                    <p>{{ comment.content }}</p>
+                    <p class="comment-content">{{ comment.content }} {% if comment.updated_at %}
+                        <small>(Modified)</small>{% endif %}</p>
                     <p><small>Published {{ comment.created_at }}</small></p>
-                    {% empty %}
-                    <p>No comments yet.</p>
-                    {% endfor %}
-                </div>
 
-                <h3>Leave a Comment</h3>
-                <form method="POST">
+                    {% if user.is_authenticated and comment.profile.user == user %}
+                    <button class="btn btn-link" onclick="toggleEditOptions({{ comment.id }})">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <div class="edit-options" id="edit-options-{{ comment.id }}">
+                        <form method="POST" action="{% url 'books:delete_comment' comment.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Delete</button>
+                        </form>
+                        <button class="btn btn-secondary"
+                                onclick="editComment({{ comment.id }}, '{{ comment.content|escapejs }}')">
+                            <i class="bi bi-pencil"></i> Edit
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <p>No comments yet.</p>
+                {% endfor %}
+            </div>
+
+            <h3>Leave a Comment</h3>
+            <div class="comment-form">
+                <form method="POST" id="comment-form">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit">Submit</button>
+                    <textarea name="content" placeholder="Write your comment..." class="form-control"
+                              id="comment-input"></textarea>
+                    <button type="submit"><i class="bi bi-send"></i> Submit</button>
                 </form>
             </div>
+
+            <!-- Button to load more comments -->
+            {% if book.comments.count > 3 %}
+            <button id="load-more-btn" class="show-more-btn" onclick="loadMoreComments()">Show more comments</button>
+            {% endif %}
             {% else %}
             <p>You must log in to leave a comment.</p>
             {% endif %}
@@ -95,4 +113,6 @@
     </div>
 </section>
 
+<link rel="stylesheet" type="text/css" href="{% static 'books/css/book_detail.css' %}">
+<script src="{% static 'books/js/book_detail.js' %}"></script>
 {% endblock %}

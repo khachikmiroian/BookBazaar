@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Books  # Предположим, что ваша модель для книг называется Book
+from .models import Books
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:

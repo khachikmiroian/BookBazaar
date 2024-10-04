@@ -1,211 +1,85 @@
 /* book_list.css */
 
 body {
-    background-color: #f4e2d0; /* Soft Beige for a warm background */
-    font-family: 'Poppins', sans-serif; /* Modern font style */
-    color: #4a4a4a; /* Dark Gray color for text */
+    background-color: #f0f8ff; /* Нежно-голубой фон для всего тела */
+    font-family: 'Poppins', sans-serif; /* Более современный и стильный шрифт */
+    color: #444; /* Темно-серый цвет для текста */
     margin: 0;
     padding: 0;
 }
 
 .book-list-section {
-    display: flex; /* or 'grid' if you are using grid */
-    flex-wrap: wrap; /* Allows wrapping of items */
-    gap: 30px; /* Increased space between items */
-    padding: 50px 30px;
+    padding: 50px 30px; /* Увеличенные отступы для воздушного дизайна */
     max-width: 1200px;
     margin: auto;
-    animation: fadeIn 1.5s ease-in-out; /* Fade-in effect for the section */
 }
 
 .card {
-    border: none; /* Remove default card borders */
-    border-radius: 16px; /* More rounded corners */
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+    border: none; /* Убираем стандартные границы карт */
+    border-radius: 12px; /* Более заметные закругленные углы */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Плавный переход с более выраженным эффектом */
     overflow: hidden;
-    background: linear-gradient(145deg, #c6b29a, #d8d8d8); /* Light Brown to Light Gray gradient for cards */
-    position: relative; /* For absolute positioning of images */
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Softer shadow for cards */
-    margin-bottom: 20px; /* Add space below each card */
+    background: linear-gradient(145deg, #e6f1ff, #ffffff); /* Легкий градиент для карт */
 }
 
 .card:hover {
-    transform: translateY(-5px); /* Lift card on hover */
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
-    background-color: rgba(198, 178, 154, 0.9); /* Lighten background on hover */
-}
-
-.card-image {
-    width: 100%; /* Full width for images */
-    height: 220px; /* Increased height for images */
-    object-fit: cover; /* Cover images maintaining aspect ratio */
-    transition: transform 0.5s ease, filter 0.5s ease; /* Smooth transition for image scaling */
-    filter: brightness(80%); /* Darken images */
-}
-
-.card:hover .card-image {
-    transform: scale(1.1); /* Scale up image on hover */
-    filter: brightness(100%); /* Brightness on hover */
+    transform: scale(1.08); /* Более сильное увеличение при наведении */
+    box-shadow: 0 6px 30px rgba(0, 123, 255, 0.2); /* Более глубокая тень */
 }
 
 .card-body {
-    background-color: #f4e2d0; /* Soft Beige for card body */
-    padding: 30px; /* Increased padding */
-    border-radius: 16px;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+    background-color: #ffffff; /* Белый фон для тела карты */
+    padding: 25px; /* Увеличенные отступы */
+    border-radius: 12px;
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.05); /* Легкая внутренняя тень для объема */
 }
 
 .card-title {
-    font-size: 1.6rem; /* Slightly larger title size */
-    color: #6a4a3b; /* Medium Brown title color */
-    margin-bottom: 10px; /* Bottom margin */
-    transition: color 0.3s ease, transform 0.3s ease; /* Smooth color transition for title */
-}
-
-.card-title:hover {
-    color: #3b2e2e; /* Dark Brown on hover */
-    transform: scale(1.05); /* Slightly increase size on hover */
-    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5); /* Glow effect on hover */
+    font-size: 1.5rem; /* Увеличенный размер заголовка */
+    color: #333; /* Темный цвет заголовка */
+    margin-bottom: 10px; /* Отступ снизу */
 }
 
 .card-subtitle {
-    color: #aaa; /* Neutral gray for subtitle */
+    color: #6c757d; /* Нейтральный серый цвет для подзаголовка */
     font-size: 1.1rem;
-    margin-bottom: 8px; /* Added bottom margin */
 }
 
 .card-text {
-    color: #4a4a4a; /* Dark Gray for description text */
-    line-height: 1.7; /* Increased line height for readability */
-    margin-bottom: 20px; /* Increased bottom margin */
-    transition: color 0.3s ease; /* Smooth transition for text color */
+    color: #555; /* Серый цвет текста описания */
+    line-height: 1.6; /* Межстрочный интервал для лучшей читаемости */
+    margin-bottom: 20px; /* Увеличенный отступ снизу */
 }
 
-.card:hover .card-text {
-    color: #6a4a3b; /* Change text color to Medium Brown on hover */
-    transform: translateY(-3px); /* Lift text on hover */
-}
-
-/* New Card Footer Styles */
-.card-footer {
-    background: linear-gradient(145deg, #d8cfcf, #c6b29a); /* Soft gradient for footer */
-    padding: 15px; /* Padding for the footer */
-    border-top: 2px solid #6a4a3b; /* Dark Brown border on top */
-    border-radius: 0 0 16px 16px; /* Rounded corners on the bottom */
-    text-align: center; /* Centered text */
-    transition: background 0.3s ease; /* Smooth transition for background */
-}
-
-.card-footer:hover {
-    background: rgba(198, 178, 154, 0.9); /* Lighten background on hover */
-}
-
-.card-footer-text {
-    color: #4a4a4a; /* Dark Gray text color */
-    font-size: 1rem; /* Font size for footer text */
-    margin: 0; /* Remove margin */
-}
-
-/* Pagination Styles */
 .pagination {
-    margin-top: 40px; /* Increased top margin for pagination */
+    margin-top: 40px; /* Увеличенный отступ сверху для пагинации */
     display: flex;
-    justify-content: center; /* Center pagination */
+    justify-content: center; /* Выравнивание пагинации по центру */
 }
 
 .page-item.active .page-link {
-    background-color: #6a4a3b; /* Active page background color */
-    border-color: #6a4a3b; /* Active page border color */
-    color: #f4e2d0; /* Soft Beige text */
-    border-radius: 50px; /* Rounded links */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); /* Shadow for active page */
+    background-color: #ff6f61; /* Насыщенный цвет для активной страницы */
+    border-color: #ff6f61; /* Цвет границы для активной страницы */
+    color: white;
+    border-radius: 50px; /* Закругленные ссылки */
+    box-shadow: 0 0 15px rgba(255, 111, 97, 0.4); /* Тень для активной страницы */
 }
 
 .page-link {
-    color: #4a4a4a; /* Dark Gray for page links */
+    color: #007bff; /* Насыщенный синий для ссылок на страницы */
     border-radius: 50px;
-    padding: 10px 20px;
-    transition: background-color 0.5s, color 0.5s, transform 0.3s, box-shadow 0.5s; /* Smooth transition for hover effects */
-    position: relative; /* For animation on hover */
+    padding: 8px 16px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .page-link:hover {
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); /* Glowing effect on hover */
-    transform: scale(1.05); /* Scale up on hover */
-    background-color: rgba(198, 178, 154, 0.2); /* Semi-transparent Light Brown on hover */
-}
-
-.page-link:hover {
-    color: #3b2e2e; /* Dark Brown text on hover */
+    background-color: #f8d7da; /* Светлый розовый фон при наведении */
+    color: #c82333; /* Темный красный текст при наведении */
 }
 
 .text-center {
-    margin-top: 50px; /* Top margin for centered text */
+    margin-top: 50px; /* Отступ сверху для центра текста */
     font-size: 1.2rem;
-    font-weight: 600; /* Slightly bolder text */
-    animation: textSlideIn 1s ease forwards; /* Slide-in effect for text */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for depth */
+    font-weight: 500;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes textSlideIn {
-    0% {
-        transform: translateY(30px); /* Start lower */
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0); /* End in place */
-        opacity: 1;
-    }
-}
-
-.book-icon {
-    font-size: 3rem; /* Bigger icon size */
-    transition: color 0.3s ease, transform 0.3s ease; /* Smooth color transition */
-    color: #6a4a3b; /* Initial Medium Brown color */
-}
-
-/* Hover effect with pulse */
-.book-icon:hover {
-    animation: pulse 0.6s; /* Trigger the pulse animation on hover */
-    color: #3b2e2e; /* Change color to Dark Brown on hover */
-    transform: scale(1.1); /* Scale up icon on hover */
-}
-
-/* Pulse keyframes */
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1); /* Slightly increase the size */
-    }
-    100% {
-        transform: scale(1); /* Return to original size */
-    }
-}
-
-/* Optional: Add animation on page load */
-.animated-icon {
-    animation: bounce 1s ease infinite; /* Bouncing animation */
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-10px);
-    }
-    60% {
-        transform: translateY(-5px);
-    }
-}
