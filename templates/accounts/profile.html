@@ -17,7 +17,6 @@
                     <div class="profile-picture">
                         {% if user.profile.photo %}
                             <img src="{{ user.profile.photo.url }}" alt="Profile Photo" class="profile-img">
-                            {{ user.username }}
                         {% else %}
                             <img src="{% static 'profile_images/default.jpg' %}" alt="Profile Photo" class="profile-img">
                         {% endif %}
@@ -47,11 +46,11 @@
                     {% if purchased_books %}
                     <ul>
                         {% for purchase in purchased_books %}
-                        <li>
-                            <a href="{% url 'books:view_pdf_file' purchase.book.id %}" target="_blank">
-                                <i class="fas fa-book"></i> {{ purchase.book.title }}
-                            </a>
-                        </li>
+
+                        <a href="{% url 'books:book_detail' purchase.book.id %}" target="_blank">
+                            <i class="fas fa-book"></i> {{ purchase.book.title }}
+                        </a>
+
                         {% endfor %}
                     </ul>
                     {% else %}

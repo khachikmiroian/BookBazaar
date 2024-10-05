@@ -6,7 +6,8 @@
 <link rel="stylesheet" href="{% static 'books/css/book_list.css' %}">
 
 <div class="container mt-5">
-    <h2 class="text-center" style="color: #8b4513;">Your Bookmarks</h2>
+    <h1 class="text-center" style="color: #8b4513; font-size: 36px; margin-top: -5px;">Your Bookmarks</h1>
+
     <div class="row mt-4">
         {% for bookmark in bookmarks %}
         <div class="col-md-4 mb-4">
@@ -26,7 +27,8 @@
             </div>
         </div>
         {% empty %}
-        <p>No bookmarks found.</p>
+        <h4 style="text-align: center; margin-top: 100px;">No bookmarks found.</h4>
+
         {% endfor %}
     </div>
 </div>

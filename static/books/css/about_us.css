@@ -1,0 +1,142 @@
+body {
+    background: linear-gradient(135deg, #fff4e6, #f0e5d8);
+    font-family: 'Helvetica', sans-serif;
+    color: #5d3a29;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 3em;
+    color: #7b5a29;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    position: relative;
+    animation: slideIn 1s ease-out;
+}
+
+.section-title i {
+    margin-right: 10px;
+}
+
+.section-subtitle {
+    font-size: 2em;
+    color: #8d6e53;
+    margin: 30px 0 10px;
+    text-transform: capitalize;
+    animation: fadeUp 1s ease-in;
+    position: relative;
+}
+
+.section-subtitle i {
+    margin-right: 10px;
+}
+
+.about-text {
+    font-size: 1.2em;
+    line-height: 1.8;
+    color: #7d5b3e;
+    margin-bottom: 20px;
+    animation: fadeUp 1.2s ease-in;
+}
+
+.contact-info {
+    background: #f8e9d2;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.contact-title {
+    font-size: 1.6em;
+    color: #7b5a29;
+    margin-bottom: 10px;
+}
+
+.contact-title i {
+    margin-right: 10px;
+}
+
+.contact-info p {
+    font-size: 1.1em;
+    color: #5d3a29;
+    margin: 8px 0;
+}
+
+.contact-info a {
+    color: #a0522d;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.contact-info a:hover {
+    color: #7b5a29;
+}
+
+.contact-info i {
+    margin-right: 8px;
+    color: #c58c4f;
+}
+
+.team-list {
+    list-style: none;
+    padding: 0;
+    animation: fadeIn 1.5s;
+}
+
+.team-list li {
+    font-size: 1.2em;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    animation: fadeUp 1.3s ease-in;
+}
+
+.team-list i {
+    margin-right: 10px;
+    font-size: 1.8em;
+    color: #7b5a29;
+    transition: transform 0.3s ease-in-out;
+}
+
+.team-list li:hover i {
+    transform: scale(1.2);
+}
+
+.social-icon {
+    color: #7b5a29;
+    font-size: 1.5em;
+    margin-right: 15px;
+    transition: color 0.3s;
+}
+
+.social-icon:hover {
+    color: #8d6e53;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

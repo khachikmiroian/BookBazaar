@@ -4,31 +4,27 @@
 {% block title %}About Us{% endblock %}
 
 {% block content %}
-
+<link rel="stylesheet" href="{% static 'books/css/about_us.css'%}">
 <section class="about-us">
     <div class="container">
-        <!-- Main Title with Icon -->
         <h1 class="section-title">
             <i class="bi bi-book"></i> About Us
         </h1>
-        
-        <!-- About Text with Book Icon -->
+
         <p class="about-text">
             <i class="bi bi-book-open"></i> Welcome to Online Book Store! We are passionate about books and dedicated to providing you with the best
             reading experience. Our goal is to offer a wide selection of books that cater to all tastes and interests.
             Whether you're looking for bestsellers, new releases, or classic literature, you'll find it here.
         </p>
 
-        <!-- Contact Us Section with Icon -->
         <h2 class="section-subtitle">
             <i class="bi bi-telephone"></i> Contact Us
         </h2>
-        
+
         <p class="about-text">
             If you have any questions or need assistance, please feel free to reach out to us. We're here to help!
         </p>
 
-        <!-- Contact Information Section with Icons -->
         <div class="contact-info">
             <h3 class="contact-title"><i class="bi bi-info-circle"></i> Contact Information</h3>
             <p><i class="bi bi-envelope"></i> Email: <a href="mailto:info@onlinebookstore.com">info@onlinebookstore.com</a></p>
@@ -36,21 +32,18 @@
             <p><i class="bi bi-map"></i> Address: 3 Hakob Hakobyan St, Yerevan 0033</p>
         </div>
 
-        <!-- Our Team Section with Icon -->
         <h2 class="section-subtitle">
             <i class="bi bi-people"></i> Our Team
         </h2>
 
         <p class="about-text">Meet the people behind Online Book Store:</p>
-        
-        <!-- Team Members with Icons -->
+
         <ul class="team-list">
             <li><i class="bi bi-person-badge"></i> <strong>Xcho Miroyan</strong> - brought strong technical expertise, contributing to both the core functionality and the visual elements of the site.</li>
             <li><i class="bi bi-laptop"></i> <strong>Vahan Nahapetyan</strong> - played a key role in shaping the user experience, working on both the design and implementation of important features.</li>
             <li><i class="bi bi-headset"></i> <strong>Artak Hovsepyan</strong> -  added creativity and innovative solutions, contributing to both the design and development of new features.</li>
         </ul>
 
-        <!-- Social Media Section with Icons -->
         <h2 class="section-subtitle">
             <i class="bi bi-share"></i> Follow Us
         </h2>
@@ -62,158 +55,5 @@
         </p>
     </div>
 </section>
-
-<style>
-    /* Body and Container */
-    body {
-        background: linear-gradient(135deg, #fff4e6, #f0e5d8);
-        font-family: 'Helvetica', sans-serif;
-        color: #5d3a29; /* Dark brown text color */
-        margin: 0;
-        padding: 0;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        background: #ffffff; /* White background for the container */
-        border-radius: 15px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        animation: fadeIn 1s ease-in-out;
-    }
-
-    /* Title and Subtitle */
-    .section-title {
-        text-align: center;
-        font-size: 3em;
-        color: #7b5a29; /* Brown color */
-        text-transform: uppercase;
-        margin-bottom: 20px;
-        position: relative;
-        animation: slideIn 1s ease-out;
-    }
-
-    .section-title i {
-        margin-right: 10px;
-    }
-
-    .section-subtitle {
-        font-size: 2em;
-        color: #8d6e53; /* Lighter brown */
-        margin: 30px 0 10px;
-        text-transform: capitalize;
-        animation: fadeUp 1s ease-in;
-        position: relative;
-    }
-
-    .section-subtitle i {
-        margin-right: 10px;
-    }
-
-    /* About Text */
-    .about-text {
-        font-size: 1.2em;
-        line-height: 1.8;
-        color: #7d5b3e; /* Brownish text */
-        margin-bottom: 20px;
-        animation: fadeUp 1.2s ease-in;
-    }
-
-    /* Contact Info */
-    .contact-info {
-        background: #f8e9d2; /* Light brown background */
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-    }
-
-    .contact-title {
-        font-size: 1.6em;
-        color: #7b5a29; /* Dark brown */
-        margin-bottom: 10px;
-    }
-
-    .contact-title i {
-        margin-right: 10px;
-    }
-
-    .contact-info p {
-        font-size: 1.1em;
-        color: #5d3a29; /* Dark brown for text */
-        margin: 8px 0;
-    }
-
-    .contact-info a {
-        color: #a0522d; /* Medium brown */
-        text-decoration: none;
-        transition: color 0.3s ease-in-out;
-    }
-
-    .contact-info a:hover {
-        color: #7b5a29; /* Dark brown on hover */
-    }
-
-    .contact-info i {
-        margin-right: 8px;
-        color: #c58c4f; /* Goldish color */
-    }
-
-    /* Team List */
-    .team-list {
-        list-style: none;
-        padding: 0;
-        animation: fadeIn 1.5s;
-    }
-
-    .team-list li {
-        font-size: 1.2em;
-        margin: 10px 0;
-        display: flex;
-        align-items: center;
-        animation: fadeUp 1.3s ease-in;
-    }
-
-    .team-list i {
-        margin-right: 10px;
-        font-size: 1.8em;
-        color: #7b5a29; /* Dark brown */
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .team-list li:hover i {
-        transform: scale(1.2);
-    }
-
-    /* Social Icons */
-    .social-icon {
-        color: #7b5a29; /* Dark brown */
-        font-size: 1.5em;
-        margin-right: 15px;
-        transition: color 0.3s;
-    }
-
-    .social-icon:hover {
-        color: #8d6e53; /* Lighter brown */
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes slideIn {
-        from { transform: translateY(-50px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-</style>
 
 {% endblock %}

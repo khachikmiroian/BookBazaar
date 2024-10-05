@@ -80,10 +80,7 @@
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Delete</button>
                         </form>
-                        <button class="btn btn-secondary"
-                                onclick="editComment({{ comment.id }}, '{{ comment.content|escapejs }}')">
-                            <i class="bi bi-pencil"></i> Edit
-                        </button>
+
                     </div>
                     {% endif %}
                 </div>

@@ -11,341 +11,353 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 
-
     <style>
-       body {
-    background: linear-gradient(to bottom right, #fafafa, #ffe0b2);
-    font-family: 'Merriweather', serif;
-    color: #333;
+        body {
+     background: linear-gradient(to bottom right, #fafafa, #ffe0b2);
+     font-family: 'Merriweather', serif;
+     color: #333;
+     margin: 0;
+     padding: 0;
+     display: flex;
+     flex-direction: column;
+     min-height: 100vh;
+    }
+
+ /* Navbar Styling */
+ .navbar {
+     background-color: rgba(255, 255, 255, 0.9); /* Light transparent white */
+     padding: 15px 40px;
+     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+     position: sticky;
+     top: 0;
+     z-index: 1000;
+     transition: background-color 0.3s ease;
+ }
+
+ .navbar:hover {
+     background-color: rgba(255, 255, 255, 1); /* Fully opaque on hover */
+ }
+
+ .navbar .navbar-brand {
+     font-size: 2.5em;
+     color: #6d4c41; /* Brown */
+     font-weight: bold;
+     text-decoration: none;
+     transition: color 0.3s ease, transform 0.3s ease;
+ }
+
+ .navbar .navbar-brand:hover {
+     transform: rotate(-3deg) scale(1.1); /* Slight rotation and scaling on hover */
+     color: #4e3b31; /* Darker brown on hover */
+ }
+
+ .navbar .nav > li > a {
+     color: #6d4c41; /* Brown */
+     font-size: 1.2em;
+     margin-left: 25px;
+     text-decoration: none;
+     transition: color 0.3s ease, transform 0.3s ease;
+ }
+
+ .navbar .nav > li > a:hover {
+     color: #3e2723; /* Darker brown on hover */
+     transform: translateY(-4px); /* Slight lift on hover */
+ }
+
+ /* Page Header */
+ .page-header {
+     padding: 50px 0;
+     text-align: center;
+     background: #915706;
+     background: linear-gradient(to right, #ff9500, #7a5b03);
+     border-radius: 10px;
+     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+     transition: transform 0.3s ease;
+    }
+
+    .page-header h1 {
+     font-size: 3em;
+     color: #6d4c41;
+     margin-bottom: 20px;
+     transition: color 0.3s ease;
+    }
+
+    .page-header p {
+     font-size: 1.3em;
+     color: #4e342e;
+    }
+
+    .page-header:hover {
+     transform: translateY(-10px);
+    }
+
+    .page-header:hover h1 {
+     color: #ff7043;
+    }
+
+    .page-info {
+     padding: 50px 0;
+     background: #ffffff;
+     border-radius: 10px;
+     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+     margin-top: 30px;
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .page-info h2 {
+     font-size: 2.5em;
+     margin-bottom: 20px;
+     color: #6d4c41;
+    }
+
+    .page-info ul {
+     list-style: none;
+     padding: 0;
+     margin: 0 0 20px;
+     font-size: 1.2em;
+     line-height: 1.8em;
+     color: #5d4037;
+    }
+
+    .page-info ul li {
+     margin: 10px 0;
+     position: relative;
+     padding-left: 40px;
+    }
+
+    .page-info ul li::before {
+     content: '✔';
+     position: absolute;
+     left: 0;
+     top: 0;
+     color: #ff7043;
+     font-size: 1.5em;
+    }
+
+    .page-info p {
+     font-size: 1.2em;
+     color: #4e342e;
+    }
+
+    .page-info a {
+     color: #ff7043;
+     text-decoration: underline;
+     font-weight: bold;
+     transition: color 0.3s ease;
+    }
+
+    .page-info a:hover {
+     color: #d84315;
+    }
+
+    .page-info:hover {
+     transform: translateY(-10px);
+     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+ /* Search Section */
+ .search-container {
+     max-width: 700px;
+     margin: 40px auto;
+     text-align: center;
+ }
+
+ .search-container input[type="text"] {
+     width: 75%;
+     padding: 12px;
+     font-size: 1.3em;
+     border: 2px solid #6d4c41; /* Brown border */
+     border-radius: 30px;
+     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+ }
+
+ .search-container input[type="text"]:focus {
+     border-color: #ffb74d; /* Warm color on focus */
+     box-shadow: 0 0 20px rgba(255, 183, 77, 0.5); /* Soft glow */
+     outline: none;
+ }
+
+ .search-container button {
+     padding: 12px 28px;
+     font-size: 1.3em;
+     background-color: #6d4c41; /* Brown button */
+     color: white;
+     border: none;
+     border-radius: 30px;
+     cursor: pointer;
+     transition: background-color 0.3s ease, transform 0.3s ease;
+ }
+
+ .search-container button:hover {
+     background-color: #4e3b31; /* Darker brown on hover */
+     transform: scale(1.05); /* Button scaling */
+ }
+
+ /* Book Cards */
+ /* Book List Section */
+ .book-list-section .row {
+     display: flex; /* Use flexbox for layout */
+     flex-wrap: wrap; /* Allow items to wrap onto the next line */
+     justify-content: center; /* Center the content */
+     margin: 0 -10px; /* Negative margin to offset padding of columns */
+ }
+
+ /* Individual column styling */
+ .book-list-section .row .col {
+     flex: 1 1 calc(33.333% - 20px); /* Three columns layout with spacing */
+     margin: 10px; /* Spacing between columns */
+     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+     border-radius: 10px; /* Rounded corners for each column */
+     background-color: #fff; /* White background for book cards */
+     transition: transform 0.3s ease; /* Smooth transform transition */
+ }
+
+ /* Responsive adjustments */
+ @media (max-width: 768px) {
+     .book-list-section .row .col {
+         flex: 1 1 calc(50% - 20px); /* Two columns on medium screens */
+     }
+ }
+
+ @media (max-width: 480px) {
+     .book-list-section .row .col {
+         flex: 1 1 100%; /* Full width on small screens */
+     }
+ }
+
+ /* Hover effect for columns */
+ .book-list-section .row .col:hover {
+     transform: translateY(-5px); /* Slight lift on hover */
+     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+ }
+
+
+ /* Individual Book Card Styling */
+ .book-card {
+     background-color: #fff; /* White background */
+     border-radius: 15px;
+     padding: 20px;
+     margin: 15px; /* Adjusted margin for spacing */
+     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+     text-align: center;
+     transition: transform 0.4s ease, box-shadow 0.4s ease;
+     position: relative; /* For positioning child elements */
+ }
+
+ /* Card Hover Effect */
+ .book-card:hover {
+     transform: translateY(-10px); /* Lift effect */
+     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+ }
+
+ /* Image Styling */
+ .book-card img {
+     width: 100%;
+     height: auto;
+     border-radius: 12px; /* Rounded corners for images */
+     margin-bottom: 15px;
+     transition: transform 0.3s ease; /* Image scaling on hover */
+ }
+
+ /* Image Hover Effect */
+ .book-card img:hover {
+     transform: scale(1.1); /* Slight image scaling */
+ }
+
+ /* Title Styling */
+ .book-card .title {
+     font-size: 1.8em; /* Adjusted title size */
+     font-weight: bold;
+     color: #ff7043; /* Coral for title */
+     margin-bottom: 10px;
+     text-decoration: underline; /* Underline title */
+     transition: color 0.3s ease; /* Smooth color transition */
+ }
+
+ /* Title Hover Effect */
+ .book-card .title:hover {
+     color: #d32f2f; /* Darker red on hover */
+ }
+
+ /* Author Styling */
+ .book-card .author {
+     font-size: 1.4em;
+     color: #555; /* Medium gray for author */
+     margin-bottom: 10px;
+ }
+
+ /* Description Styling */
+ .book-card .description {
+     font-size: 1.2em; /* Increased description size */
+     color: #333;
+     margin-bottom: 15px;
+     opacity: 0.8; /* Slightly faded */
+ }
+
+ /* Price Styling */
+ .book-card .price {
+     font-size: 1.6em;
+     color: #d32f2f; /* Red for price */
+     font-weight: bold;
+     transition: color 0.3s ease; /* Smooth color transition */
+ }
+
+ /* Price Hover Effect */
+ .book-card .price:hover {
+     color: #c62828; /* Darker red on hover */
+ }
+
+ /* Button Styling */
+ .book-card .buy-btn {
+     background-color: #6d4c41; /* Brown button */
+     color: white;
+     border: none;
+     border-radius: 25px; /* Rounded corners */
+     padding: 12px 25px; /* Button padding */
+     font-size: 1.3em; /* Button font size */
+     cursor: pointer;
+     transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+ }
+
+ /* Button Hover Effect */
+ .book-card .buy-btn:hover {
+     background-color: #4e3b31; /* Darker brown on hover */
+     transform: scale(1.05); /* Button scaling */
+ }
+
+
+ /* Link Styling */
+ a {
+     color: #6d4c41; /* Brown */
+     text-decoration: none;
+     transition: color 0.3s ease, text-shadow 0.3s ease; /* Transition for link hover */
+ }
+
+ a:hover {
+     color: #3e2723; /* Darker brown on hover */
+     text-shadow: 0 0 5px rgba(109, 76, 65, 0.6); /* Subtle shadow effect on hover */
+ }
+
+ /* Основные стили для структуры страницы */
+html, body {
+    height: 100%;
     margin: 0;
-    padding: 0;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-   }
-
-/* Navbar Styling */
-.navbar {
-    background-color: rgba(255, 255, 255, 0.9); /* Light transparent white */
-    padding: 15px 40px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    transition: background-color 0.3s ease;
 }
 
-.navbar:hover {
-    background-color: rgba(255, 255, 255, 1); /* Fully opaque on hover */
+.main-wrapper {
+    flex: 1; /* Контейнер для основного контента */
 }
 
-.navbar .navbar-brand {
-    font-size: 2.5em;
-    color: #6d4c41; /* Brown */
-    font-weight: bold;
-    text-decoration: none;
-    transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.navbar .navbar-brand:hover {
-    transform: rotate(-3deg) scale(1.1); /* Slight rotation and scaling on hover */
-    color: #4e3b31; /* Darker brown on hover */
-}
-
-.navbar .nav > li > a {
-    color: #6d4c41; /* Brown */
-    font-size: 1.2em;
-    margin-left: 25px;
-    text-decoration: none;
-    transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.navbar .nav > li > a:hover {
-    color: #3e2723; /* Darker brown on hover */
-    transform: translateY(-4px); /* Slight lift on hover */
-}
-
-/* Page Header */
-.page-header {
-    padding: 50px 0;
-    text-align: center;
-    background: #915706;
-    background: linear-gradient(to right, #ff9500, #7a5b03);
-    border-radius: 10px;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-   }
-
-   .page-header h1 {
-    font-size: 3em;
-    color: #6d4c41;
-    margin-bottom: 20px;
-    transition: color 0.3s ease;
-   }
-
-   .page-header p {
-    font-size: 1.3em;
-    color: #4e342e;
-   }
-
-   .page-header:hover {
-    transform: translateY(-10px);
-   }
-
-   .page-header:hover h1 {
-    color: #ff7043;
-   }
-
-   .page-info {
-    padding: 50px 0;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    margin-top: 30px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-   }
-
-   .page-info h2 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #6d4c41;
-   }
-
-   .page-info ul {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px;
-    font-size: 1.2em;
-    line-height: 1.8em;
-    color: #5d4037;
-   }
-
-   .page-info ul li {
-    margin: 10px 0;
-    position: relative;
-    padding-left: 40px;
-   }
-
-   .page-info ul li::before {
-    content: '✔';
-    position: absolute;
-    left: 0;
-    top: 0;
-    color: #ff7043;
-    font-size: 1.5em;
-   }
-
-   .page-info p {
-    font-size: 1.2em;
-    color: #4e342e;
-   }
-
-   .page-info a {
-    color: #ff7043;
-    text-decoration: underline;
-    font-weight: bold;
-    transition: color 0.3s ease;
-   }
-
-   .page-info a:hover {
-    color: #d84315;
-   }
-
-   .page-info:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-   }
-
-/* Search Section */
-.search-container {
-    max-width: 700px;
-    margin: 40px auto;
-    text-align: center;
-}
-
-.search-container input[type="text"] {
-    width: 75%;
-    padding: 12px;
-    font-size: 1.3em;
-    border: 2px solid #6d4c41; /* Brown border */
-    border-radius: 30px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.search-container input[type="text"]:focus {
-    border-color: #ffb74d; /* Warm color on focus */
-    box-shadow: 0 0 20px rgba(255, 183, 77, 0.5); /* Soft glow */
-    outline: none;
-}
-
-.search-container button {
-    padding: 12px 28px;
-    font-size: 1.3em;
-    background-color: #6d4c41; /* Brown button */
-    color: white;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.search-container button:hover {
-    background-color: #4e3b31; /* Darker brown on hover */
-    transform: scale(1.05); /* Button scaling */
-}
-
-/* Book Cards */
-/* Book List Section */
-.book-list-section .row {
-    display: flex; /* Use flexbox for layout */
-    flex-wrap: wrap; /* Allow items to wrap onto the next line */
-    justify-content: center; /* Center the content */
-    margin: 0 -10px; /* Negative margin to offset padding of columns */
-}
-
-/* Individual column styling */
-.book-list-section .row .col {
-    flex: 1 1 calc(33.333% - 20px); /* Three columns layout with spacing */
-    margin: 10px; /* Spacing between columns */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    border-radius: 10px; /* Rounded corners for each column */
-    background-color: #fff; /* White background for book cards */
-    transition: transform 0.3s ease; /* Smooth transform transition */
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .book-list-section .row .col {
-        flex: 1 1 calc(50% - 20px); /* Two columns on medium screens */
-    }
-}
-
-@media (max-width: 480px) {
-    .book-list-section .row .col {
-        flex: 1 1 100%; /* Full width on small screens */
-    }
-}
-
-/* Hover effect for columns */
-.book-list-section .row .col:hover {
-    transform: translateY(-5px); /* Slight lift on hover */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
-}
-
-
-/* Individual Book Card Styling */
-.book-card {
-    background-color: #fff; /* White background */
-    border-radius: 15px;
-    padding: 20px;
-    margin: 15px; /* Adjusted margin for spacing */
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-    position: relative; /* For positioning child elements */
-}
-
-/* Card Hover Effect */
-.book-card:hover {
-    transform: translateY(-10px); /* Lift effect */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-/* Image Styling */
-.book-card img {
-    width: 100%;
-    height: auto;
-    border-radius: 12px; /* Rounded corners for images */
-    margin-bottom: 15px;
-    transition: transform 0.3s ease; /* Image scaling on hover */
-}
-
-/* Image Hover Effect */
-.book-card img:hover {
-    transform: scale(1.1); /* Slight image scaling */
-}
-
-/* Title Styling */
-.book-card .title {
-    font-size: 1.8em; /* Adjusted title size */
-    font-weight: bold;
-    color: #ff7043; /* Coral for title */
-    margin-bottom: 10px;
-    text-decoration: underline; /* Underline title */
-    transition: color 0.3s ease; /* Smooth color transition */
-}
-
-/* Title Hover Effect */
-.book-card .title:hover {
-    color: #d32f2f; /* Darker red on hover */
-}
-
-/* Author Styling */
-.book-card .author {
-    font-size: 1.4em;
-    color: #555; /* Medium gray for author */
-    margin-bottom: 10px;
-}
-
-/* Description Styling */
-.book-card .description {
-    font-size: 1.2em; /* Increased description size */
-    color: #333;
-    margin-bottom: 15px;
-    opacity: 0.8; /* Slightly faded */
-}
-
-/* Price Styling */
-.book-card .price {
-    font-size: 1.6em;
-    color: #d32f2f; /* Red for price */
-    font-weight: bold;
-    transition: color 0.3s ease; /* Smooth color transition */
-}
-
-/* Price Hover Effect */
-.book-card .price:hover {
-    color: #c62828; /* Darker red on hover */
-}
-
-/* Button Styling */
-.book-card .buy-btn {
-    background-color: #6d4c41; /* Brown button */
-    color: white;
-    border: none;
-    border-radius: 25px; /* Rounded corners */
-    padding: 12px 25px; /* Button padding */
-    font-size: 1.3em; /* Button font size */
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
-}
-
-/* Button Hover Effect */
-.book-card .buy-btn:hover {
-    background-color: #4e3b31; /* Darker brown on hover */
-    transform: scale(1.05); /* Button scaling */
-}
-
-
-/* Link Styling */
-a {
-    color: #6d4c41; /* Brown */
-    text-decoration: none;
-    transition: color 0.3s ease, text-shadow 0.3s ease; /* Transition for link hover */
-}
-
-a:hover {
-    color: #3e2723; /* Darker brown on hover */
-    text-shadow: 0 0 5px rgba(109, 76, 65, 0.6); /* Subtle shadow effect on hover */
-}
-
-/* Footer Styling */
+/* Footer всегда внизу */
 footer {
     background-color: #333;
     color: white;
     padding: 40px;
     text-align: center;
     box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.1);
+    margin-top: auto;
 }
 
 footer p {
@@ -354,51 +366,50 @@ footer p {
 }
 
 footer .contact-info a {
-    color: #ffb74d; /* Warm color for contact links */
+    color: #ffb74d;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 footer .contact-info a:hover {
-    color: #ff7043; /* Darker warm color on hover */
-}
-
-/* Profile Photo Styling */
-.profile-photo {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 12px;
-    transition: transform 0.3s ease;
-}
-
-.profile-photo:hover {
-    transform: scale(1.1) rotate(10deg); /* Slightly enlarge and rotate on hover */
-}
-
-/* Logout Button */
-.logout-btn {
-    background: none;
-    border: none;
-    color: #6d4c41; /* Brown text color */
-    font-size: 1.2em;
-    padding: 14px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.logout-btn:hover {
-    background-color: #6d4c41; /* Brown background on hover */
-    color: #ffe0b2; /* Light beige text on hover */
-    border-radius: 4px;
-}
-
-.username_image {
-    margin-top: -13px;
+    color: #ff7043;
 }
 
 
+ /* Profile Photo Styling */
+ .profile-photo {
+     width: 50px;
+     height: 50px;
+     border-radius: 50%;
+     object-fit: cover;
+     margin-right: 12px;
+     transition: transform 0.3s ease;
+ }
+
+ .profile-photo:hover {
+     transform: scale(1.1) rotate(10deg); /* Slightly enlarge and rotate on hover */
+ }
+
+ /* Logout Button */
+ .logout-btn {
+     background: none;
+     border: none;
+     color: #6d4c41; /* Brown text color */
+     font-size: 1.2em;
+     padding: 14px 20px;
+     cursor: pointer;
+     transition: background-color 0.3s ease, color 0.3s ease;
+ }
+
+ .logout-btn:hover {
+     background-color: #6d4c41; /* Brown background on hover */
+     color: #ffe0b2; /* Light beige text on hover */
+     border-radius: 4px;
+ }
+
+ .username_image {
+     margin-top: -13px;
+ }
 
 
     </style>
@@ -456,15 +467,20 @@ footer .contact-info a:hover {
         </div>
     </nav>
 </header>
-{% block content %}{% endblock %}
+<div class="main-wrapper">
+    {% block content %}
+    <!-- Контент будет вставлен сюда -->
+    {% endblock %}
+</div>
 
-<footer>
-    <p>&copy; 2024 Online Book Store. All rights reserved.</p>
-    <div class="contact-info">
-        <p>Contact us at: info@onlinebookstore.com</p>
-    </div>
-</footer>
-
+{% if request.path != '/books/about-us/' %}
+    <footer>
+        <p>&copy; 2024 Online Book Store. All rights reserved.</p>
+        <div class="contact-info">
+            <p>Contact us at: <a href="mailto:info@onlinebookstore.com">info@onlinebookstore.com</a></p>
+        </div>
+    </footer>
+    {% endif %}
 <script>
     // Log Out confirmation
     document.getElementById('logoutButton').addEventListener('click', function(event) {

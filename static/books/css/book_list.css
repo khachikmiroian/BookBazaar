@@ -1,162 +1,156 @@
-/* book_list.css */
-
 body {
-    background-color: #f4e2d0; /* Soft Beige for a warm background */
-    font-family: 'Poppins', sans-serif; /* Modern font style */
-    color: #4a4a4a; /* Dark Gray color for text */
+    background-color: #f4e2d0;
+    font-family: 'Poppins', sans-serif;
+    color: #4a4a4a;
     margin: 0;
     padding: 0;
 }
 
 .book-list-section {
-    display: flex; /* or 'grid' if you are using grid */
-    flex-wrap: wrap; /* Allows wrapping of items */
-    gap: 30px; /* Increased space between items */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
     padding: 50px 30px;
     max-width: 1200px;
     margin: auto;
-    animation: fadeIn 1.5s ease-in-out; /* Fade-in effect for the section */
+    animation: fadeIn 1.5s ease-in-out;
 }
 
 .card {
-    border: none; /* Remove default card borders */
-    border-radius: 16px; /* More rounded corners */
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+    border: none;
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
     overflow: hidden;
-    background: linear-gradient(145deg, #c6b29a, #d8d8d8); /* Light Brown to Light Gray gradient for cards */
-    position: relative; /* For absolute positioning of images */
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Softer shadow for cards */
-    margin-bottom: 20px; /* Add space below each card */
+    background: linear-gradient(145deg, #c6b29a, #d8d8d8);
+    position: relative;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
 }
 
 .card:hover {
-    transform: translateY(-5px); /* Lift card on hover */
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
-    background-color: rgba(198, 178, 154, 0.9); /* Lighten background on hover */
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    background-color: rgba(198, 178, 154, 0.9);
 }
 
 .card-image {
-    width: 100%; /* Full width for images */
-    height: 220px; /* Increased height for images */
-    object-fit: cover; /* Cover images maintaining aspect ratio */
-    transition: transform 0.5s ease, filter 0.5s ease; /* Smooth transition for image scaling */
-    filter: brightness(80%); /* Darken images */
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.5s ease, filter 0.5s ease;
+    filter: brightness(80%);
 }
 
 .card:hover .card-image {
-    transform: scale(1.1); /* Scale up image on hover */
-    filter: brightness(100%); /* Brightness on hover */
+    transform: scale(1.1);
+    filter: brightness(100%);
 }
 
 .card-body {
-    background-color: #f4e2d0; /* Soft Beige for card body */
-    padding: 30px; /* Increased padding */
+    background-color: #f4e2d0;
+    padding: 30px;
     border-radius: 16px;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .card-title {
-    font-size: 1.6rem; /* Slightly larger title size */
-    color: #6a4a3b; /* Medium Brown title color */
-    margin-bottom: 10px; /* Bottom margin */
-    transition: color 0.3s ease, transform 0.3s ease; /* Smooth color transition for title */
+    font-size: 1.6rem;
+    color: #6a4a3b;
+    margin-bottom: 10px;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .card-title:hover {
-    color: #3b2e2e; /* Dark Brown on hover */
-    transform: scale(1.05); /* Slightly increase size on hover */
-    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5); /* Glow effect on hover */
+    color: #3b2e2e;
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
 }
 
 .card-subtitle {
-    color: #aaa; /* Neutral gray for subtitle */
+    color: #aaa;
     font-size: 1.1rem;
-    margin-bottom: 8px; /* Added bottom margin */
+    margin-bottom: 8px;
 }
 
 .card-text {
-    color: #4a4a4a; /* Dark Gray for description text */
-    line-height: 1.7; /* Increased line height for readability */
-    margin-bottom: 20px; /* Increased bottom margin */
-    transition: color 0.3s ease; /* Smooth transition for text color */
+    color: #4a4a4a;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
 }
 
 .card:hover .card-text {
-    color: #6a4a3b; /* Change text color to Medium Brown on hover */
-    transform: translateY(-3px); /* Lift text on hover */
+    color: #6a4a3b;
+    transform: translateY(-3px);
 }
 
-/* New Card Footer Styles */
 .card-footer {
-    background: linear-gradient(145deg, #d8cfcf, #c6b29a); /* Soft gradient for footer */
-    padding: 15px; /* Padding for the footer */
-    border-top: 2px solid #6a4a3b; /* Dark Brown border on top */
-    border-radius: 0 0 16px 16px; /* Rounded corners on the bottom */
-    text-align: center; /* Centered text */
-    transition: background 0.3s ease; /* Smooth transition for background */
+    background: linear-gradient(145deg, #d8cfcf, #c6b29a);
+    padding: 15px;
+    border-top: 2px solid #6a4a3b;
+    border-radius: 0 0 16px 16px;
+    text-align: center;
+    transition: background 0.3s ease;
 }
 
 .card-footer:hover {
-    background: rgba(198, 178, 154, 0.9); /* Lighten background on hover */
-
+    background: rgba(198, 178, 154, 0.9);
 }
 
 .card-footer-text {
-    color: #4a4a4a; /* Dark Gray text color */
-    font-size: 1rem; /* Font size for footer text */
-    margin: 0; /* Remove margin */
-
+    color: #4a4a4a;
+    font-size: 1rem;
+    margin: 0;
 }
 
 .card-footer .btn-primary {
-    background-color: #6d4c41; /* Brown button */
-    border-color: #6d4c41; /* Matching border color */
+    background-color: #6d4c41;
+    border-color: #6d4c41;
 }
 
 .card-footer .btn-primary:hover {
-    background-color: #5d4037; /* Darker brown on hover */
-    border-color: #5d4037; /* Darker border on hover */
+    background-color: #5d4037;
+    border-color: #5d4037;
 }
 
-/* Pagination Styles */
 .pagination {
-    margin-top: 40px; /* Increased top margin for pagination */
+    margin-top: 40px;
     display: flex;
-    justify-content: center; /* Center pagination */
+    justify-content: center;
 }
 
 .page-item.active .page-link {
-    background-color: #6a4a3b; /* Active page background color */
-    border-color: #6a4a3b; /* Active page border color */
-    color: #f4e2d0; /* Soft Beige text */
-    border-radius: 50px; /* Rounded links */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); /* Shadow for active page */
+    background-color: #6a4a3b;
+    border-color: #6a4a3b;
+    color: #f4e2d0;
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
 }
 
 .page-link {
-    color: #4a4a4a; /* Dark Gray for page links */
+    color: #4a4a4a;
     border-radius: 50px;
     padding: 10px 20px;
-    transition: background-color 0.5s, color 0.5s, transform 0.3s, box-shadow 0.5s; /* Smooth transition for hover effects */
-    position: relative; /* For animation on hover */
+    transition: background-color 0.5s, color 0.5s, transform 0.3s, box-shadow 0.5s;
+    position: relative;
 }
 
 .page-link:hover {
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); /* Glowing effect on hover */
-    transform: scale(1.05); /* Scale up on hover */
-    background-color: rgba(198, 178, 154, 0.2); /* Semi-transparent Light Brown on hover */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    transform: scale(1.05);
+    background-color: rgba(198, 178, 154, 0.2);
 }
 
 .page-link:hover {
-    color: #3b2e2e; /* Dark Brown text on hover */
+    color: #3b2e2e;
 }
 
 .text-center {
-    margin-top: 50px; /* Top margin for centered text */
+    margin-top: 50px;
     font-size: 1.2rem;
-    font-weight: 600; /* Slightly bolder text */
-    animation: textSlideIn 1s ease forwards; /* Slide-in effect for text */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for depth */
+    font-weight: 600;
+    animation: textSlideIn 1s ease forwards;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes fadeIn {
@@ -170,44 +164,41 @@ body {
 
 @keyframes textSlideIn {
     0% {
-        transform: translateY(30px); /* Start lower */
+        transform: translateY(30px);
         opacity: 0;
     }
     100% {
-        transform: translateY(0); /* End in place */
+        transform: translateY(0);
         opacity: 1;
     }
 }
 
 .book-icon {
-    font-size: 3rem; /* Bigger icon size */
-    transition: color 0.3s ease, transform 0.3s ease; /* Smooth color transition */
-    color: #6a4a3b; /* Initial Medium Brown color */
+    font-size: 3rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+    color: #6a4a3b;
 }
 
-/* Hover effect with pulse */
 .book-icon:hover {
-    animation: pulse 0.6s; /* Trigger the pulse animation on hover */
-    color: #3b2e2e; /* Change color to Dark Brown on hover */
-    transform: scale(1.1); /* Scale up icon on hover */
+    animation: pulse 0.6s;
+    color: #3b2e2e;
+    transform: scale(1.1);
 }
 
-/* Pulse keyframes */
 @keyframes pulse {
     0% {
         transform: scale(1);
     }
     50% {
-        transform: scale(1.1); /* Slightly increase the size */
+        transform: scale(1.1);
     }
     100% {
-        transform: scale(1); /* Return to original size */
+        transform: scale(1);
     }
 }
 
-/* Optional: Add animation on page load */
 .animated-icon {
-    animation: bounce 1s ease infinite; /* Bouncing animation */
+    animation: bounce 1s ease infinite;
 }
 
 @keyframes bounce {
