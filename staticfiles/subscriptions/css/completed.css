@@ -1,0 +1,47 @@
+.payment-success-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    background-color: #f9f9f9;
+}
+
+.success-message {
+    text-align: center;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.success-message h1 {
+    font-size: 36px;
+    color: #28a745; /* Зеленый цвет для успешного сообщения */
+    margin-bottom: 20px;
+}
+
+.success-message i {
+    color: #28a745;
+    margin-right: 10px;
+}
+
+.success-message p {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+    color: #fff;
+}

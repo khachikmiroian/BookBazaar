@@ -1,0 +1,127 @@
+/* Profile Section Styling */
+.profile-section {
+    background-color: #f8f9fa; /* Light background for contrast */
+    padding: 40px 0; /* Vertical padding */
+    animation: fadeIn 0.5s ease-in; /* Fade-in effect on load */
+}
+
+/* Profile Picture Styling */
+.profile-picture {
+    display: flex; /* Use flexbox for layout */
+    justify-content: flex-start; /* Align items to the left */
+    align-items: center; /* Center align items vertically */
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    width: 150px; /* Width for the image */
+    height: 150px; /* Height to match */
+    border-radius: 50%; /* Make the image round */
+    object-fit: cover; /* Ensures image scales properly */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow around the image */
+    transition: transform 0.3s ease; /* Smooth transitions */
+    margin-right: 20px; /* Space between the image and the button */
+}
+
+/* Hover Effect for Profile Picture */
+.profile-img:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Edit Profile Button */
+.edit-profile-button {
+    margin-top: 20px;
+}
+
+/* Button Styling */
+.upload-button {
+    display: inline-block;
+    background-color: #ad740b;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden; /* Contain pseudo-elements */
+}
+
+/* Hover Effect for Upload Button */
+.upload-button:hover {
+    background-color: #a96d0a; /* Slightly darker shade on hover */
+    transform: translateY(-3px); /* Lift effect */
+}
+
+/* Ripple Effect on Button Hover */
+.upload-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: transform 0.5s ease;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0); /* Start small */
+}
+
+.upload-button:hover::after {
+    transform: translate(-50%, -50%) scale(1); /* Grow effect */
+}
+
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Profile Container */
+.container {
+    display: flex; /* Flexbox for layout */
+    flex-direction: column; /* Stack sections vertically */
+    background-color: white; /* You can change this to match your preference */
+    padding: 40px;
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Shadow for overall container */
+    transition: transform 0.3s ease; /* Hover effect for the whole container */
+}
+
+/* Hover Effect for Entire Profile Container */
+.container:hover {
+    transform: translateY(-5px); /* Slight lift on hover for the entire container */
+}
+
+/* Profile Info Styles */
+.profile-info h2 {
+    font-size: 2.5em; /* Increase the size of h2 */
+    margin-bottom: 10px; /* Space below the heading */
+}
+
+.profile-info p {
+    font-size: 1.5em; /* Increase the size of p */
+    margin-bottom: 20px; /* Space below the paragraph */
+}
+
+/* Flex Layout for Purchased Books and Subscription Plans */
+.row {
+    display: flex; /* Flexbox for layout */
+    justify-content: space-between; /* Space between the two columns */
+    width: 100%; /* Full width of the row */
+}
+
+/* Purchased Books and Subscription Plans Styles */
+
+/* Subscription Plans Styles */
+.subscriptions-plans {
+    margin-top: -379px; /* Space above the section */
+    margin-left: 270px; /* Remove left margin to align with the left border */
+    width: 100%; /* Ensure it takes full width */
+    text-align: left; /* Align text to the left */
+}
+
+/* Remove margin on the last section */
+.subscriptions-plans {
+    margin-right: 0; /* No right margin on the last section */
+}
+

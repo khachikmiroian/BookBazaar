@@ -14,11 +14,20 @@
 
                     {% if subscription.get_name_display == "By month" %}
                     <ul class="advantages list-unstyled">
-                        <li><i class="fas fa-check-circle"></i> Flexibility: Cancel anytime without long-term commitment.</li>
-                        <li><i class="fas fa-check-circle"></i> Lower Initial Cost: More affordable in the short term.</li>
-                        <li><i class="fas fa-check-circle"></i> Trial Period: Try the service before committing long-term.</li>
+                        <li><i class="fas fa-check-circle"></i> Flexibility: Cancel anytime without long-term
+                            commitment.
+                        </li>
+                        <li><i class="fas fa-check-circle"></i> Lower Initial Cost: More affordable in the short term.
+                        </li>
+                        <li><i class="fas fa-check-circle"></i> Trial Period: Try the service before committing
+                            long-term.
+                        </li>
                         <li><i class="fas fa-check-circle"></i> Adaptability: Switch or upgrade plans easily.</li>
                         <li><i class="fas fa-check-circle"></i> Less Risk: Not locked into a lengthy contract.</li>
+                        <form action="{% url 'subs:create_subscription_session' subscription.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn custom-button">Purchase</button>
+                        </form>
                     </ul>
                     {% else %}
                     <ul class="advantages list-unstyled">
@@ -27,10 +36,13 @@
                         <li><i class="fas fa-check-circle"></i> Commitment: Unlocks additional perks or benefits.</li>
                         <li><i class="fas fa-check-circle"></i> Set and Forget: No need to renew monthly.</li>
                         <li><i class="fas fa-check-circle"></i> Better Value: Bonuses for yearly subscribers.</li>
+                        <form action="{% url 'subs:create_subscription_session' subscription.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn custom-button">Purchase</button>
+                        </form>
                     </ul>
                     {% endif %}
 
-                    <a href="{% url 'subscriptions:subscription_detail' subscription.id %}" class="btn custom-button">Details</a>
                 </div>
             </div>
         </div>
@@ -58,7 +70,9 @@
         position: relative;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Softer shadow */
         margin-bottom: 20px;
-        min-height: 400px; /* Increased minimum height */
+        max-height: 350px; /* Set a maximum height for cards */
+        display: flex; /* Flexbox for centering */
+        flex-direction: column; /* Column layout */
     }
 
     .subscription-card:hover {
@@ -68,6 +82,8 @@
 
     .subscription-card .card-body {
         text-align: center; /* Center content in card */
+        overflow: hidden; /* Hide overflowing content */
+        flex-grow: 1; /* Allow body to grow and fill the card */
     }
 
     .card-title {
@@ -90,6 +106,7 @@
         position: relative; /* Position for pseudo element */
         margin-top: -5px; /* Move text up slightly */
         font-size: 1.1em; /* Larger font size for list items */
+        white-space: nowrap; /* Prevent line break */
     }
 
     .advantages li i {

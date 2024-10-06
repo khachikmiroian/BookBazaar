@@ -1,118 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
+
 
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<style>
-    /* General styles for the authentication container */
-    .auth-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background: linear-gradient(145deg, #c6b29a, #d8d8d8); /* Gradient background */
-    }
-
-    .auth-box {
-        background: #8d380063; /* Color for the auth box */
-        border-radius: 15px;
-        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
-        padding: 30px;
-        width: 400px;
-        text-align: center;
-        animation: fadeIn 0.5s; /* Animation for entering the view */
-    }
-
-    /* Animation for the auth box */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    h2 {
-        font-size: 24px;
-        color: #4a4a4a; /* Updated text color */
-        margin-bottom: 20px;
-        font-family: 'Arial', sans-serif; /* Clean font for the header */
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: #4a4a4a; /* Updated label color */
-    }
-
-    input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    input:focus {
-        border-color: #4a4a4a; /* Highlight color on focus */
-        outline: none;
-        box-shadow: 0 0 5px rgba(74, 74, 74, 0.5);
-    }
-
-    .btn {
-        background-color: #ffffff; /* White button */
-        color: #6a4a3b; /* Text color that contrasts with the button */
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.2s; /* Animation */
-    }
-
-    .btn:hover {
-        background-color: #f1f1f1; /* Light gray on hover */
-        transform: translateY(-2px); /* Slight lift effect */
-    }
-
-    .alert {
-        margin: 15px 0;
-        padding: 10px;
-        border: 1px solid #f44336; /* Error border color */
-        background-color: #f8d7da; /* Light red background for alerts */
-        color: #721c24; /* Dark red text color */
-        border-radius: 5px;
-    }
-
-    .text-center {
-        margin-top: 10px;
-        color: #4a4a4a; /* Updated text color */
-    }
-
-    .text-center a {
-        color: #4a4a4a; /* Updated link color */
-        text-decoration: none;
-        transition: color 0.3s, text-shadow 0.3s;
-    }
-
-    .text-center a:hover {
-        color: #e2c9c2; /* Lighter shade on hover */
-        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2); /* Slight shadow effect on hover */
-    }
-</style>
+<link rel="stylesheet" href="{% static 'registration/css/login.css' %}">
 
 <div class="auth-container">
     <div class="auth-box">
         <h2>Login to Your Account</h2>
-
-        <!-- Блок для отображения сообщений об ошибках -->
         {% if messages %}
             <ul class="alert alert-danger">
                 {% for message in messages %}

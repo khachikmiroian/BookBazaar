@@ -1,0 +1,214 @@
+body {
+    background-color: #f4e2d0;
+    font-family: 'Poppins', sans-serif;
+    color: #4a4a4a;
+    margin: 0;
+    padding: 0;
+}
+
+.book-list-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 50px 30px;
+    max-width: 1200px;
+    margin: auto;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.card {
+    border: none;
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    overflow: hidden;
+    background: linear-gradient(145deg, #c6b29a, #d8d8d8);
+    position: relative;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    background-color: rgba(198, 178, 154, 0.9);
+}
+
+.card-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.5s ease, filter 0.5s ease;
+    filter: brightness(80%);
+}
+
+.card:hover .card-image {
+    transform: scale(1.1);
+    filter: brightness(100%);
+}
+
+.card-body {
+    background-color: #f4e2d0;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.6rem;
+    color: #6a4a3b;
+    margin-bottom: 10px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.card-title:hover {
+    color: #3b2e2e;
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+}
+
+.card-subtitle {
+    color: #aaa;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.card-text {
+    color: #4a4a4a;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+}
+
+.card:hover .card-text {
+    color: #6a4a3b;
+    transform: translateY(-3px);
+}
+
+.card-footer {
+    background: linear-gradient(145deg, #d8cfcf, #c6b29a);
+    padding: 15px;
+    border-top: 2px solid #6a4a3b;
+    border-radius: 0 0 16px 16px;
+    text-align: center;
+    transition: background 0.3s ease;
+}
+
+.card-footer:hover {
+    background: rgba(198, 178, 154, 0.9);
+}
+
+.card-footer-text {
+    color: #4a4a4a;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.card-footer .btn-primary {
+    background-color: #6d4c41;
+    border-color: #6d4c41;
+}
+
+.card-footer .btn-primary:hover {
+    background-color: #5d4037;
+    border-color: #5d4037;
+}
+
+.pagination {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.page-item.active .page-link {
+    background-color: #6a4a3b;
+    border-color: #6a4a3b;
+    color: #f4e2d0;
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+
+.page-link {
+    color: #4a4a4a;
+    border-radius: 50px;
+    padding: 10px 20px;
+    transition: background-color 0.5s, color 0.5s, transform 0.3s, box-shadow 0.5s;
+    position: relative;
+}
+
+.page-link:hover {
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    transform: scale(1.05);
+    background-color: rgba(198, 178, 154, 0.2);
+}
+
+.page-link:hover {
+    color: #3b2e2e;
+}
+
+.text-center {
+    margin-top: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    animation: textSlideIn 1s ease forwards;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes textSlideIn {
+    0% {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.book-icon {
+    font-size: 3rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+    color: #6a4a3b;
+}
+
+.book-icon:hover {
+    animation: pulse 0.6s;
+    color: #3b2e2e;
+    transform: scale(1.1);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animated-icon {
+    animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}

@@ -8,11 +8,13 @@ from books.models import Books
 from datetime import timedelta
 from .tasks import send_purchase_email
 from accounts.models import MyUser
+from django.db import transaction
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
 
+@transaction.atomic
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
