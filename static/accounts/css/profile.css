@@ -10,7 +10,8 @@
     display: flex; /* Use flexbox for layout */
     justify-content: flex-start; /* Align items to the left */
     align-items: center; /* Center align items vertically */
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+
 }
 
 .profile-img {
