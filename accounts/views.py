@@ -6,7 +6,6 @@ from django.views import View
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.urls import reverse_lazy
-from rest_framework import viewsets
 
 from .forms import (
     LoginForm,
@@ -16,7 +15,6 @@ from .forms import (
 )
 from .models import Profile, MyUser
 from subscriptions.models import Subscription, BookPurchase
-from .serializers import ProfileSerializer
 from .tasks import (
     send_registration_email,
     send_profile_updated_email,
@@ -31,7 +29,7 @@ from django.contrib.auth.forms import (
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.contrib.auth.views import LogoutView, PasswordChangeView
+from django.contrib.auth.views import LogoutView, PasswordChangeView, LoginView
 
 
 @login_required
@@ -52,56 +50,37 @@ def profile_view(request):
 
 
 class UserLoginView(View):
+    form_class = LoginForm
+    template_name = 'accounts/login.html'
+
     def get(self, request):
-        form = LoginForm()
-        return render(request, 'accounts/login.html', {'form': form})
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request):
-        form = LoginForm(request.POST)
+        form = self.form_class(request.POST)
         if form.is_valid():
-            cd = form.cleaned_data
-            username_or_email = cd['username_or_email']
-            password = cd['password']
+            username_or_email = form.cleaned_data['username_or_email']
+            password = form.cleaned_data['password']
             user = authenticate(request, username=username_or_email, password=password)
 
-            if user is None:
-                try:
-                    user = MyUser.objects.get(email=username_or_email)
-                except MyUser.DoesNotExist:
-                    try:
-                        user = MyUser.objects.get(username=username_or_email)
-                    except MyUser.DoesNotExist:
-                        user = None
-
-                if user and user.check_password(password):
-                    login(request, user)
-                else:
-                    user = None
-
             if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return redirect('profile')
-                else:
-                    return redirect('login')
+                login(request, user)
+                return redirect('profile')  # Путь после успешного входа
             else:
-                return redirect('login')
+                form.add_error(None, 'Invalid username or password.')
 
-        return render(request, 'accounts/login.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
 
 
 class UserRegistrationView(FormView):
     template_name = 'accounts/register.html'
     form_class = UserRegistrationForm
-    success_url = reverse_lazy('register_done')
+    success_url = reverse_lazy('email_verification_sent')
 
     def form_valid(self, form):
-        new_user = form.save(commit=False)
-        new_user.set_password(form.cleaned_data['password'])
-        new_user.save()
-        Profile.objects.create(user=new_user)
-        send_registration_email.delay(new_user.email, new_user.username)
-        return super().form_valid(form)
+        email = form.cleaned_data['email']
+        existing_user = My
 
 
 class UserRegistrationDoneView(View):
@@ -220,8 +199,3 @@ class CustomPasswordChangeView(PasswordChangeView):
 class CustomPasswordResetCompleteView(View):
     def get(self, request):
         return render(request, 'registration/password_reset_complete.html')
-
-
-class ProfileViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer

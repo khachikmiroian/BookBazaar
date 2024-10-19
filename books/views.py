@@ -8,8 +8,6 @@ from .models import Books, Author, Bookmarks, Comments
 from subscriptions.models import BookPurchase, Subscription
 from .forms import SearchForm, CommentsForm
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
-from rest_framework import viewsets
-from .serializers import BookSerializer
 import requests
 from django.utils import timezone
 from django.core.paginator import Paginator
@@ -172,10 +170,6 @@ def view_pdf_in_new_tab(request, book_id):
         return HttpResponse('PDF not available', status=404)
     return render(request, 'books/view_pdf.html', {'book': book})
 
-
-class BookViewSet(viewsets.ModelViewSet):
-    queryset = Books.objects.all()
-    serializer_class = BookSerializer
 
 
 def delete_comment(request, comment_id):

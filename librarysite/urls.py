@@ -12,7 +12,6 @@ urlpatterns = [
     path('books/', include('books.urls', namespace='books')),
     path('subscriptions/', include('subscriptions.urls', namespace='subs')),
     path('about-us/', AboutUsView.as_view(), name='about'),
-    path('api/', include('api.urls')),
 ]
 
 if settings.DEBUG:

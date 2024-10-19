@@ -191,3 +191,8 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
 PROTOCOL = 'http'
 DOMAIN = '127.0.0.1:8000'
 RESET_URL = 'accounts/reset/'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'accounts.auth_backends.EmailAuthBackend',
+]

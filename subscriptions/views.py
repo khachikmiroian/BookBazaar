@@ -4,9 +4,7 @@ from django.views.generic import TemplateView, ListView
 from django.conf import settings
 from books.models import Books
 import stripe
-from rest_framework import viewsets
 from .models import SubscriptionPlan
-from .serializers import SubscriptionSerializer
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 stripe.api_version = settings.STRIPE_API_VERSION
@@ -112,7 +110,3 @@ def create_book_purchase_session(request, book_id):
     else:
         return render(request, 'books/book_detail.html', {'book': book})
 
-
-class SubscriptionPlanViewSet(viewsets.ModelViewSet):
-    queryset = SubscriptionPlan.objects.all()
-    serializer_class = SubscriptionSerializer

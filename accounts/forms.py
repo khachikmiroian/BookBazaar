@@ -4,10 +4,13 @@ from django.forms.widgets import DateInput
 import re
 
 
-
 class LoginForm(forms.Form):
     username_or_email = forms.CharField(label='Username or Email')
     password = forms.CharField(widget=forms.PasswordInput)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
 
 
 class UserRegistrationForm(forms.ModelForm):
