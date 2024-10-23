@@ -1,112 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<style>
-    /* Auth container styling */
-    .auth-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 80vh;
-        background-color: #f5f5f5;
-    }
 
-    .auth-box {
-        background-color: white;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        width: 100%;
-    }
-
-    .auth-box h2 {
-        text-align: center;
-        color: #2c3e50;
-        margin-bottom: 30px;
-    }
-
-    .auth-box .form-group {
-        margin-bottom: 20px;
-    }
-
-    .auth-box .form-group label {
-        font-size: 1.1em;
-        color: #2c3e50;
-    }
-
-    .auth-box .form-control {
-        padding: 10px;
-        font-size: 1em;
-        border: 2px solid #3498db;
-        border-radius: 4px;
-    }
-
-    .auth-box .btn {
-        background-color: #3498db;
-        color: white;
-        border: none;
-        padding: 12px;
-        font-size: 1.2em;
-        border-radius: 4px;
-        cursor: pointer;
-        width: 100%;
-    }
-
-    .auth-box .btn:hover {
-        background-color: #2980b9;
-    }
-
-    .auth-box p {
-        margin-top: 20px;
-        font-size: 0.9em;
-        color: #2c3e50;
-    }
-
-    .auth-box a {
-        color: #3498db;
-        text-decoration: none;
-    }
-
-    .auth-box a:hover {
-        text-decoration: underline;
-    }
-
-    /* Error message styling */
-    .errorlist {
-        color: red;
-        font-size: 0.9em;
-        margin-top: 5px;
-    }
-
-    /* Flexbox for first and last name */
-    .form-row {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .form-row .form-group {
-        flex: 1;
-        margin-right: 10px;
-    }
-
-    .form-row .form-group:last-child {
-        margin-right: 0;
-    }
-
-    .toggle-password {
-        position: absolute;
-        top: 50%;
-        margin-top: 126px;
-        margin-left: 315px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        fill: rgba(128, 128, 128, 0.7);
-        font-size: 1.4em;
-    }
-</style>
+<!-- Подключение вашего файла register.css -->
+<link rel="stylesheet" href="{% static 'registration/register.css' %}">
 
 <div class="auth-container">
     <div class="auth-box">
@@ -116,73 +16,91 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="first-name">First Name</label>
-                    <input type="text" name="first_name" class="form-control" id="first-name" placeholder="First Name" required>
+                    <input type="text" name="first_name"
+                           class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" id="first-name"
+                           placeholder="First Name" required value="{{ form.first_name.value|default_if_none:'' }}">
                     {% if form.first_name.errors %}
-                        <ul class="errorlist">
-                            {% for error in form.first_name.errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
+                    <div class="error-message">
+                        {% for error in form.first_name.errors %}
+                        <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
                     {% endif %}
                 </div>
                 <div class="form-group">
                     <label for="last-name">Last Name</label>
-                    <input type="text" name="last_name" class="form-control" id="last-name" placeholder="Last Name" required>
+                    <input type="text" name="last_name"
+                           class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" id="last-name"
+                           placeholder="Last Name" required value="{{ form.last_name.value|default_if_none:'' }}">
                     {% if form.last_name.errors %}
-                        <ul class="errorlist">
-                            {% for error in form.last_name.errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
+                    <div class="error-message">
+                        {% for error in form.last_name.errors %}
+                        <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
                     {% endif %}
                 </div>
             </div>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" name="username" class="form-control" id="username" placeholder="Choose a Username" required>
+                <input type="text" name="username"
+                       class="form-control {% if form.username.errors %}is-invalid{% endif %}" id="username"
+                       placeholder="Choose a Username" required value="{{ form.username.value|default_if_none:'' }}">
                 {% if form.username.errors %}
-                    <ul class="errorlist">
-                        {% for error in form.username.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
+                <div class="error-message">
+                    {% for error in form.username.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
                 {% endif %}
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" name="email" class="form-control" id="email" placeholder="Enter Email Address" required>
+                <input type="email" name="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                       id="email" placeholder="Enter Email Address" required
+                       value="{{ form.email.value|default_if_none:'' }}">
                 {% if form.email.errors %}
-                    <ul class="errorlist">
-                        {% for error in form.email.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
+                <div class="error-message">
+                    {% for error in form.email.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group password-group">
                 <label for="password">Password</label>
-                <input type="password" name="password" class="form-control" id="password" placeholder="Enter Password" required>
+                <div class="password-container">
+                    <input type="password" name="password"
+                           class="form-control {% if form.password.errors %}is-invalid{% endif %}" id="password"
+                           placeholder="Enter Password" required>
+                    <span class="toggle-password" toggle="#password">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </span>
+                </div>
                 {% if form.password.errors %}
-                    <ul class="errorlist">
-                        {% for error in form.password.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
+                <div class="error-message">
+                    {% for error in form.password.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
                 {% endif %}
-                <svg id="togglePassword" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye toggle-password" viewBox="0 0 16 16">
-                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-                </svg>
             </div>
-            <div class="form-group">
+            <div class="form-group password-group">
                 <label for="confirm-password">Confirm Password</label>
-                <input type="password" name="password2" class="form-control" id="confirm-password" placeholder="Confirm Password" required>
+                <div class="password-container">
+                    <input type="password" name="password2"
+                           class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+                           id="confirm-password" placeholder="Confirm Password" required>
+                    <span class="toggle-password" toggle="#confirm-password">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </span>
+                </div>
                 {% if form.password2.errors %}
-                    <ul class="errorlist">
-                        {% for error in form.password2.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
+                <div class="error-message">
+                    {% for error in form.password2.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
                 {% endif %}
             </div>
             <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
@@ -192,31 +110,17 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const passwordInput = document.getElementById("password");
-        const confirmPasswordInput = document.getElementById("confirm-password");
-        const togglePassword = document.getElementById("togglePassword");
-
-        togglePassword.addEventListener("click", function () {
-            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
-            passwordInput.setAttribute("type", type);
-            confirmPasswordInput.setAttribute("type", type);
-
-            if (type === "text") {
-                togglePassword.innerHTML = `
-                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash" viewBox="0 0 16 16">
-                   <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z"/>
-                   <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829"/>
-                   <path d="M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.048l-12-12 .708-.708 12 12-.707.707z"/>
-                </svg>`;
+    $(document).ready(function() {
+        $(".toggle-password").click(function() {
+            $(this).find('i').toggleClass("glyphicon-eye-open glyphicon-eye-close");
+            let input = $($(this).attr("toggle"));
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
             } else {
-                togglePassword.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zm-1.173 0a13 13 0 0 1-1.66 2.043C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8q.086-.13.195-.288c.335-.48.83-1.12 1.465-1.755C4.121 4.668 5.881 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8z"/>
-                  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/>
-                </svg>`;
+                input.attr("type", "password");
             }
         });
     });
 </script>
+
 {% endblock %}

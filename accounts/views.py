@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.utils.decorators import method_decorator
@@ -6,6 +7,7 @@ from django.views import View
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.utils import timezone  # Не забудьте импортировать timezone
 
 from .forms import (
     LoginForm,
@@ -16,10 +18,10 @@ from .forms import (
 from .models import Profile, MyUser
 from subscriptions.models import Subscription, BookPurchase
 from .tasks import (
-    send_registration_email,
     send_profile_updated_email,
     send_password_change_email,
-    send_password_reset_email
+    send_password_reset_email,
+    send_verification_email
 )
 from django.contrib.auth.forms import (
     PasswordResetForm,
@@ -29,7 +31,7 @@ from django.contrib.auth.forms import (
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.contrib.auth.views import LogoutView, PasswordChangeView, LoginView
+from django.contrib.auth.views import LogoutView, PasswordChangeView
 
 
 @login_required
@@ -65,6 +67,12 @@ class UserLoginView(View):
             user = authenticate(request, username=username_or_email, password=password)
 
             if user is not None:
+                # Проверяем, прошел ли пользователь верификацию
+                if not user.is_active:
+                    form.add_error(None,
+                                   'Your email address is not verified. Please check your email to verify your account.')
+                    return render(request, self.template_name, {'form': form})
+
                 login(request, user)
                 return redirect('profile')  # Путь после успешного входа
             else:
@@ -76,11 +84,57 @@ class UserLoginView(View):
 class UserRegistrationView(FormView):
     template_name = 'accounts/register.html'
     form_class = UserRegistrationForm
-    success_url = reverse_lazy('email_verification_sent')
+    success_url = reverse_lazy('email_check')
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
-        existing_user = My
+        existing_user = MyUser.objects.filter(email=email).first()
+
+        if existing_user:
+            if not existing_user.email_verified_at:
+                form.add_error('email',
+                               'This email is already registered but not verified. Please check your email to verify your account.')
+                return self.form_invalid(form)
+
+        new_user = form.save(commit=False)
+        new_user.set_password(form.cleaned_data['password'])
+        new_user.is_active = False  # Не активен до верификации
+        new_user.email_verified_at = None
+        new_user.save()
+
+        Profile.objects.create(user=new_user)
+
+        send_verification_email.delay(new_user.id)
+
+        messages.success(self.request, 'Registration successful! Please check your email to complete the registration.')
+        return super().form_valid(form)
+
+
+class EmailCheckView(View):
+    template_name = 'accounts/email_check.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+class VerifyEmailView(View):
+    def get(self, request, uidb64):
+        try:
+            user_id = urlsafe_base64_decode(uidb64).decode()
+            user = MyUser.objects.get(id=user_id)
+
+            if user.is_active:
+                return HttpResponse('Email has already been verified.')
+
+            user.is_active = True
+            user.email_verified_at = timezone.now()  # Устанавливаем время подтверждения
+            user.save()
+
+            messages.success(request, 'Your email has been verified! You can now log in.')
+            return redirect('register_done')
+
+        except MyUser.DoesNotExist:
+            return HttpResponse('Invalid verification link.')
 
 
 class UserRegistrationDoneView(View):
@@ -119,13 +173,13 @@ def edit(request, id):
 
 class UserLogoutView(LogoutView):
     template_name = 'logged_out.html'
-    next_page = reverse_lazy('books:home')
+    next_page = reverse_lazy('home')
 
 
 class CustomPasswordResetView(View):
     def get(self, request):
         form = PasswordResetForm()
-        return render(request, 'registration/password_reset.html', {'form': form})
+        return render(request, 'registration/password_reset.html', {'form': form})  # Исправлено
 
     def post(self, request):
         form = PasswordResetForm(request.POST)
@@ -137,8 +191,7 @@ class CustomPasswordResetView(View):
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
                 send_password_reset_email.delay(email, uid, token, user.username)
                 return redirect('password_reset_done')
-            return render(request, 'registration/password_reset.html', {'form': form})
-
+        return render(request, 'registration/password_reset.html', {'form': form})  # Исправлено
 
 class CustomPasswordResetDoneView(View):
     def get(self, request):
@@ -181,12 +234,12 @@ class CustomPasswordResetConfirmView(View):
 @method_decorator(login_required, name='dispatch')
 class CustomPasswordChangeView(PasswordChangeView):
     template_name = 'registration/password_change.html'
-    success_url = reverse_lazy('password_reset_confirm.html')
+    success_url = reverse_lazy('password_reset_complete')
     form_class = PasswordChangeForm
 
     def form_valid(self, form):
         user = form.save()
-        update_session_auth_hash(self.request, user)
+        update_session_auth_hash(self.request, user)  # Обновляем сессию после смены пароля
         messages.success(self.request, 'Password was successfully changed.')
         send_password_change_email.delay(user.email, user.username)
         return super().form_valid(form)

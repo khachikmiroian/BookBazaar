@@ -58,7 +58,7 @@ class Author(models.Model):
         return f'{self.first_name} {self.last_name}'
 
     def get_absolute_url(self):
-        return reverse('books:actor_detail', args=[self.id])
+        return reverse('books:author_detail', args=[self.id])
 
     class Meta:
         verbose_name = 'Author'

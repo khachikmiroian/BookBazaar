@@ -1,0 +1,67 @@
+/* Welcome Section */
+.welcome-section {
+    display: flex;
+    flex-direction: column; /* Добавлено */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 80vh;
+    padding: 50px 0;
+    background: linear-gradient(135deg, #fafafa, #ffe0b2); /* Используем цвета из base.css */
+    margin: 0; /* Сбросим отступы */
+}
+
+.welcome-message {
+    max-width: 800px;
+    width: 100%;
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-message h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: #6d4c41; /* Коричневый цвет для заголовка */
+}
+
+.welcome-message p {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.welcome-message .btn {
+    background-color: #6d4c41; /* Коричневый цвет */
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.welcome-message .btn:hover {
+    background-color: #4e3b31; /* Более темный коричневый при наведении */
+    transform: translateY(-3px);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .welcome-message {
+        padding: 20px;
+    }
+
+    .welcome-message h1 {
+        font-size: 2em;
+    }
+
+    .welcome-message p {
+        font-size: 1.2em;
+    }
+}

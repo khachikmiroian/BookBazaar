@@ -2,12 +2,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, FormView
 from accounts.models import Profile
 from .models import Books, Author, Bookmarks, Comments
 from subscriptions.models import BookPurchase, Subscription
 from .forms import SearchForm, CommentsForm
-from django.http import FileResponse, Http404, HttpResponse, JsonResponse
+from django.http import FileResponse, Http404, JsonResponse
 import requests
 from django.utils import timezone
 from django.core.paginator import Paginator
@@ -40,7 +40,8 @@ def post_search(request):
         if form.is_valid():
             query = form.cleaned_data['query']
             book_results = Books.objects.filter(status=Books.Status.PUBLISHED, title__icontains=query).distinct()
-            author_results = Author.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query)).distinct()
+            author_results = Author.objects.filter(
+                Q(first_name__icontains=query) | Q(last_name__icontains=query)).distinct()
 
     return render(request, 'search.html', {
         'form': form,
@@ -50,16 +51,15 @@ def post_search(request):
     })
 
 
-
 class BookListView(ListView):
     model = Books
     template_name = 'books/book_list.html'
     context_object_name = 'books'
     paginate_by = 6
 
-
     def get_queryset(self):
         return Books.objects.filter(status='PB')
+
 
 class BookListByTagView(ListView):
     model = Books
@@ -113,7 +113,7 @@ class BookDetailView(DetailView):
         context['book'] = self.get_object()
         context['form'] = CommentsForm()
         comments = context['book'].comments.all()
-        context['comments'] = comments[:3]
+        context['comments']  = comments[:3]  # Показать только первые 3 комментария
         context['all_comments'] = comments
         context['show_all'] = len(comments) > 3
 
@@ -124,7 +124,8 @@ class BookDetailView(DetailView):
             context['purchased_books'] = purchased_books
             context['has_purchased'] = context['book'].id in purchased_books
             context['can_purchase'] = context['book'].id not in purchased_books
-            context['bookmarked'] = Bookmarks.objects.filter(profile=self.request.user.profile, book=context['book']).exists()
+            context['bookmarked'] = Bookmarks.objects.filter(profile=self.request.user.profile,
+                                                             book=context['book']).exists()
         else:
             context['purchased_books'] = []
             context['has_active_subscription'] = False
@@ -142,17 +143,57 @@ class BookDetailView(DetailView):
             comment.books = book
             comment.profile = request.user.profile
             comment.save()
+            return redirect(self.get_object())  # Перенаправление на детальную страницу книги
+
         return self.get(request, *args, **kwargs)
 
-    def delete_comment(self, request, comment_id):
-        try:
-            comment = Comments.objects.get(id=comment_id, profile=request.user.profile)
-            comment.delete()
-            return redirect('books:book_detail', pk=self.get_object().pk)
-        except Comments.DoesNotExist:
-            pass
+
+class AddCommentView(LoginRequiredMixin, FormView):
+    form_class = CommentsForm
+    template_name = 'books/book_detail.html'
+
+    def form_valid(self, form):
+        book = get_object_or_404(Books, id=self.kwargs['book_id'])
+        comment = form.save(commit=False)
+        comment.books = book
+        comment.profile = self.request.user.profile
+        comment.save()
+        return redirect('books:book_detail', pk=book.id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = get_object_or_404(Books, id=self.kwargs['book_id'])
+        context['comments'] = context['book'].comments.all()[:3]  # Показать первые 3 комментария
+        context['show_all'] = context['book'].comments.count() > 3
+        return context
 
 
+class DeleteCommentView(LoginRequiredMixin, View):
+    def post(self, request, comment_id):
+        comment = get_object_or_404(Comments, id=comment_id, profile=request.user.profile)
+        book_id = comment.books.id
+        comment.delete()
+        return redirect('books:book_detail', pk=book_id)
+
+
+class UpdateCommentView(LoginRequiredMixin, FormView):
+    form_class = CommentsForm
+    template_name = 'books/book_detail.html'
+
+    def form_valid(self, form):
+        comment = get_object_or_404(Comments, id=self.kwargs['comment_id'], profile=self.request.user.profile)
+        comment.content = form.cleaned_data['content']
+        comment.save()
+        return redirect('books:book_detail', pk=comment.books.id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = get_object_or_404(Books, id=self.kwargs['book_id'])
+        context['comments'] = context['book'].comments.all()[:3]
+        context['show_all'] = context['book'].comments.count() > 3
+        context['editing_comment'] = get_object_or_404(Comments, id=self.kwargs['comment_id'],
+                                                       profile=self.request.user.profile)
+        return context
 
 
 def view_pdf(request, book_id):
@@ -169,24 +210,6 @@ def view_pdf_in_new_tab(request, book_id):
     if not book.pdf_file:
         return HttpResponse('PDF not available', status=404)
     return render(request, 'books/view_pdf.html', {'book': book})
-
-
-
-def delete_comment(request, comment_id):
-    if request.method == 'POST':
-        comment = get_object_or_404(Comments, pk=comment_id)
-        book_id = comment.books.id
-        comment.delete()
-        return redirect('books:book_detail', pk=book_id)
-    return redirect('books:book_list')
-
-
-def update_comment(request, comment_id):
-    comment = get_object_or_404(Comments, id=comment_id)
-    if request.method == 'POST':
-        comment.content = request.POST['content']
-        comment.save()
-    return redirect('books:book_detail', pk=comment.books.id)
 
 
 def load_more_comments(request, book_id):
@@ -208,13 +231,13 @@ def load_more_comments(request, book_id):
     return JsonResponse({'comments': []})
 
 
-class BookmarksView(ListView):
+class BookmarksView(LoginRequiredMixin, ListView):
     model = Bookmarks
     template_name = 'books/bookmarks.html'
     context_object_name = 'bookmarks'
 
     def get_queryset(self):
-        # Get the current user's profile
+        # Получаем профиль текущего пользователя
         profile = self.request.user.profile
-        # Return bookmarks for the logged-in user
+        # Возвращаем закладки для вошедшего в систему пользователя
         return Bookmarks.objects.filter(profile=profile).select_related('book')
