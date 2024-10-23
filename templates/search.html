@@ -1,49 +1,76 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Search Results{% endblock  %}
+
+{% block title %}Search Results{% endblock %}
+
 {% block content %}
+<!-- Linking the Search CSS -->
 <link rel="stylesheet" href="{% static 'books/css/search.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome -->
 
-<header>
-    <h1>Search Results</h1>
-</header>
+<section class="search-results">
+    <div class="container">
+        <header class="text-center mb-5">
+            <h1>Search Results</h1>
+        </header>
 
-<main>
-    <div class="search-container">
-        <form action="{% url 'books:search' %}" method="GET">
-            <input type="text" name="query" placeholder="Поиск книг..." required>
-            <button type="submit"><i class="bi bi-search"></i></button>
-        </form>
+        <section id="results">
+            <!-- Books Results -->
+            {% if book_results %}
+            <div class="results-section mb-5">
+                <h2 class="text-center">Books</h2>
+                <div class="row centered">
+                    {% for book in book_results %}
+                    <div class="col-md-4 col-sm-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{% url 'books:book_detail' book.id %}" class="card-link">{{ book.title }}</a>
+                                </h5>
+                                <p class="card-text">
+                                    <strong>Author:</strong>
+                                    <a href="{% url 'books:author_detail' pk=book.author.pk %}" class="card-link">{{ book.author }}</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Authors Results -->
+            {% if author_results %}
+            <div class="results-section mb-5">
+                <h2 class="text-center">Authors</h2>
+                <div class="row centered">
+                    {% for author in author_results %}
+                    <div class="col-md-4 col-sm-6">
+                        <div class="card text-center">
+                            <!-- Removed author image since authors don't have photos -->
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{% url 'books:author_detail' pk=author.pk %}" class="card-link">{{ author.first_name }} {{ author.last_name }}</a>
+                                </h5>
+                                <p class="card-text">
+                                    <strong>Date of Birth:</strong> {{ author.birth_date }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- No Results Found -->
+            {% if not book_results and not author_results %}
+            <div class="no-results text-center">
+                <p>No results found for your query.</p>
+            </div>
+            {% endif %}
+        </section>
     </div>
+</section>
 
-    <section id="results">
-        {% if book_results %}
-        <h2>Books</h2>
-        <ul>
-            {% for book in book_results %}
-            <li>
-                <strong>{{ book.title }}</strong>
-                <p>{{ book.author }} - {{ book.publication_date }}</p>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No books found.</p>
-        {% endif %}
-
-        {% if author_results %}
-        <h2>Authors</h2>
-        <ul>
-            {% for author in author_results %}
-            <li>
-                <strong>{{ author.first_name }} {{ author.last_name }}</strong>
-                <p>Books: {% for book in author.books.all %}{{ book.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No authors found.</p>
-        {% endif %}
-    </section>
-</main>
 {% endblock %}

@@ -1,0 +1,75 @@
+.text-center {
+    text-align: center;
+}
+
+.subscription-card {
+    border: none; /* Убираем стандартные границы карточки */
+    border-radius: 16px; /* Скругленные углы */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Плавный переход */
+    overflow: hidden;
+    background: linear-gradient(145deg, #c6b29a, #d8d8d8); /* Градиент от светло-коричневого к светло-серому */
+    position: relative;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Мягкая тень */
+    margin-bottom: 20px;
+    max-height: 350px; /* Максимальная высота карточки */
+    display: flex; /* Flexbox для выравнивания */
+    flex-direction: column; /* Колонночный макет */
+}
+
+.subscription-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3); /* Усиленная тень при наведении */
+}
+
+.subscription-card .card-body {
+    text-align: center; /* Центрируем контент в карточке */
+    overflow: hidden; /* Скрываем переполнение */
+    flex-grow: 1; /* Даем блоку занять доступное пространство */
+}
+
+.card-title {
+    font-size: 1.5em; /* Увеличиваем размер шрифта заголовка */
+}
+
+.card-text {
+    font-size: 1.2em; /* Увеличиваем размер шрифта цены */
+}
+
+.advantages {
+    text-align: left; /* Выравнивание списка преимуществ по левому краю */
+    margin: 10px 0; /* Отступы для лучшего расположения */
+    padding-left: 0; /* Убираем отступы */
+}
+
+.advantages li {
+    margin-bottom: 8px; /* Расстояние между пунктами */
+    padding-left: 35px; /* Отступ для текста */
+    position: relative; /* Относительное позиционирование для псевдоэлементов */
+    margin-top: -5px; /* Слегка поднимаем текст */
+    font-size: 1.1em; /* Увеличиваем размер шрифта пунктов списка */
+    white-space: nowrap; /* Предотвращаем перенос строк */
+}
+
+.advantages li i {
+    color: #4e3b31; /* Цвет иконок галочек */
+    position: absolute; /* Абсолютное позиционирование иконки */
+    left: 15px; /* Отступ слева */
+    top: 0; /* Отступ сверху */
+}
+
+.custom-button {
+    padding: 10px 16px; /* Размеры кнопки */
+    font-size: 1.1em; /* Увеличиваем размер шрифта кнопки */
+    background-color: #6d4c41; /* Коричневый фон кнопки */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем границу */
+    border-radius: 20px; /* Скругленные углы */
+    cursor: pointer; /* Курсор указателя при наведении */
+    margin-left: 10px; /* Отступ между элементами */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Плавные переходы */
+}
+
+.custom-button:hover {
+    background-color: #4e3b31; /* Более темный коричневый при наведении */
+    transform: scale(1.05); /* Увеличение кнопки при наведении */
+}

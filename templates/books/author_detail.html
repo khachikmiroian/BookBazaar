@@ -2,29 +2,37 @@
 {% load static %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'books/css/author_detail.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome -->
 
-    <div class="author-detail">
-        <h1 class="author-name">{{ object.first_name }} {{ object.last_name }}</h1>
-        <p class="birth-date">
-            <strong><i class="fas fa-birthday-cake"></i> Birth Date:</strong> {{ object.birth_date }}
-        </p>
-        <p class="about">
-            <strong><i class="fas fa-info-circle"></i> About:</strong>
-        </p>
-        <p class="about-text">{{ object.about }}</p>
-
-        <h2 class="books-title">
-            <i class="fas fa-book"></i> Книги автора {{ object.first_name }} {{ object.last_name }}
-        </h2>
-        <ul class="book-list">
-            {% for book in object.books.all %}
-            <li class="book-item">
-                <a href="{% url 'books:book_detail' book.id %}" class="book-link">
-                    <i class="fas fa-arrow-right"></i> {{ book.title }}
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
+    <div class="container author-detail-container">
+        <div class="author-card panel panel-default">
+            <div class="panel-heading text-center">
+                <h2 class="author-name">{{ object.first_name }} {{ object.last_name }}</h2>
+            </div>
+            <div class="panel-body">
+                <p class="birth-date">
+                    <strong><i class="fas fa-birthday-cake"></i> Birth Date:</strong> {{ object.birth_date }}
+                </p>
+                <p class="about">
+                    <strong><i class="fas fa-info-circle"></i> About:</strong>
+                </p>
+                <p class="about-text">{{ object.about }}</p>
+            </div>
+            <div class="panel-footer">
+                <h3 class="books-title">
+                    <i class="fas fa-book"></i> Books by {{ object.first_name }} {{ object.last_name }}
+                </h3>
+                <ul class="book-list">
+                    {% for book in object.books.all %}
+                    <li class="book-item">
+                        <a href="{% url 'books:book_detail' book.id %}" class="book-link">
+                            <i class="fas fa-arrow-right"></i> {{ book.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>

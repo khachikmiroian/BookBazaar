@@ -1,111 +1,133 @@
-/* Общие стили для заголовков */
-header h1 {
-    font-size: 2.5em; /* Увеличенный размер заголовка */
+/* Scoped styles for the search results page */
+.search-results {
+    background-color: #f5f2e1; /* Match with base.css color scheme */
+    padding: 40px 0;
+}
+
+.search-results header h1 {
+    font-size: 3em;
+    color: #6d4c41; /* Primary color from base.css */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.results-section h2 {
+    font-size: 2em;
+    color: #6d4c41; /* Primary color from base.css */
+    margin-bottom: 30px;
+}
+
+/* Center the cards within the row */
+.row.centered {
     text-align: center;
+}
+
+.row.centered .col-md-4 {
+    display: inline-block;
+    float: none;
+    vertical-align: top;
+    margin: 0 10px; /* Adjust spacing between cards */
+}
+
+/* Card Styling */
+.card {
+    border: 1px solid #d2b48c; /* Secondary color from base.css */
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    background-color: #fff; /* Ensure consistency with base.css */
+    padding: 15px;
     margin-bottom: 20px;
+    width: 100%; /* Ensure cards take full width within their columns */
+    box-sizing: border-box;
 }
 
-/* Стили для основной формы поиска */
-main form {
-    display: flex;
-    justify-content: center; /* Центрирование формы */
-    margin-bottom: 30px; /* Отступ снизу */
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    transform: translateY(-5px);
 }
 
-main form label {
-    margin-right: 10px; /* Отступ справа для метки */
+.card-img-top {
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
 }
 
-main form input[type="text"] {
-    padding: 10px; /* Внутренний отступ */
-    font-size: 1em; /* Размер шрифта */
-    border: 1px solid #ccc; /* Рамка */
-    border-radius: 4px; /* Закругление углов */
-    width: 300px; /* Ширина поля ввода */
+.card-body {
+    padding: 15px;
 }
 
-main form button {
-    padding: 10px 15px; /* Внутренний отступ */
-    font-size: 1em; /* Размер шрифта */
-    color: white; /* Цвет текста */
-    background-color: #007bff; /* Цвет фона */
-    border: none; /* Без рамки */
-    border-radius: 4px; /* Закругление углов */
-    cursor: pointer; /* Указатель курсора */
+.card-title {
+    color: #6d4c41; /* Primary color from base.css */
+    font-size: 1.5em;
+    margin-bottom: 15px;
 }
 
-main form button:hover {
-    background-color: #0056b3; /* Темный фон при наведении */
+.card-title a {
+    color: #6d4c41; /* Ensure links match base.css color scheme */
+    text-decoration: none;
 }
 
-/* Стили для секции результатов */
-#results {
-    margin-top: 20px; /* Отступ сверху */
+.card-title a:hover {
+    text-decoration: underline;
 }
 
-#results h2 {
-    font-size: 1.5em; /* Размер заголовка для секции результатов */
-    margin-bottom: 10px; /* Отступ снизу */
+.card-text {
+    color: #5a3d2b; /* Text color from base.css */
+    font-size: 1em;
+    margin-bottom: 10px;
 }
 
-#results ul {
-    list-style-type: none; /* Убрать маркеры списка */
-    padding: 0; /* Убрать отступы */
+.card-text a {
+    color: #8b4513; /* Link color from base.css */
+    text-decoration: none;
 }
 
-#results li {
-    border-bottom: 1px solid #ddd; /* Разделительная линия */
-    padding: 10px 0; /* Вертикальные отступы */
+.card-text a:hover {
+    text-decoration: underline;
 }
 
-#results li strong {
-    font-size: 1.2em; /* Размер шрифта для названий книг и авторов */
+.no-results p {
+    font-size: 1.2em;
+    color: #999;
+    font-style: italic;
+    margin-top: 50px;
 }
 
-/* Стили для сообщений об отсутствии результатов */
-#results p {
-    text-align: center; /* Центрирование текста */
-    font-style: italic; /* Курсив */
-    color: #999; /* Серый цвет для текста */
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .search-results {
+        padding: 20px 0;
+    }
+
+    .search-results header h1 {
+        font-size: 2.5em;
+    }
+
+    .results-section h2 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        margin-bottom: 15px;
+    }
 }
 
+@media (max-width: 480px) {
+    .search-results header h1 {
+        font-size: 2em;
+    }
 
-/* Search Section */
-.search-container {
-    max-width: 600px; /* Уменьшено для компактности */
-    margin: 20px auto; /* Уменьшено отступ */
-    display: flex; /* Flexbox для выравнивания */
-    justify-content: center; /* Центрирование */
-}
+    .results-section h2 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
 
-.search-container input[type="text"] {
-    flex: 1; /* Занять оставшееся пространство */
-    padding: 10px; /* Уменьшено для компактности */
-    font-size: 1em; /* Уменьшено размер шрифта */
-    border: 2px solid #6d4c41; /* Коричневая рамка */
-    border-radius: 20px; /* Закругленные углы */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
+    .card-title {
+        font-size: 1.3em;
+    }
 
-.search-container input[type="text"]:focus {
-    border-color: #ffb74d; /* Цвет рамки при фокусе */
-    box-shadow: 0 0 20px rgba(255, 183, 77, 0.5); /* Мягкое свечение */
-    outline: none;
-}
-
-.search-container button {
-    padding: 10px 16px; /* Уменьшено для компактности */
-    font-size: 1em; /* Уменьшен размер шрифта */
-    background-color: #6d4c41; /* Коричневая кнопка */
-    color: white;
-    border: none;
-    border-radius: 20px; /* Закругленные углы */
-    cursor: pointer;
-    margin-left: 10px; /* Отступ между полем и кнопкой */
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.search-container button:hover {
-    background-color: #4e3b31; /* Темнее коричневый при наведении */
-    transform: scale(1.05); /* Увеличение кнопки */
+    .card-text {
+        font-size: 0.9em;
+    }
 }

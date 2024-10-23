@@ -1,17 +1,19 @@
-
 body {
     background-color: #f5f2e1;
     font-family: 'Arial', sans-serif;
 }
+
 .content {
     display: flex;
     justify-content: space-between;
     padding: 20px;
 }
+
 .left-section {
     flex: 1 1 60%;
     padding-right: 20px;
 }
+
 .right-section {
     flex: 1 1 35%;
     background-color: #f5ebe0;
@@ -19,12 +21,14 @@ body {
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 .card-title {
     color: #8b4513;
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 10px;
 }
+
 .tags a {
     color: #d2691e;
     text-decoration: none;
@@ -32,10 +36,12 @@ body {
     border-bottom: 1px dashed #d2691e;
     transition: color 0.3s, border-bottom 0.3s;
 }
+
 .tags a:hover {
     color: #8b4513;
     border-bottom: 1px solid #8b4513;
 }
+
 .comment {
     background-color: #fff;
     border: 1px solid #d2b48c;
@@ -43,17 +49,36 @@ body {
     margin-bottom: 15px;
     border-radius: 10px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
 .comment strong {
     color: #6b4226;
 }
+
 .comment p {
     color: #5a3d2b;
     margin-bottom: 5px;
 }
+
 .comment small {
     color: #8b4513;
 }
+
 .comment-form textarea {
     width: 100%;
     padding: 15px;
@@ -61,7 +86,9 @@ body {
     border-radius: 10px;
     resize: vertical;
     margin-bottom: 10px;
+    font-size: 1em;
 }
+
 .comment-form button {
     background-color: #6d4c41;
     color: #fff;
@@ -71,10 +98,12 @@ body {
     cursor: pointer;
     transition: background-color 0.3s;
 }
+
 .comment-form button:hover {
     background-color: #4e3b31; /* Darker brown on hover */
     transform: scale(1.05); /* Button scaling */
 }
+
 .show-more-btn {
     background-color: #d2691e;
     color: white;
@@ -85,9 +114,69 @@ body {
     margin-top: 10px;
     transition: background-color 0.3s;
 }
+
 .show-more-btn:hover {
     background-color: #8b4513;
 }
+
 .edit-options {
     display: none; /* Initially hidden */
+    margin-top: 10px;
+}
+
+.edit-options textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d2b48c;
+    border-radius: 5px;
+    resize: vertical;
+    font-size: 1em;
+    margin-bottom: 10px;
+}
+
+.edit-options button {
+    margin-right: 10px;
+}
+
+/* Dropdown Menu Styling */
+.dropdown .dropdown-menu {
+    min-width: auto;
+    right: 0;
+    left: auto;
+}
+
+.dropdown .dropdown-item {
+    color: #6d4c41;
+    padding: 8px 16px;
+    display: block;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dropdown .dropdown-item:hover {
+    background-color: #f5ebe0;
+    color: #8b4513;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+    .left-section, .right-section {
+        flex: 1 1 100%;
+        padding: 0;
+    }
+    .right-section {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .author-name {
+        font-size: 2em;
+    }
+    .book-list {
+        padding: 0 10px;
+    }
 }

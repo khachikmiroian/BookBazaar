@@ -21,21 +21,22 @@
                             <img src="{% static 'profile_images/default.jpg' %}" alt="Profile Photo" class="profile-img">
                         {% endif %}
                     </div>
-                    
+
                     <h2>Profile Information</h2>
                     <p><i class="fas fa-user"></i> <strong>Username:</strong> {{ user.username }}</p>
                     <p><i class="fas fa-envelope"></i> <strong>Email:</strong> {{ user.email }}</p>
                     <p><i class="fas fa-user-tag"></i> <strong>First Name:</strong> {{ user.first_name }}</p>
                     <p><i class="fas fa-user-tag"></i> <strong>Last Name:</strong> {{ user.last_name }}</p>
-                    
+
                     <div class="edit-profile-button">
                         <a href="{% url 'edit' request.user.id %}" class="upload-button">
                             <span>Edit Profile</span>
                         </a>
+                    </div>
                         <a href="{% url 'password_change' %}" class="change-password-button">
                             <i class="fas fa-lock"></i> Change Password
                         </a>
-                    </div>
+
                 </div>
             </div>
 

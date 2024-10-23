@@ -1,0 +1,65 @@
+/* Стиль для секции оплаты */
+.payment-section {
+    background-color: #f9f9f9;
+    padding: 60px 0;
+}
+
+/* Заголовок ошибки оплаты */
+.payment-failed-title {
+    color: #e74c3c;
+    font-size: 2.5rem;
+    margin-top: 50px;
+}
+
+/* Текст ошибки оплаты */
+.payment-failed-text {
+    color: #555;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+/* Текст поддержки */
+.payment-failed-support {
+    color: #777;
+}
+
+/* Ссылка на поддержку */
+.support-link {
+    color: #3498db;
+    text-decoration: underline;
+}
+
+/* Кнопки */
+.btn-outline-primary {
+    border-color: #3498db;
+    color: #3498db;
+    font-size: 1.2rem;
+    padding: 15px 30px;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    font-size: 1.2rem;
+    padding: 15px 30px;
+    margin-left: 15px;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+/* Дополнительный текст */
+.additional-text {
+    margin-top: 30px;
+}
+
+.additional-text p {
+    color: #888;
+    font-size: 1rem;
+}

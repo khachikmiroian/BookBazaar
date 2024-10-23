@@ -39,9 +39,13 @@ def post_search(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            book_results = Books.objects.filter(status=Books.Status.PUBLISHED, title__icontains=query).distinct()
+            book_results = Books.objects.filter(
+                status=Books.Status.PUBLISHED,
+                title__icontains=query
+            ).distinct()
             author_results = Author.objects.filter(
-                Q(first_name__icontains=query) | Q(last_name__icontains=query)).distinct()
+                Q(first_name__icontains=query) | Q(last_name__icontains=query)
+            ).distinct()
 
     return render(request, 'search.html', {
         'form': form,
@@ -113,7 +117,7 @@ class BookDetailView(DetailView):
         context['book'] = self.get_object()
         context['form'] = CommentsForm()
         comments = context['book'].comments.all()
-        context['comments']  = comments[:3]  # Показать только первые 3 комментария
+        context['comments'] = comments[:3]  # Показать только первые 3 комментария
         context['all_comments'] = comments
         context['show_all'] = len(comments) > 3
 

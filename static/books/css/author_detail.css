@@ -3,81 +3,50 @@ body {
     font-family: 'Arial', sans-serif;
 }
 
-.author-detail {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: fadeIn 1s ease-in;
+.author-detail-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
 }
 
-.author-detail:hover {
+.author-card {
+    width: 100%;
+    max-width: 700px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.author-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.panel-heading {
+    background-color: #6d4c41;
+    color: #ffffff;
+    padding: 20px 15px;
 }
 
 .author-name {
     font-size: 2.5em;
-    color: #6d4c41;
-    margin-bottom: 10px;
-    text-align: center;
+    margin: 0;
     text-transform: uppercase;
     letter-spacing: 1px;
-    opacity: 0;
-    animation: slideIn 0.8s forwards;
 }
 
-@keyframes slideIn {
-    0% {
-        transform: translateY(-20px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
+.panel-body {
+    padding: 30px 15px;
+    background-color: #ffffff;
 }
 
 .birth-date, .about {
     font-size: 1.2em;
     color: #6d4c41;
-    margin: 10px 0;
-    text-align: center;
-    opacity: 0;
-    animation: fadeInText 0.6s forwards;
-}
-
-@keyframes fadeInText {
-    0% {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.birth-date {
-    animation-delay: 0.2s;
-}
-
-.about {
-    animation-delay: 0.4s;
+    margin: 15px 0;
 }
 
 .about-text {
@@ -86,53 +55,30 @@ body {
     line-height: 1.6;
     margin-bottom: 20px;
     text-align: justify;
-    opacity: 0;
-    animation: fadeInText 0.6s forwards;
-    animation-delay: 0.6s;
+}
+
+.panel-footer {
+    padding: 20px 15px;
+    background-color: #f9f9f9;
 }
 
 .books-title {
     font-size: 2em;
     color: #6d4c41;
-    margin-top: 20px;
+    margin-bottom: 20px;
     text-align: center;
-    position: relative;
-    padding-bottom: 10px;
-    transform: scale(0);
-    animation: scaleIn 0.8s forwards;
-}
-
-@keyframes scaleIn {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.books-title::after {
-    content: '';
-    display: block;
-    width: 50px;
-    height: 4px;
-    background-color: #6d4c41;
-    margin: 0 auto;
-    transition: width 0.3s ease;
 }
 
 .book-list {
     list-style: none;
     padding: 0;
+    margin: 0;
     text-align: center;
 }
 
 .book-item {
     margin: 10px 0;
     font-size: 1.2em;
-    position: relative;
     transition: transform 0.3s ease;
 }
 
@@ -154,4 +100,29 @@ body {
 i {
     margin-right: 8px;
     color: #6d4c41;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .author-card {
+        margin-bottom: 20px;
+    }
+
+    .author-name {
+        font-size: 2em;
+    }
+
+    .books-title {
+        font-size: 1.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .author-name {
+        font-size: 1.8em;
+    }
+
+    .books-title {
+        font-size: 1.5em;
+    }
 }

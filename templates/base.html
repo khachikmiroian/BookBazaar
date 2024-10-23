@@ -41,24 +41,24 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
-
-                <li class="username_image">
-                    <a href="{% url 'profile' %}">
-                        {% if user.profile.photo %}
-                        <img src="{{ user.profile.photo.url }}" alt="Profile Photo" class="profile-photo img-circle">
-                        {{ user.username }}
-                        {% else %}
-                        <span class="glyphicon glyphicon-user"></span> {{ user.username }}
-                        {% endif %}
-                    </a>
-                </li>
-                <li>
-                    <form method="POST" action="{% url 'logout' %}" style="display:inline;" id="logoutForm">
-                        {% csrf_token %}
-                        <button type="button" class="logout-btn" id="logoutButton">
-                            <span class="glyphicon glyphicon-log-out"></span> Log Out
-                        </button>
-                    </form>
+                <!-- Объединяем имя пользователя и кнопку logout в один li -->
+                <li class="username_logout">
+                    <div class="user-info">
+                        <a href="{% url 'profile' %}" class="username-link">
+                            {% if user.profile.photo %}
+                            <img src="{{ user.profile.photo.url }}" alt="Profile Photo" class="profile-photo img-circle">
+                            {{ user.username }}
+                            {% else %}
+                            <span class="glyphicon glyphicon-user"></span> {{ user.username }}
+                            {% endif %}
+                        </a>
+                        <form method="POST" action="{% url 'logout' %}" id="logoutForm" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="button" class="logout-btn" id="logoutButton">
+                                <span class="glyphicon glyphicon-log-out"></span> Log Out
+                            </button>
+                        </form>
+                    </div>
                 </li>
                 {% else %}
                 <li><a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>

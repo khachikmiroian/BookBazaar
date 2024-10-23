@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+
+<!-- Подключение Font Awesome для иконок -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<!-- Подключение внешнего CSS-файла -->
+<link rel="stylesheet" href="{% static 'subscriptions/css/subscription_list.css' %}">
+
 <div class="container">
     <h1 class="text-center">Available Subscriptions</h1>
     <div class="row d-flex justify-content-center">
@@ -56,84 +64,4 @@
     </div>
 </div>
 
-<style>
-    .text-center {
-        text-align: center;
-    }
-
-    .subscription-card {
-        border: none; /* Remove default card borders */
-        border-radius: 16px; /* Rounded corners */
-        transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition */
-        overflow: hidden;
-        background: linear-gradient(145deg, #c6b29a, #d8d8d8); /* Light Brown to Light Gray gradient for cards */
-        position: relative;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Softer shadow */
-        margin-bottom: 20px;
-        max-height: 350px; /* Set a maximum height for cards */
-        display: flex; /* Flexbox for centering */
-        flex-direction: column; /* Column layout */
-    }
-
-    .subscription-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
-    }
-
-    .subscription-card .card-body {
-        text-align: center; /* Center content in card */
-        overflow: hidden; /* Hide overflowing content */
-        flex-grow: 1; /* Allow body to grow and fill the card */
-    }
-
-    .card-title {
-        font-size: 1.5em; /* Larger font size for title */
-    }
-
-    .card-text {
-        font-size: 1.2em; /* Larger font size for price */
-    }
-
-    .advantages {
-        text-align: left; /* Align advantages list to the left */
-        margin: 10px 0; /* Margin for better spacing */
-        padding-left: 0; /* Remove default padding */
-    }
-
-    .advantages li {
-        margin-bottom: 8px; /* Space between items */
-        padding-left: 35px; /* Space for text */
-        position: relative; /* Position for pseudo element */
-        margin-top: -5px; /* Move text up slightly */
-        font-size: 1.1em; /* Larger font size for list items */
-        white-space: nowrap; /* Prevent line break */
-    }
-
-    .advantages li i {
-        color: #4e3b31; /* Updated color for check icons */
-        position: absolute; /* Position the icon */
-        left: 15px; /* Align left */
-        top: 0; /* Align top */
-    }
-
-    .custom-button {
-        padding: 10px 16px; /* Button dimensions */
-        font-size: 1.1em; /* Larger font size for button */
-        background-color: #6d4c41; /* Brown button */
-        color: white; /* Text color */
-        border: none; /* Remove border */
-        border-radius: 20px; /* Rounded corners */
-        cursor: pointer; /* Pointer on hover */
-        margin-left: 10px; /* Margin between elements */
-        transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
-    }
-
-    .custom-button:hover {
-        background-color: #4e3b31; /* Darker brown on hover */
-        transform: scale(1.05); /* Increase button size on hover */
-    }
-</style>
-
-<!-- Include Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock %}
