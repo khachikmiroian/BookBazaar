@@ -7,7 +7,7 @@ from accounts.models import Profile
 from .models import Books, Author, Bookmarks, Comments
 from subscriptions.models import BookPurchase, Subscription
 from .forms import SearchForm, CommentsForm
-from django.http import FileResponse, Http404, JsonResponse
+from django.http import FileResponse, Http404, JsonResponse, HttpResponse
 import requests
 from django.utils import timezone
 from django.core.paginator import Paginator
@@ -241,7 +241,5 @@ class BookmarksView(LoginRequiredMixin, ListView):
     context_object_name = 'bookmarks'
 
     def get_queryset(self):
-        # Получаем профиль текущего пользователя
         profile = self.request.user.profile
-        # Возвращаем закладки для вошедшего в систему пользователя
         return Bookmarks.objects.filter(profile=profile).select_related('book')

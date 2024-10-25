@@ -43,12 +43,11 @@ def profile_view(request):
     if active_subscription and not active_subscription.is_active:
         active_subscription = None
 
-    context = {
+    return render(request, 'accounts/profile.html', {
         'user': user,
         'purchased_books': purchased_books,
         'active_subscription': active_subscription,
-    }
-    return render(request, 'accounts/profile.html', context)
+    })
 
 
 class UserLoginView(View):
@@ -67,14 +66,14 @@ class UserLoginView(View):
             user = authenticate(request, username=username_or_email, password=password)
 
             if user is not None:
-                # Проверяем, прошел ли пользователь верификацию
+
                 if not user.is_active:
                     form.add_error(None,
                                    'Your email address is not verified. Please check your email to verify your account.')
                     return render(request, self.template_name, {'form': form})
 
                 login(request, user)
-                return redirect('profile')  # Путь после успешного входа
+                return redirect('profile')
             else:
                 form.add_error(None, 'Invalid username or password.')
 
@@ -98,7 +97,7 @@ class UserRegistrationView(FormView):
 
         new_user = form.save(commit=False)
         new_user.set_password(form.cleaned_data['password'])
-        new_user.is_active = False  # Не активен до верификации
+        new_user.is_active = False
         new_user.email_verified_at = None
         new_user.save()
 
@@ -127,7 +126,7 @@ class VerifyEmailView(View):
                 return HttpResponse('Email has already been verified.')
 
             user.is_active = True
-            user.email_verified_at = timezone.now()  # Устанавливаем время подтверждения
+            user.email_verified_at = timezone.now()
             user.save()
 
             messages.success(request, 'Your email has been verified! You can now log in.')
@@ -193,6 +192,7 @@ class CustomPasswordResetView(View):
                 return redirect('password_reset_done')
         return render(request, 'registration/password_reset.html', {'form': form})  # Исправлено
 
+
 class CustomPasswordResetDoneView(View):
     def get(self, request):
         return render(request, 'registration/password_reset_done.html')
@@ -239,7 +239,7 @@ class CustomPasswordChangeView(PasswordChangeView):
 
     def form_valid(self, form):
         user = form.save()
-        update_session_auth_hash(self.request, user)  # Обновляем сессию после смены пароля
+        update_session_auth_hash(self.request, user)
         messages.success(self.request, 'Password was successfully changed.')
         send_password_change_email.delay(user.email, user.username)
         return super().form_valid(form)
