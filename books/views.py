@@ -1,9 +1,17 @@
+import stripe
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, FormView
 from accounts.models import Profile
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from .serializers import BookSerializer, AuthorSerializer, CommentsSerializer, BookmarksSerializer
+from .permissions import IsOwnerOrReadOnly, IsSubscribedOrPurchased
+from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Books, Author, Bookmarks, Comments
 from subscriptions.models import BookPurchase, Subscription
 from .forms import SearchForm, CommentsForm
@@ -243,3 +251,134 @@ class BookmarksView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         profile = self.request.user.profile
         return Bookmarks.objects.filter(profile=profile).select_related('book')
+
+
+class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = AuthorSerializer
+    permission_classes = [AllowAny]
+    queryset = Author.objects.all()
+
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Books.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [AllowAny]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'request': self.request})
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated], url_path='purchase')
+    def purchase_book(self, request, pk=None):
+
+        book = self.get_object()
+        user = request.user
+        if BookPurchase.objects.filter(user=user, book=book).exists():
+            return Response(
+                {"message": "You are already have this book."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        success_url = request.build_absolute_uri('/subscriptions/completed/')
+        cancel_url = request.build_absolute_uri('/subscriptions/canceled/')
+
+        session_data = {
+            'payment_method_types': ['card'],
+            'customer_email': user.email,
+            'line_items': [{
+                'price_data': {
+                    'currency': 'usd',
+                    'product_data': {
+                        'name': book.title,
+                    },
+                    'unit_amount': int(book.price * 100),
+                },
+                'quantity': 1,
+            }],
+            'mode': 'payment',
+            'success_url': success_url + '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url': cancel_url,
+            'metadata': {
+                'purchase_type': 'book',
+                'book_id': book.id
+            }
+        }
+
+        try:
+
+            session = stripe.checkout.Session.create(**session_data)
+
+            return Response({'checkout_url': session.url}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsSubscribedOrPurchased], url_path='pdf')
+    def view_pdf(self, request, pk=None):
+        book = self.get_object()
+        if book.pdf_file:
+            return FileResponse(book.pdf_file.open(), content_type='application/pdf')
+        else:
+            raise Http404("PDF file doesn't exists.")
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated], url_path='add_comment')
+    def add_comment(self, request, pk=None):
+        book = self.get_object()
+        content = request.data.get('content', '')
+        if not content:
+            return Response(
+                {"error": "Content is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        comment = Comments.objects.create(
+            books=book,
+            profile=request.user.profile,
+            content=content
+        )
+        serializer = CommentsSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['put', 'patch'], permission_classes=[IsAuthenticated, IsOwnerOrReadOnly],
+            url_path='comments/(?P<comment_id>[^/.]+)')
+    def update_comment(self, request, pk=None, comment_id=None):
+        book = self.get_object()
+        comment = get_object_or_404(Comments, id=comment_id, books=book, profile=request.user.profile)
+        serializer = CommentsSerializer(comment, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(is_modified=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticated, IsOwnerOrReadOnly],
+            url_path='comments/(?P<comment_id>[^/.]+)')
+    def delete_comment(self, request, pk=None, comment_id=None):
+        book = self.get_object()
+        comment = get_object_or_404(Comments, id=comment_id, books=book, profile=request.user.profile)
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated], url_path='bookmark')
+    def add_bookmark(self, request, pk=None):
+        book = self.get_object()
+        bookmark, created = Bookmarks.objects.get_or_create(profile=request.user.profile, book=book)
+        if not created:
+            return Response(
+                {"message": "Book already in bookmarks."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = BookmarksSerializer(bookmark)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticated], url_path='bookmark')
+    def remove_bookmark(self, request, pk=None):
+        book = self.get_object()
+        bookmark = Bookmarks.objects.filter(profile=request.user.profile, book=book).first()
+        if not bookmark:
+            return Response(
+                {"error": "Book doesn't exists in bookmarks."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        bookmark.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

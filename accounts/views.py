@@ -1,14 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth import authenticate, login, update_session_auth_hash
+from django.contrib.auth import authenticate, login, update_session_auth_hash, get_user_model
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.utils import timezone  # Не забудьте импортировать timezone
-
+from django.utils import timezone
 from .forms import (
     LoginForm,
     UserRegistrationForm,
@@ -32,6 +31,24 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.views import LogoutView, PasswordChangeView
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import generics, status, permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import (
+    UserRegistrationSerializer,
+    UserLoginSerializer,
+    UserSerializer,
+    ProfileSerializer,
+    PasswordChangeSerializer,
+    PasswordResetSerializer,
+    SetNewPasswordSerializer,
+    VerifyEmailSerializer
+)
+
+User = get_user_model()
 
 
 @login_required
@@ -252,3 +269,119 @@ class CustomPasswordChangeView(PasswordChangeView):
 class CustomPasswordResetCompleteView(View):
     def get(self, request):
         return render(request, 'registration/password_reset_complete.html')
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (permissions.AllowAny)
+    serializer_class = UserRegistrationSerializer
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        send_verification_email.delay(user.id)
+
+
+class LoginView(APIView):
+    permission_classes = (permissions.AllowAny)
+
+    def post(self, request):
+        serializer = UserLoginSerializer(data=request.user)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+        password = serializer.validated_data['password']
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            if not user.is_active:
+                return Response({'error': "Account isn't verificated"}, status=status.HTTP_401_UNAUTHORIZED)
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
+        return Response({'error': 'Invalid data'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class LogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data['refresh']
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileUpdateView(generics.RetrieveUpdateAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def get_object(self):
+        return self.request.user.profile
+
+    def perform_update(self, serializer):
+        serializer.save()
+        send_profile_updated_email.delay(self.request.user.id)
+
+
+class PasswordChangeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        serializer = PasswordChangeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = request.user
+        old_password = serializer.validated_data['old_password']
+        if not user.check_password(old_password):
+            return Response({'old_password': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
+        user.set_password(serializer.validated_data['new_password'])
+        user.save()
+        send_password_change_email.delay(user.id)
+        return Response({'message': 'Password changed successfully'}, status=status.HTTP_200_OK)
+
+
+class PasswordResetView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        serializer = PasswordResetSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+        user = User.objects.filter(email=email).first()
+        if user:
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            send_password_reset_email.delay(user.id, uid, token, user.username)
+        return Response({"message": "If the email exists, a password reset link has been sent."},
+                        status=status.HTTP_200_OK)
+
+
+class SetNewPasswordView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        serializer = SetNewPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message": "Password reset successfully."}, status=status.HTTP_200_OK)
+
+
+class VerifyEmailApi(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.email_verified_at = timezone.now()
+            user.save()
+            return Response({"message": "Email verified successfully."}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Invalid verification link."}, status=status.HTTP_400_BAD_REQUEST)

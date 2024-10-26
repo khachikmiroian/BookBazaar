@@ -4,7 +4,12 @@ from django.views.generic import TemplateView, ListView
 from django.conf import settings
 from books.models import Books
 import stripe
-from .models import SubscriptionPlan
+from .models import SubscriptionPlan, Subscription
+from .serializers import SubscriptionPlanSerializer, SubscriptionSerializer
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 stripe.api_version = settings.STRIPE_API_VERSION
@@ -110,3 +115,53 @@ def create_book_purchase_session(request, book_id):
     else:
         return render(request, 'books/book_detail.html', {'book': book})
 
+
+class SubscriptionViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = SubscriptionPlan.objects.all()
+    serializer_class = SubscriptionPlanSerializer
+    permission_classes = [AllowAny]
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated], url_path='subscribe')
+    def create_subscription_session(self, request, pk=None):
+        user = request.user
+        plan = get_object_or_404(SubscriptionPlan, pk=pk)
+        current_subscription = Subscription.objects.filter(user=user, is_active=True).first()
+        if current_subscription:
+            return Response(
+                {"message": "You already have subscription."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        success_url = request.build_absolute_uri('/subscriptions/completed/')
+        cancel_url = request.build_absolute_uri('/subscriptions/canceled/')
+
+        session_data = {
+            'payment_method_types': ['card'],
+            'customer_email': user.email,
+            'line_items': [{
+                'price_data': {
+                    'currency': 'usd',
+                    'product_data': {
+                        'name': plan.get_name_display(),
+                    },
+                    'unit_amount': int(plan.price * 100),
+                },
+                'quantity': 1,
+            }],
+            'mode': 'payment',
+            'success_url': success_url + '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url': cancel_url,
+            'metadata': {
+                'purchase_type': 'subscription',
+                'plan_id': plan.id
+            }
+        }
+
+        try:
+            session = stripe.checkout.Session.create(**session_data)
+            return Response({'checkout_url': session.url}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
