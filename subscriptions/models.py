@@ -18,6 +18,7 @@ class SubscriptionPlan(models.Model):
     def get_absolute_url(self):
         return reverse('subscriptions:subscription_detail', args=[str(self.id)])
 
+
 class Subscription(models.Model):
     user = models.OneToOneField('accounts.MyUser', on_delete=models.CASCADE, related_name='subscription')
     plan = models.ForeignKey(SubscriptionPlan, on_delete=models.SET_NULL, null=True, blank=True)

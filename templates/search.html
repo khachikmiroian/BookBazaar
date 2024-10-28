@@ -4,9 +4,10 @@
 {% block title %}Search Results{% endblock %}
 
 {% block content %}
-<!-- Linking the Search CSS -->
+
 <link rel="stylesheet" href="{% static 'books/css/search.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome -->
 
 <section class="search-results">
     <div class="container">
@@ -15,7 +16,7 @@
         </header>
 
         <section id="results">
-            <!-- Books Results -->
+
             {% if book_results %}
             <div class="results-section mb-5">
                 <h2 class="text-center">Books</h2>
@@ -25,11 +26,11 @@
                         <div class="card text-center">
                             <div class="card-body">
                                 <h5 class="card-title">
-                                    <a href="{% url 'books:book_detail' book.id %}" class="card-link">{{ book.title }}</a>
+                                    <a href="{{ books.get_absolute_url }}" class="card-link">{{ book.title}}</a>
                                 </h5>
                                 <p class="card-text">
                                     <strong>Author:</strong>
-                                    <a href="{% url 'books:author_detail' pk=book.author.pk %}" class="card-link">{{ book.author }}</a>
+                                    <a href="{{ book.author.get_absolute_url }}" class="card-link">{{ book.author }}</a>
                                 </p>
                             </div>
                         </div>
@@ -39,7 +40,7 @@
             </div>
             {% endif %}
 
-            <!-- Authors Results -->
+
             {% if author_results %}
             <div class="results-section mb-5">
                 <h2 class="text-center">Authors</h2>
@@ -47,10 +48,11 @@
                     {% for author in author_results %}
                     <div class="col-md-4 col-sm-6">
                         <div class="card text-center">
-                            <!-- Removed author image since authors don't have photos -->
+
                             <div class="card-body">
                                 <h5 class="card-title">
-                                    <a href="{% url 'books:author_detail' pk=author.pk %}" class="card-link">{{ author.first_name }} {{ author.last_name }}</a>
+                                    <a href="{% url 'books:author_detail' pk=author.pk %}" class="card-link">{{
+                                        author.first_name }} {{ author.last_name }}</a>
                                 </h5>
                                 <p class="card-text">
                                     <strong>Date of Birth:</strong> {{ author.birth_date }}
@@ -63,7 +65,7 @@
             </div>
             {% endif %}
 
-            <!-- No Results Found -->
+
             {% if not book_results and not author_results %}
             <div class="no-results text-center">
                 <p>No results found for your query.</p>

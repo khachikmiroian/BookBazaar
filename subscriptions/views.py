@@ -10,6 +10,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from django.utils import timezone
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 stripe.api_version = settings.STRIPE_API_VERSION
@@ -125,16 +126,15 @@ class SubscriptionViewSet(viewsets.ReadOnlyModelViewSet):
     def create_subscription_session(self, request, pk=None):
         user = request.user
         plan = get_object_or_404(SubscriptionPlan, pk=pk)
-        current_subscription = Subscription.objects.filter(user=user, is_active=True).first()
+        current_subscription = Subscription.objects.filter(user=user, end_date__gt=timezone.now()).first()
         if current_subscription:
             return Response(
-                {"message": "You already have subscription."},
+                {"message": "You already have an active subscription."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         success_url = request.build_absolute_uri('/subscriptions/completed/')
         cancel_url = request.build_absolute_uri('/subscriptions/canceled/')
-
         session_data = {
             'payment_method_types': ['card'],
             'customer_email': user.email,
@@ -153,7 +153,8 @@ class SubscriptionViewSet(viewsets.ReadOnlyModelViewSet):
             'cancel_url': cancel_url,
             'metadata': {
                 'purchase_type': 'subscription',
-                'plan_id': plan.id
+                'plan_name': plan.name,
+                'user_id': user.id,
             }
         }
 

@@ -7,14 +7,15 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'books/css/book_detail.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 <section class="book-detail">
     <div class="content">
-        <!-- Left section - book info -->
+
         <div class="left-section">
             <h2 class="card-title">{{ book.title }}</h2>
-            <h4>Author: <a href="{% url 'books:author_detail' pk=book.author.pk %}">{{ book.author }}</a></h4>
+            <h4>Author: <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a></h4>
             <p><strong>Description:</strong> {{ book.description }}</p>
             <p><strong>Price:</strong> ${{ book.price }}</p>
 
@@ -31,48 +32,45 @@
                 {% endif %}
             </form>
 
-            <!-- Tags Section -->
             {% if tag %}
             <h2>Posts tagged with "{{ tag.name }}"</h2>
             {% endif %}
             <p class="tags">
                 Tags:
                 {% for tag in book.tags.all %}
-                <a href="{% url 'books:book_list_by_tag' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                    <a href="{% url 'books:book_list_by_tag' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </p>
 
-            <!-- Purchase or Read Options -->
             {% if book.id in purchased_books %}
-                <p>You have purchased this book.</p>
-                {% if book.pdf_file %}
-                    <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
-                        <i class="fas fa-file-pdf"></i> Open PDF in New Tab
-                    </a>
-                {% else %}
-                    <p>PDF file for this book is not available.</p>
-                {% endif %}
-            {% elif has_active_subscription %}
-                <p>You have an active subscription.</p>
-                {% if book.pdf_file %}
-                    <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
-                        <i class="fas fa-file-pdf"></i> Open PDF in New Tab
-                    </a>
-                {% endif %}
-                <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success"><i class="fas fa-cart-plus"></i> Buy this Book</button>
-                </form>
+            <p>You have purchased this book.</p>
+            {% if book.pdf_file %}
+            <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
+                <i class="fas fa-file-pdf"></i> Open PDF in New Tab
+            </a>
             {% else %}
-                <p>You can purchase this book.</p>
-                <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success"><i class="fas fa-cart-plus"></i> Buy this Book</button>
-                </form>
+            <p>PDF file for this book is not available.</p>
+            {% endif %}
+            {% elif has_active_subscription %}
+            <p>You have an active subscription.</p>
+            {% if book.pdf_file %}
+            <a href="{% url 'books:view_pdf_in_new_tab' book.id %}" class="btn btn-primary" target="_blank">
+                <i class="fas fa-file-pdf"></i> Open PDF in New Tab
+            </a>
+            {% endif %}
+            <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success"><i class="fas fa-cart-plus"></i> Buy this Book</button>
+            </form>
+            {% else %}
+            <p>You can purchase this book.</p>
+            <form action="{% url 'subs:create_book_purchase_session' book.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success"><i class="fas fa-cart-plus"></i> Buy this Book</button>
+            </form>
             {% endif %}
         </div>
 
-        <!-- Right section - comments -->
         <div class="right-section">
             {% if user.is_authenticated %}
             <h3>Comments:</h3>
@@ -82,14 +80,17 @@
                     <div class="comment-header">
                         <strong>{{ comment.profile.user.username }}</strong>
                         {% if user == comment.profile.user %}
-                        <!-- Dropdown menu with three dots -->
                         <div class="dropdown">
-                            <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu{{ comment.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu{{ comment.id }}"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu{{ comment.id }}">
-                                <li><a class="dropdown-item" href="#" onclick="toggleEditOptions({{ comment.id }})"><i class="fas fa-edit"></i> Edit</a></li>
-                                <li><a class="dropdown-item text-danger" href="#" onclick="confirmDelete({{ comment.id }})"><i class="fas fa-trash-alt"></i> Delete</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="toggleEditOptions({{ comment.id }})"><i
+                                        class="fas fa-edit"></i> Edit</a></li>
+                                <li><a class="dropdown-item text-danger" href="#"
+                                       onclick="confirmDelete({{ comment.id }})"><i class="fas fa-trash-alt"></i> Delete</a>
+                                </li>
                             </ul>
                         </div>
                         {% endif %}
@@ -103,11 +104,15 @@
                         <form method="POST" action="{% url 'books:edit_comment' comment.id %}">
                             {% csrf_token %}
                             <textarea name="content" class="form-control" required>{{ comment.content }}</textarea>
-                            <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Save</button>
-                            <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEditOptions({{ comment.id }})"><i class="fas fa-times"></i> Cancel</button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Save
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-sm"
+                                    onclick="toggleEditOptions({{ comment.id }})"><i class="fas fa-times"></i> Cancel
+                            </button>
                         </form>
                     </div>
-                    <form method="POST" action="{% url 'books:delete_comment' comment.id %}" id="delete-form-{{ comment.id }}" style="display: none;">
+                    <form method="POST" action="{% url 'books:delete_comment' comment.id %}"
+                          id="delete-form-{{ comment.id }}" style="display: none;">
                         {% csrf_token %}
                     </form>
                     {% endif %}
@@ -121,14 +126,16 @@
             <div class="comment-form">
                 <form method="POST" id="comment-form">
                     {% csrf_token %}
-                    <textarea name="content" placeholder="Write your comment..." class="form-control" id="comment-input" required></textarea>
+                    <textarea name="content" placeholder="Write your comment..." class="form-control" id="comment-input"
+                              required></textarea>
                     <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit</button>
                 </form>
             </div>
 
-            <!-- Button to load more comments -->
             {% if book.comments.count > 3 %}
-            <button id="load-more-btn" class="btn btn-info show-more-btn" onclick="loadMoreComments()"><i class="fas fa-eye"></i> Show more comments</button>
+            <button id="load-more-btn" class="btn btn-info show-more-btn" onclick="loadMoreComments()"><i
+                    class="fas fa-eye"></i> Show more comments
+            </button>
             {% endif %}
             {% else %}
             <p>You must <a href="{% url 'login' %}">log in</a> to leave a comment.</p>

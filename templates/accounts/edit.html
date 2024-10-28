@@ -18,13 +18,13 @@
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <!-- Отображаем поля из формы ProfileEditForm -->
+
             {{ profile_form.as_p }}
 
-            <!-- Кнопка для выбора изображения -->
 
 
-            <!-- Отображаем поля из формы UserEditForm -->
+
+
             {{ user_form.as_p }}
             <div class="image-upload">
                 <label for="id_photo" class="upload-button">

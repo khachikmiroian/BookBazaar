@@ -14,7 +14,6 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
 
-@transaction.atomic
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
@@ -40,6 +39,7 @@ def stripe_webhook(request):
     return HttpResponse(status=200)
 
 
+@transaction.atomic
 def handle_checkout_session(session):
     customer_email = session.get('customer_email')
     payment_status = session.get('payment_status')

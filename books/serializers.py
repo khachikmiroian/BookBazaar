@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Books, Author, Comments, Bookmarks
 from subscriptions.models import Subscription, BookPurchase
-from accounts.serializers import UserSerializer
+from accounts.serializers import ProfileSerializer
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -12,7 +12,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class CommentsSerializer(serializers.ModelSerializer):
-    profile = UserSerializer(read_only=True)
+    profile = ProfileSerializer(read_only=True)
 
     class Meta:
         model = Comments
@@ -53,15 +53,8 @@ class BookSerializer(serializers.ModelSerializer):
         return BookPurchase.objects.filter(user=user, book=obj).exists()
 
 
-class BookCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Books
-        fields = ['id', 'title', 'author', 'description', 'date', 'price', 'tags', 'status', 'pdf_file']
-        read_only_fields = ['id']
-
-
 class BookmarksSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bookmarks
-        fields = ['id', 'profile', 'book', 'added_at']
-        read_only_fields = ['id', 'profile', 'added_at']
+        fields = ['id', 'profile', 'book', 'date_added']
+        read_only_fields = ['id', 'profile', 'date_added']

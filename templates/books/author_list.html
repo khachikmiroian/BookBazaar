@@ -7,7 +7,7 @@
         <ul class="authors-list">
             {% for author in object_list %}
                 <li class="author-item">
-                    <a href="{% url 'books:author_detail' author.id %}" class="author-link">
+                    <a href="{{ author.get_absolute_url }}" class="author-link">
                         <span class="icon">&#x270E;</span>
                         {{ author.first_name }} {{ author.last_name }}
                     </a>

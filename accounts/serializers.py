@@ -12,39 +12,38 @@ User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-        required=True,
-        validators=[UniqueValidator(queryset=User.objects.all())]
+        required=False,
+        allow_blank=True,
     )
+    username = serializers.CharField(required=False)
+    date_of_birth = serializers.DateField(required=False, allow_null=True)
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'first_name', 'last_name']
+        fields = ['id', 'email', 'username', 'first_name', 'last_name', 'date_of_birth']
         read_only_fields = ['id']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    date_of_birth = serializers.DateField(required=False, allow_null=True)
-    photo = serializers.ImageField(required=False)
-    bookmarks = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    user = UserSerializer()
 
     class Meta:
         model = Profile
-        fields = ['user', 'photo', 'purchased_books', 'date_of_birth', 'bookmarks']
+        fields = ['user', 'photo']
 
     def update(self, instance, validated_data):
+
         user_data = validated_data.pop('user', {})
+
+        if 'photo' in validated_data:
+            instance.photo = validated_data.get('photo', instance.photo)
+        instance.save()
+
+        # Обновляем данные пользователя, если они были переданы
         user = instance.user
-
-
         for attr, value in user_data.items():
             setattr(user, attr, value)
         user.save()
-
-
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
 
         return instance
 
@@ -134,17 +133,15 @@ class SetNewPasswordSerializer(serializers.Serializer):
         required=True,
         style={'input_type': 'password'}
     )
-    uidb64 = serializers.CharField(write_only=True, required=True)
-    token = serializers.CharField(write_only=True, required=True)
 
     def validate(self, attrs):
         try:
-            uid = force_str(urlsafe_base64_decode(attrs['uidb64']))
+            uid = force_str(urlsafe_base64_decode(self.context['uidb64']))
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             raise serializers.ValidationError('Incorrect UID or token.')
 
-        if not default_token_generator.check_token(user, attrs['token']):
+        if not default_token_generator.check_token(user, self.context['token']):
             raise serializers.ValidationError('Incorrect token.')
 
         if attrs['password'] != attrs['password2']:

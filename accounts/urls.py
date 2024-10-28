@@ -13,7 +13,7 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name='login'),
     path('register/', UserRegistrationView.as_view(), name='register'),
     path('register/done/', UserRegistrationDoneView.as_view(), name='register_done'),
-    path('verify-email/<uidb64>/', VerifyEmailView.as_view(), name='verify_email'),
+    path('verify-email/<uidb64>/<token>/', VerifyEmailView.as_view(), name='verify_email'),
     path('email/check/', EmailCheckView.as_view(), name='email_check'),
     path('edit/<int:id>/', edit, name='edit'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
@@ -31,6 +31,6 @@ urlpatterns = [
     path('api/profile/update/', ProfileUpdateView.as_view(), name='api_profile_update'),
     path('api/password/change/', PasswordChangeView.as_view(), name='api_password_change'),
     path('api/password/reset/', PasswordResetView.as_view(), name='api_password_reset'),
-    path('api/password/reset/confirm/', SetNewPasswordView.as_view(), name='api_password_reset_confirm'),
+    path('api/password/reset/confirm/<uidb64>/<token>/', SetNewPasswordView.as_view(), name='api_password_reset_confirm'),
     path('api/email/verify/<uidb64>/<token>/', VerifyEmailApi.as_view(), name='api_verify_email'),
 ]

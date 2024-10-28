@@ -1,4 +1,3 @@
-from django.contrib.auth.hashers import make_password, check_password
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
@@ -47,11 +46,9 @@ class Profile(models.Model):
     user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to='users/%Y/%m/%d/', blank=True)
     purchased_books = models.ManyToManyField('books.Books', related_name='purchasers', blank=True)
-    
+
     def __str__(self):
         return f'Profile of {self.user.username}'
 
     def get_active_subscription(self):
         return Subscription.objects.filter(user=self.user, end_date__gt=timezone.now()).first()
-
-

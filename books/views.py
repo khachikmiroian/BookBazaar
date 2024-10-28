@@ -11,10 +11,10 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import BookSerializer, AuthorSerializer, CommentsSerializer, BookmarksSerializer
 from .permissions import IsOwnerOrReadOnly, IsSubscribedOrPurchased
 from rest_framework.decorators import action
-from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Books, Author, Bookmarks, Comments
 from subscriptions.models import BookPurchase, Subscription
 from .forms import SearchForm, CommentsForm
+from django.urls import reverse
 from django.http import FileResponse, Http404, JsonResponse, HttpResponse
 import requests
 from django.utils import timezone
@@ -23,15 +23,6 @@ from django.core.paginator import Paginator
 
 class HomeView(TemplateView):
     template_name = 'books/home.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['random_quote'] = self.get_quote()
-        return context
-
-    def get_quote(self):
-        response = requests.get('https://favqs.com/api/qotd').json()
-        return f'Daily quote: {response["quote"]["body"]}'
 
 
 class AboutUsView(TemplateView):
@@ -125,7 +116,7 @@ class BookDetailView(DetailView):
         context['book'] = self.get_object()
         context['form'] = CommentsForm()
         comments = context['book'].comments.all()
-        context['comments'] = comments[:3]  # Показать только первые 3 комментария
+        context['comments'] = comments[:3]
         context['all_comments'] = comments
         context['show_all'] = len(comments) > 3
 
@@ -155,7 +146,7 @@ class BookDetailView(DetailView):
             comment.books = book
             comment.profile = request.user.profile
             comment.save()
-            return redirect(self.get_object())  # Перенаправление на детальную страницу книги
+            return redirect(self.get_object())
 
         return self.get(request, *args, **kwargs)
 
@@ -175,7 +166,7 @@ class AddCommentView(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['book'] = get_object_or_404(Books, id=self.kwargs['book_id'])
-        context['comments'] = context['book'].comments.all()[:3]  # Показать первые 3 комментария
+        context['comments'] = context['book'].comments.all()[:3]
         context['show_all'] = context['book'].comments.count() > 3
         return context
 
@@ -267,15 +258,15 @@ class BookViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context.update({'request': self.request})
+        return context
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated], url_path='purchase')
     def purchase_book(self, request, pk=None):
-
         book = self.get_object()
         user = request.user
         if BookPurchase.objects.filter(user=user, book=book).exists():
             return Response(
-                {"message": "You are already have this book."},
+                {"message": "You already own this book."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -300,68 +291,64 @@ class BookViewSet(viewsets.ModelViewSet):
             'cancel_url': cancel_url,
             'metadata': {
                 'purchase_type': 'book',
-                'book_id': book.id
+                'item_id': book.id
             }
         }
 
         try:
 
             session = stripe.checkout.Session.create(**session_data)
-
             return Response({'checkout_url': session.url}, status=status.HTTP_201_CREATED)
         except Exception as e:
-
             return Response(
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsSubscribedOrPurchased], url_path='pdf')
-    def view_pdf(self, request, pk=None):
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated, IsSubscribedOrPurchased],
+            url_path='pdf-url')
+    def get_pdf_url(self, request, pk=None):
         book = self.get_object()
         if book.pdf_file:
-            return FileResponse(book.pdf_file.open(), content_type='application/pdf')
+            pdf_url = request.build_absolute_uri(reverse('books:view_pdf_in_new_tab', args=[book.id]))
+            return Response({'pdf_url': pdf_url}, status=status.HTTP_200_OK)
         else:
-            raise Http404("PDF file doesn't exists.")
+            return Response({"error": "PDF file doesn't exist."}, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated], url_path='add_comment')
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated], url_path='comments/add')
     def add_comment(self, request, pk=None):
         book = self.get_object()
         content = request.data.get('content', '')
         if not content:
-            return Response(
-                {"error": "Content is required."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        comment = Comments.objects.create(
-            books=book,
-            profile=request.user.profile,
-            content=content
-        )
+            return Response({"error": "Comment cannot be empty."}, status=status.HTTP_400_BAD_REQUEST)
+
+        comment = Comments.objects.create(books=book, profile=request.user.profile, content=content)
         serializer = CommentsSerializer(comment)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @action(detail=True, methods=['put', 'patch'], permission_classes=[IsAuthenticated, IsOwnerOrReadOnly],
-            url_path='comments/(?P<comment_id>[^/.]+)')
+    @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated, IsOwnerOrReadOnly],
+            url_path='comments/(?P<comment_id>[^/.]+)/edit')
     def update_comment(self, request, pk=None, comment_id=None):
-        book = self.get_object()
-        comment = get_object_or_404(Comments, id=comment_id, books=book, profile=request.user.profile)
+
+        comment = get_object_or_404(Comments, id=comment_id, books_id=pk, profile=request.user.profile)
+
         serializer = CommentsSerializer(comment, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        serializer.save(is_modified=True)
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticated, IsOwnerOrReadOnly],
-            url_path='comments/(?P<comment_id>[^/.]+)')
+            url_path='comments/(?P<comment_id>[^/.]+)/remove')
     def delete_comment(self, request, pk=None, comment_id=None):
-        book = self.get_object()
-        comment = get_object_or_404(Comments, id=comment_id, books=book, profile=request.user.profile)
+        comment = get_object_or_404(Comments, id=comment_id, books_id=pk, profile=request.user.profile)
+
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated], url_path='bookmark')
-    def add_bookmark(self, request, pk=None):
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated], url_path='add-bookmark')
+    def add_bookmark(self, request, pk):
         book = self.get_object()
+
         bookmark, created = Bookmarks.objects.get_or_create(profile=request.user.profile, book=book)
         if not created:
             return Response(
@@ -371,8 +358,8 @@ class BookViewSet(viewsets.ModelViewSet):
         serializer = BookmarksSerializer(bookmark)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticated], url_path='bookmark')
-    def remove_bookmark(self, request, pk=None):
+    @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticated], url_path='remove-bookmark')
+    def remove_bookmark(self, request, pk):
         book = self.get_object()
         bookmark = Bookmarks.objects.filter(profile=request.user.profile, book=book).first()
         if not bookmark:
@@ -380,5 +367,6 @@ class BookViewSet(viewsets.ModelViewSet):
                 {"error": "Book doesn't exists in bookmarks."},
                 status=status.HTTP_404_NOT_FOUND
             )
+
         bookmark.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
