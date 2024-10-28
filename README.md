@@ -1,4 +1,4 @@
-# Library Management System
+# Library Site
 
 **Project Description**: This project is a library management web application that allows users to register, subscribe, browse books, and manage subscriptions. It also includes email notifications and supports authentication using JWT tokens.
 
