@@ -1,13 +1,13 @@
-# Library Site
+# BookBazaar
 
-**Project Description**: This project is a library management web application that allows users to register, subscribe, browse books, and manage subscriptions. It also includes email notifications and supports authentication using JWT tokens.
+**Project Description**: BookBazaar is a web application designed to allow users to purchase books or subscribe to library content. Users can register, subscribe, browse available books, and manage their purchases and subscriptions. The platform also features email notifications for users and supports secure authentication via JWT tokens.
 
 ## Technologies Used
 
-- **Programming Language**: Python
+- **Programming Language**: Python, JavaScript
 - **Framework**: Django
 - **Database**: PostgreSQL
-- **Frontend**: Bootstrap 5, Django Templates
+- **Frontend**: Bootstrap 5, Django Templates, HTML, CSS, JavaScript
 - **Payment Gateway**: Stripe
 - **Task Queue**: Celery + Redis
 - **Authentication**: JWT (using `rest_framework_simplejwt`)
@@ -83,25 +83,26 @@
     Celery, which uses Redis as a broker, can be run using:
 
     ```bash
-    celery -A librarysite worker --loglevel=info
-    celery -A librarysite beat --loglevel=info
+    celery -A library-site worker --loglevel=info
+    celery -A library-site beat --loglevel=info
     ```
 
 ## Features
 
 - **User Registration and Authentication**: Users can register, log in, and manage their profiles.
-- **Subscription Management**: Users can manage their subscriptions using Stripe.
+- **Book Purchase and Subscription Management**: Users can purchase books or manage subscriptions using Stripe.
 - **Library Management**: Admin users can add, edit, and delete books.
 - **Book Tagging**: Tags are supported using `django-taggit`.
 - **JWT Authentication**: The application uses JWT tokens for secure API authentication.
 - **Background Tasks**: Uses Celery for executing background tasks (e.g., sending email notifications).
+- **Interactive UI**: Built with Django Templates, Bootstrap 5, and enhanced with JavaScript for dynamic interactions.
 
 ## Project Structure
 
 - **accounts**: Handles user registration, authentication, and profile management.
 - **books**: Module for managing books.
-- **subscriptions**: Handles user subscriptions.
-- **librarysite**: Main module containing project settings and configurations.
+- **subscriptions**: Handles user subscriptions and purchases.
+- **library-site**: Main module containing project settings and configurations.
 
 ## Usage
 
